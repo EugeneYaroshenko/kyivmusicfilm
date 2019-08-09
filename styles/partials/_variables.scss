@@ -1,0 +1,40 @@
+/*** Fonts ***/
+$base-font-size: 16px;
+$base-line-height: 1.8;
+$text-font: 'OPEN_SANS';
+$headline-font: 'MONTSERRAT';
+
+/*** Colors ***/
+$primary-color: #ffffff;
+$primary-color-light: #FEFEFE;
+$primary-color-dark: #28272D;
+
+$grey: #C5C5C5;
+$grey-dark: #6F6F6F;
+$grey-medium: #E8E8E8;
+$grey-light: #F4F2F2;
+
+$blue: #0510FF;
+$rose: #FF45F6;
+
+
+$blue-light: #1790F7;
+
+$red-light: #EC90AE;
+$red-dark: #D04449;
+
+
+/*** Breakpoints ***/
+$break-large: 1200px;
+$break-small: 600px;
+
+
+/*** Z-Indexes ***/
+$indexBack: -1;
+$indexFront: 1000;
+$indexPopup: 2000;
+
+/*** Mixins ***/
+@mixin transition($duration: 400ms, $cubic-bezier: cubic-bezier(0.075, 0.82, 0.165, 1)) {
+  transition: all $duration $cubic-bezier;
+}
