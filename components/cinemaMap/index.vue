@@ -1,257 +1,106 @@
 <template>
-  <div class="cinema-map">
-    <div class="location-container">
-      <div class="location-component">
-        <div class="location-icon">
-          <icon
-            view-box="0 0 27.051 27.051"
-            size="24"
-            icon-name="location"
-            class="location-icon"
-          >
-            <location />
-          </icon>
-        </div>
-        <div class="location-city">
-          Київ
-        </div>
-      </div>
-    </div>
-    <div class="map">
-      <GmapMap
-        :center="{lat:50.4395699, lng:30.5158215}"
-        :options="mapStyle"
-        style="width: 100%; height: 100%"
+  <div class="map" v-if="location">
+    <GmapMap
+      :center="location.position"
+      :options="mapStyle"
+      style="width: 100%; height: 100%"
+    >
+      <GmapMarker
+        :key="index"
+        v-for="(m, index) in markers"
+        :position="m.position"
+        :clickable="true"
+        :icon.sync="m.icon"
+        @click="showInfoWindow(m)"
+      />
+      <GmapInfoWindow
+        :opened="infoWindowShown"
+        :options="infoWindowOptions"
+        :position="markerPosition"
+        @closeclick="closeInfoWindow"
       >
-      </GmapMap>
-    </div>
+        <div v-html="infoWindowContent" />
+      </GmapInfoWindow>
+    </GmapMap>
   </div>
 </template>
 
 <script>
-  import Icon from '../../components/icon'
-  import Location from '../../assets/icons/vueIcons/location'
+  import MarkerIcon from '../../assets/icons/marker.png'
+  import { mapState } from 'vuex'
 
   export default {
     data () {
       return {
-        mapStyle: {
-          disableDefaultUI: true,
-          scaleControl: true,
-          zoomControl: true,
-          zoom: 13,
-          styles: [
-            {
-              featureType: 'all',
-              elementType: 'geometry.fill',
-              stylers: [
-                {
-                  weight: '2.00'
-                }
-              ]
-            },
-            {
-              featureType: 'all',
-              elementType: 'geometry.stroke',
-              stylers: [
-                {
-                  color: '#9c9c9c'
-                }
-              ]
-            },
-            {
-              featureType: 'all',
-              elementType: 'labels.text',
-              stylers: [
-                {
-                  visibility: 'on'
-                }
-              ]
-            },
-            {
-              featureType: 'landscape',
-              elementType: 'all',
-              stylers: [
-                {
-                  color: '#f2f2f2'
-                }
-              ]
-            },
-            {
-              featureType: 'landscape',
-              elementType: 'geometry.fill',
-              stylers: [
-                {
-                  color: '#ffffff'
-                }
-              ]
-            },
-            {
-              featureType: 'landscape.man_made',
-              elementType: 'geometry.fill',
-              stylers: [
-                {
-                  color: '#ffffff'
-                }
-              ]
-            },
-            {
-              featureType: 'poi',
-              elementType: 'all',
-              stylers: [
-                {
-                  visibility: 'off'
-                }
-              ]
-            },
-            {
-              featureType: 'road',
-              elementType: 'all',
-              stylers: [
-                {
-                  saturation: -100
-                },
-                {
-                  lightness: 45
-                }
-              ]
-            },
-            {
-              featureType: 'road',
-              elementType: 'geometry.fill',
-              stylers: [
-                {
-                  color: '#eeeeee'
-                }
-              ]
-            },
-            {
-              featureType: 'road',
-              elementType: 'labels.text.fill',
-              stylers: [
-                {
-                  color: '#7b7b7b'
-                }
-              ]
-            },
-            {
-              featureType: 'road',
-              elementType: 'labels.text.stroke',
-              stylers: [
-                {
-                  color: '#ffffff'
-                }
-              ]
-            },
-            {
-              featureType: 'road.highway',
-              elementType: 'all',
-              stylers: [
-                {
-                  visibility: 'simplified'
-                }
-              ]
-            },
-            {
-              featureType: 'road.arterial',
-              elementType: 'labels.icon',
-              stylers: [
-                {
-                  visibility: 'off'
-                }
-              ]
-            },
-            {
-              featureType: 'transit',
-              elementType: 'all',
-              stylers: [
-                {
-                  visibility: 'off'
-                }
-              ]
-            },
-            {
-              featureType: 'water',
-              elementType: 'all',
-              stylers: [
-                {
-                  color: '#46bcec'
-                },
-                {
-                  visibility: 'on'
-                }
-              ]
-            },
-            {
-              featureType: 'water',
-              elementType: 'geometry.fill',
-              stylers: [
-                {
-                  color: '#c8d7d4'
-                }
-              ]
-            },
-            {
-              featureType: 'water',
-              elementType: 'labels.text.fill',
-              stylers: [
-                {
-                  color: '#070707'
-                }
-              ]
-            },
-            {
-              featureType: 'water',
-              elementType: 'labels.text.stroke',
-              stylers: [
-                {
-                  color: '#ffffff'
-                }
-              ]
-            }
-          ]
-        }
+        infoWindowShown: false,
+        markerPosition: null,
+        infoWindowOptions: {
+          pixelOffset: {
+            width: 0,
+            height: -45
+          }
+        },
+        infoWindowContent: null
       }
     },
-    components: {
-      Icon,
-      Location
+    computed: {
+      ...mapState({
+        location: state => state.map.location,
+        mapStyle: state => state.map.style,
+        // GETTER FOR CURRENT CITY
+        allCinemas: state => state.film.cinema
+      }),
+      markers () {
+        const cinemas = this.allCinemas.filter(cityCinemas => cityCinemas.name === location.name)
+
+        return cinemas[0].cinema_array.map(cinema => {
+          return {
+            position: cinema.position,
+            title: JSON.stringify({ title: cinema.name, address: cinema.address })
+          }
+        })
+      }
+    },
+    methods: {
+      showInfoWindow (data) {
+        this.markerPosition = data.position
+        this.setInfoWindowContent(JSON.parse(data.title))
+        this.infoWindowShown = true
+      },
+      closeInfoWindow () {
+        this.infoWindowShown = false
+      },
+      setInfoWindowContent (content) {
+        this.infoWindowContent = `<div class="info-content">
+            <h4 class="info-content__title">${content.title}</h4>
+            <div class="info-content__address"> ${content.address}</div>
+         </div>`
+      }
     }
   }
 </script>
 
 <style>
-  .location-icon {
-    margin-right: 4px;
-    display: flex;
-  }
-
-  .location-city {
-    font-weight: 600;
-    font-size: 1em;
-  }
-
   .cinema-map {
-    padding: 24px 0 12px 32px;
     flex: 1;
-  }
-
-  .location-container {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .location-component {
-    cursor: pointer;
-    letter-spacing: 1px;
-    padding: 8px 4px 8px 16px;
-    display: flex;
-    align-items: center;
   }
 
   .map {
     width: 100%;
-    height: 400px;
+    height: 100%;
+  }
+
+  .info-content {
+    padding: 12px 4px 2px;
+  }
+
+  .info-content__title {
+    letter-spacing: 1px;
+    margin-top: 0;
+    text-transform: uppercase;
+  }
+
+  .info-content__address {
+    font-size: .9em;
   }
 </style>

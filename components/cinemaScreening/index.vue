@@ -1,7 +1,9 @@
 <template>
-  <div class="cinema-screening">
+  <div class="cinema-screening" v-if="dateCinemas">
+    <location-component />
+    <loader-component v-if="loaderShown" />
     <h3 class="title">
-      Клімт і Шіле
+      Геніальний Кутюр'є
     </h3>
     <div class="screening-block">
       <h4 class="screening-block__title">
@@ -13,30 +15,33 @@
       <h4 class="screening-block__title">
         Кінотеатри
       </h4>
-      <div class="cinemas">
-        <div class="cinema">
-          <div class="cinema-name">"Київ"</div>
-          <div class="time">
-            <div class="time-item">16:20</div>
-            <div class="time-item">18:00</div>
+      <div
+        class="cinemas"
+        v-if="location"
+      >
+        <div
+          class="cinema"
+          v-for="(cinema, index) in dateCinemas.cinema_array"
+          :key="index"
+        >
+          <div class="cinema-name">
+            {{ cinema }}
           </div>
         </div>
-        <div class="cinema">
-          <div class="cinema-name">"Жовтень"</div>
-          <div class="time">
-            <div class="time-item">13:30</div>
-            <div class="time-item">15:00</div>
-            <div class="time-item">18:00</div>
-            <div class="time-item">21:00</div>
-          </div>
-        </div>
-        <div class="cinema">
-          <div class="cinema-name">"Батерфляй"</div>
-          <div class="time">
-            <div class="time-item">13:30</div>
-            <div class="time-item">15:00</div>
-          </div>
-        </div>
+      </div>
+    </div>
+    <div class="map-control">
+      <div
+        class="toggle-icon"
+        @click="toggleMap"
+      >
+        <icon
+          view-box="0 0 14.67 22.4"
+          size="36"
+          icon-name="map"
+        >
+          <map-icon />
+        </icon>
       </div>
     </div>
   </div>
@@ -44,10 +49,38 @@
 
 <script>
   import CalendarComponent from '~/components/calendar'
+  import LocationComponent from '~/components/location'
+  import LoaderComponent from '~/components/loader'
+  import Icon from '~/components/icon'
+  import MapIcon from '~/assets/icons/vueIcons/map'
+  import { mapState } from 'vuex'
 
   export default {
     components: {
-      CalendarComponent
+      CalendarComponent,
+      LocationComponent,
+      LoaderComponent,
+      Icon,
+      MapIcon
+    },
+    methods: {
+      toggleMap () {
+        if (this.mapShown) {
+          this.$store.dispatch('map/hideMap')
+        } else {
+          this.$store.dispatch('map/showMap')
+        }
+      }
+    },
+    computed: {
+      ...mapState({
+        mapShown: state => state.map.mapShown,
+        loaderShown: state => state.ui.loading,
+        location: state => state.map.location
+                  }),
+      dateCinemas () {
+        return this.$store.state.filmDate.selectedDate
+      },
     }
   }
 </script>
@@ -55,21 +88,21 @@
 <style lang="scss">
   .cinema-screening {
     flex: 1.2;
-    max-width: 60%;
-    padding: 24px 32px 12px 24px;
+    padding: 40px 32px 12px 24px;
+    position: relative;
   }
 
   .title {
     text-transform: uppercase;
     text-align: center;
     letter-spacing: 2px;
-    font-weight: 500;
-    margin: 0 0 2em 0;
+    font-weight: 600;
+    margin: 54px 0 2em 0;
   }
 
   .screening-block {
     margin: 0 auto 2em;
-    max-width: 90%;
+    max-width: 80%;
   }
 
   .screening-block__title {
@@ -80,25 +113,31 @@
   }
 
   .cinemas {
-    margin-top: 8px;
+    margin-top: 16px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
   }
 
   .cinema {
-    padding: 18px 26px;
+    padding: 8px 12px;
     margin-bottom: 4px;
     display: flex;
     justify-content: space-between;
     transition: all .2s ease-in-out;
     cursor: pointer;
+    font-size: .8em;
+    text-align: center;
+    color: #06A4FF;
 
     &:hover {
-      box-shadow: 0 0 8px 0 rgba(#000000, .1);
+      color: darken(#06A4FF, 20%);
     }
+
   }
 
   .cinema-name {
     text-transform: uppercase;
-    color: #3DB5EA;
     font-weight: 600;
   }
 
@@ -112,5 +151,21 @@
 
   .time-item {
     padding: 0 4px;
+  }
+
+  .map-control {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 16px 8px 12px 16px;
+    box-shadow: 0 3px 6px 0px rgba(#C8D7D4, 1);
+    cursor: pointer;
+    display: none;
+  }
+
+  @media screen and (min-width: 960px) {
+    .map-control {
+      display: block;
+    }
   }
 </style>

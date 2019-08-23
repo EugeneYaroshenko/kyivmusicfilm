@@ -11,6 +11,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
+
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
@@ -31,7 +32,9 @@ module.exports = {
   /*
   ** Nuxt.js modules
   */
-  modules: [],
+  modules: [
+    '@nuxtjs/axios',
+  ],
   /*
   ** Build configuration
   */
@@ -42,7 +45,8 @@ module.exports = {
     vendor: ['vue2-google-maps']
   },
   plugins: [
-    { src: '~/plugins/vue2-google-maps', ssr: false }
+    { src: '~/plugins/vue2-google-maps', ssr: false },
+    { src: '~/plugins/vue-moment', ssr: false }
   ]
 
 }

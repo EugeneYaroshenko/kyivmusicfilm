@@ -1,48 +1,131 @@
 <template>
-  <div class="main__film-info">
-    <div class="preview-image__container">
-      <div class="preview-image">
-        <img
-          class="image"
-          src="../../assets/images/preview__image.jpg"
-          alt="preview image"
-        >
-        <div class="preview-image__overflow" />
+  <div class="film-information__container">
+    <div class="preview-web">
+      <preview-trailer />
+    </div>
+    <div :class="{'information': true, 'information--collapsed': isMapShown }">
+      <h4 class="information-heading--mobile">
+        Про Фільм
+      </h4>
+      <div class="information-description">
+        <p class="information-description__text">
+          «Геніальний кутюр’є» — документальна стрічка про останні роки легендарного Іва Сен-Лорана та його модний дім.
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {}
+  import PreviewTrailer from '~/components/interactions/previewTrailer'
+  import { mapState } from 'vuex'
+
+  export default {
+    components: {
+      PreviewTrailer
+    },
+    methods: {
+      showTrailer () {
+        return this.$store.dispatch('trailer/showTrailer')
+      }
+    },
+    computed: {
+      ...mapState({
+                    isMapShown: state => state.map.mapShown
+                  })
+    }
+  }
 </script>
 
-<style>
-
-  .main__film-info {
-    width: 100%;
-    max-width: 28%;
-  }
-
-  .preview-image {
+<style lang="scss" scoped>
+  .film-information__container {
     position: relative;
-  }
-
-  .image {
-    margin: 0;
-    display: block;
-    padding: 0;
-    max-width: 100%;
-  }
-
-  .preview-image__overflow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
     width: 100%;
-    background: #141E30;
-    background: linear-gradient(to top, rgba(0, 51, 69, .8), transparent);
-    cursor: pointer;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .information {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  .information-heading--mobile {
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .preview-web {
+    display: none;
+  }
+
+  @media screen and (min-width: 960px) {
+    .information-heading--mobile {
+      display: none;
+    }
+
+    .preview-web {
+      display: block;
+    }
+
+    .information {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      flex-flow: row nowrap;
+      width: 33.3%;
+      height: auto;
+      min-height: 150px;
+      max-height: 300px;
+      overflow: hidden;
+      margin: auto;
+    }
+
+    .information-description {
+      flex: 1;
+      margin-top: 24px;
+      background: #57575e;
+      padding: 24px 18px 8px;
+      color: #fff;
+    }
+
+    .information-description__items {
+      list-style: none;
+      margin: 0 0 12px;
+      font-size: 12px;
+      padding: 0;
+    }
+
+    .information-description__item {
+      display: flex;
+
+      .label {
+        font-weight: 600;
+        margin-right: 4px;
+      }
+    }
+
+    .information-description__text {
+      font-size: 12px;
+      margin: 12px 0;
+    }
+
+    .information--collapsed {
+      .information-trailer {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0;
+      }
+
+      .information-description {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0;
+      }
+    }
   }
 </style>
