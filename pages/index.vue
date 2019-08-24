@@ -88,8 +88,9 @@
     bottom: 0;
     display: flex;
     flex-flow: column nowrap;
-    padding: 100px 40px;
+    padding: 100px 16px;
     flex: 1;
+    max-width: 100%;
   }
 
   .preview-image {
@@ -98,7 +99,7 @@
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
-    height: 400px;
+    height: 40vh;
     position: relative;
     border-radius: 24px;
     box-shadow: 0 0 12px 0px rgba(0, 0, 0, .4);

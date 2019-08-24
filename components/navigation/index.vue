@@ -2,7 +2,7 @@
   <nav class="navigation">
     <div class="navigation-block">
       <div class="navigation-block__logo-container">
-        <div class="navigation-block__logo" v-if="!isLoaderShown" />
+        <div :class="{'navigation-block__logo': true, 'navigation-block__logo--hidden': isLoaderShown}" />
       </div>
       <div class="navigation-block__icons">
         <a target="_blank" href="https://www.facebook.com/KyivMusicFilm/">
@@ -90,7 +90,7 @@
     flex-flow: row nowrap;
     justify-content: space-between;
     flex: 1;
-    padding: 0 32px;
+    padding: 0 16px;
   }
 
   .navigation-block__logo-container {
@@ -103,6 +103,10 @@
     background-image: url('../../assets/icons/logo.svg');
     height: 54px;
     width: 54px;
+  }
+
+  .navigation-block__logo--hidden {
+    opacity: 0;
   }
 
   .navigation-block__icons {

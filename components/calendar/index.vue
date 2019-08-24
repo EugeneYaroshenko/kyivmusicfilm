@@ -14,7 +14,7 @@
           <arrow-left />
         </icon>
       </div>
-      <div class="dates-container">
+      <div class="dates-container" ref="datesContainer">
         <div
           :class="{'dates': true, 'dates--centered': !longListOfDates }"
           :style="{left: `${scrollOffset}px`}"
@@ -126,7 +126,7 @@
 
         this.scrollVisibleArea = this.filmDates.slice(scrollLastVisibleElementIndex, scrollLastVisibleElementIndex + 5)
 
-        this.scrollOffset = this.scrollOffset - this.DEFAULT_SCROLL_LENGTH
+        this.scrollOffset = this.scrollOffset - this.$refs.datesContainer.clientWidth
 
         console.log(scrollLastVisibleElementIndex, this.scrollVisibleArea, this.scrollOffset)
 
@@ -138,7 +138,7 @@
 
         this.scrollVisibleArea = this.filmDates.slice(scrollFirstVisibleElementIndex - 5, scrollFirstVisibleElementIndex)
 
-        this.scrollOffset = this.scrollOffset + this.DEFAULT_SCROLL_LENGTH
+        this.scrollOffset = this.scrollOffset + this.$refs.datesContainer.clientWidth
 
         console.log(scrollFirstVisibleElementIndex, this.scrollVisibleArea, this.scrollOffset)
 
@@ -188,9 +188,9 @@
   .dates-container {
     position: relative;
     width: 100%;
-    max-width: 300px;
-    min-width: 300px;
-    height: 60px;
+    max-width: 150px;
+    min-width: 150px;
+    height: 30px;
     overflow: hidden;
   }
 
@@ -211,8 +211,8 @@
   }
 
   .date {
-    width: 60px;
-    min-width: 60px;
+    width: 30px;
+    min-width: 30px;
     background: transparent;
     cursor: pointer;
     display: flex;
@@ -251,5 +251,18 @@
     opacity: .5;
     cursor: default;
     pointer-events: none;
+  }
+
+  @media screen and (min-width: 960px) {
+    .dates-container {
+      max-width: 300px;
+      min-width: 300px;
+      height: 60px;
+    }
+
+    .date {
+      height: 60px;
+      min-width: 60px;
+    }
   }
 </style>

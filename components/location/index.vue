@@ -130,16 +130,16 @@
     right: 0;
     width: 100%;
     align-items: flex-end;
-    z-index: 200;
-    clip-path: circle(80px at 50% 20%);
-    transition: clip-path .5s ease-out;
+    z-index: 500;
     background-color: #fff;
+    transition: all .4s ease-in-out;
   }
 
   .location-container--is-expanded {
     height: 100%;
     clip-path: circle(100% at 50% 20%);
     background-color: #FFF9F6;
+    position: fixed;
   }
 
   .location-component {
@@ -238,6 +238,20 @@
 
   .location-container--is-expanded .cities-select {
     display: block;
+  }
+
+  @media screen and (min-width: 960px) {
+    .location-container {
+      clip-path: circle(80px at 50% 20%);
+      transition: clip-path .5s ease-out;
+      background-color: #fff;
+    }
+
+    .location-container--is-expanded {
+      clip-path: circle(100% at 50% 20%);
+      background-color: #FFF9F6;
+      position: absolute;
+    }
   }
 
 </style>

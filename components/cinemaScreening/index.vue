@@ -84,8 +84,8 @@
 
 <style lang="scss">
   .cinema-screening {
-    flex: 1.2;
-    padding: 40px 32px 12px 24px;
+    flex: 1;
+    padding: 32px 16px 12px;
     position: relative;
   }
 
@@ -163,6 +163,11 @@
   @media screen and (min-width: 960px) {
     .map-control {
       display: block;
+    }
+
+    .cinema-screening {
+      flex: 1.2;
+      padding: 40px 32px 12px 24px;
     }
   }
 </style>
