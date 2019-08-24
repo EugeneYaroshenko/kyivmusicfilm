@@ -40,8 +40,19 @@
             height: -45
           }
         },
-        infoWindowContent: null
+        infoWindowContent: null,
+        markers: null
       }
+    },
+    watch: {
+      location: function (val, oldVal) {
+        if (val && val.name !== oldVal.name) {
+          this.setMarkers()
+        }
+      }
+    },
+    mounted () {
+      this.setMarkers()
     },
     computed: {
       ...mapState({
@@ -50,18 +61,19 @@
         // GETTER FOR CURRENT CITY
         allCinemas: state => state.film.cinema
       }),
-      markers () {
-        const cinemas = this.allCinemas.filter(cityCinemas => cityCinemas.name === location.name)
+    },
+    methods: {
+      setMarkers () {
+        console.log('here', this.location)
+        const cinemas = this.allCinemas.filter(cityCinemas => cityCinemas.location === this.location.name)
 
-        return cinemas[0].cinema_array.map(cinema => {
+        this.markers = cinemas[0].cinema_array.map(cinema => {
           return {
             position: cinema.position,
             title: JSON.stringify({ title: cinema.name, address: cinema.address })
           }
         })
-      }
-    },
-    methods: {
+      },
       showInfoWindow (data) {
         this.markerPosition = data.position
         this.setInfoWindowContent(JSON.parse(data.title))

@@ -12,6 +12,12 @@ function matchUserLocationWithFilmLocation (userCurrentLocation, availableCities
   return currentLocation
 }
 
+function hideLoader (dispatch) {
+  setTimeout(() => {
+    dispatch('ui/hideLoader', {}, { root: true })
+  }, 4000)
+}
+
 export const state = () => ({
   mapShown: false,
   location: null,
@@ -20,7 +26,7 @@ export const state = () => ({
     disableDefaultUI: true,
     scaleControl: true,
     zoomControl: true,
-    zoom: 13,
+    zoom: 12,
     styles: [
       {
         featureType: 'all',
@@ -243,7 +249,7 @@ export const actions = {
         throw new Error('no location')
       }
 
-      dispatch('ui/hideLoader', {}, { root: true })
+      hideLoader(dispatch)
     } catch (error) {
       console.log(error, error)
     }

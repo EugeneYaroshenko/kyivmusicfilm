@@ -1,7 +1,6 @@
 <template>
-  <div class="cinema-screening" v-if="dateCinemas">
+  <div class="cinema-screening">
     <location-component />
-    <loader-component v-if="loaderShown" />
     <h3 class="title">
       Геніальний Кутюр'є
     </h3>
@@ -17,7 +16,7 @@
       </h4>
       <div
         class="cinemas"
-        v-if="location"
+        v-if="dateCinemas"
       >
         <div
           class="cinema"
@@ -50,7 +49,6 @@
 <script>
   import CalendarComponent from '~/components/calendar'
   import LocationComponent from '~/components/location'
-  import LoaderComponent from '~/components/loader'
   import Icon from '~/components/icon'
   import MapIcon from '~/assets/icons/vueIcons/map'
   import { mapState } from 'vuex'
@@ -59,7 +57,6 @@
     components: {
       CalendarComponent,
       LocationComponent,
-      LoaderComponent,
       Icon,
       MapIcon
     },

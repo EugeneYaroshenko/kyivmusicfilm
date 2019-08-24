@@ -1,5 +1,6 @@
 <template>
   <section class="container">
+    <loader-component />
     <navigation-component />
     <div class="main">
       <div :class="{'preview-image': true, 'preview-image--expanded': trailerShown}">
@@ -32,6 +33,7 @@
   import CinemaMapComponent from '~/components/cinemaMap'
   import TrailerComponent from '~/components/trailer'
   import PreviewTrailerInteraction from '~/components/interactions/previewTrailer'
+  import LoaderComponent from '~/components/loader'
   import { mapState } from 'vuex'
 
   export default {
@@ -41,7 +43,8 @@
       CinemaScreeningComponent,
       CinemaMapComponent,
       TrailerComponent,
-      PreviewTrailerInteraction
+      PreviewTrailerInteraction,
+      LoaderComponent
     },
     computed: {
       ...mapState({
@@ -50,8 +53,8 @@
       })
     },
     created () {
-      this.$store.dispatch('map/getGeolocation')
       this.$store.dispatch('ui/showLoader')
+      this.$store.dispatch('map/getGeolocation')
     },
     methods: {
       // displayLocationInfo (position) {

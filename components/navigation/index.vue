@@ -2,7 +2,7 @@
   <nav class="navigation">
     <div class="navigation-block">
       <div class="navigation-block__logo-container">
-        <div class="navigation-block__logo" />
+        <div class="navigation-block__logo" v-if="!isLoaderShown" />
       </div>
       <div class="navigation-block__icons">
         <a target="_blank" href="https://www.facebook.com/KyivMusicFilm/">
@@ -54,6 +54,7 @@
   import Messenger from '~/assets/icons/vueIcons/messenger'
   import Youtube from '~/assets/icons/vueIcons/youtube'
   import Instagram from '~/assets/icons/vueIcons/instagram'
+  import { mapState } from 'vuex'
 
   export default {
     components: {
@@ -62,6 +63,11 @@
       Messenger,
       Youtube,
       Instagram
+    },
+    computed: {
+      ...mapState({
+                    isLoaderShown: state => state.ui.loading
+                  })
     }
   }
 </script>

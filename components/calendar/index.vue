@@ -16,7 +16,7 @@
       </div>
       <div class="dates-container">
         <div
-          class="dates"
+          :class="{'dates': true, 'dates--centered': !longListOfDates }"
           :style="{left: `${scrollOffset}px`}"
         >
           <div
@@ -70,8 +70,7 @@
       this.$store.subscribe((mutation, state) => {
         switch (mutation.type) {
           case 'filmDate/SET_FILM_DATES':
-            this.setScrollVisibleArea()
-            this.defineScrollableZone()
+
             break
         }
       })
@@ -80,10 +79,16 @@
       Icon,
       ArrowLeft
     },
+    watch: {
+      filmDates: function (val, oldVal) {
+        if (val && val !== oldVal) {
+          this.setScrollVisibleArea()
+          this.defineScrollableZone()
+          this.ifLongListOfDates()
+        }
+      }
+    },
     computed: {
-      longListOfDates () {
-        return this.filmDates && this.filmDates.length > 5
-      },
       filmDates () {
         return this.$store.state.filmDate.dates
       },
@@ -107,6 +112,9 @@
       },
       setScrollVisibleArea (datesArray = []) {
         this.scrollVisibleArea = datesArray.length ? datesArray : this.filmDates.slice(0, 5)
+      },
+      ifLongListOfDates () {
+        this.longListOfDates = this.filmDates && this.filmDates.length > 5
       },
       defineScrollableZone () {
         this.checkIfScrollRightPossible()
@@ -196,6 +204,10 @@
     top: 0;
     height: 100%;
     transition: all .3s ease-in-out;
+  }
+
+  .dates--centered {
+    justify-content: center;
   }
 
   .date {
