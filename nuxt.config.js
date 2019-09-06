@@ -33,7 +33,7 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    '@nuxtjs/axios',
+    '@nuxtjs/axios'
   ],
   /*
   ** Build configuration
@@ -46,7 +46,9 @@ module.exports = {
   },
   plugins: [
     { src: '~/plugins/vue2-google-maps', ssr: false },
-    { src: '~/plugins/vue-moment', ssr: false }
+    { src: '~/plugins/vue-moment', ssr: false },
+    { src: '~/plugins/vfc', ssr: false },
+    { src: '~/plugins/vue-fullcalendar', ssr: false }
   ]
 
 }

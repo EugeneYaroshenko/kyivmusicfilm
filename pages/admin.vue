@@ -1,6 +1,5 @@
 <template>
   <section class="admin-container">
-    <h2>Admin Main</h2>
     <nuxt-child />
   </section>
 </template>
