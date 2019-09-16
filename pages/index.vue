@@ -27,13 +27,13 @@
 </template>
 
 <script>
-  import NavigationComponent from '~/components/navigation'
-  import FilmInfoComponent from '~/components/filmInfo'
-  import CinemaScreeningComponent from '~/components/cinemaScreening'
-  import CinemaMapComponent from '~/components/cinemaMap'
-  import TrailerComponent from '~/components/trailer'
-  import PreviewTrailerInteraction from '~/components/interactions/previewTrailer'
-  import LoaderComponent from '~/components/loader'
+  import NavigationComponent from '~/components/app/elements/navigation'
+  import FilmInfoComponent from '~/components/app/elements/filmInfo'
+  import CinemaScreeningComponent from '~/components/app/sections//cinemaScreening'
+  import CinemaMapComponent from '~/components/app/sections/cinemaMap'
+  import TrailerComponent from '~/components/app/sections/trailer'
+  import PreviewTrailerInteraction from '~/components/app/elements/previewTrailer'
+  import LoaderComponent from '~/components/app/elements/loader'
   import { mapState } from 'vuex'
 
   export default {
@@ -48,8 +48,8 @@
     },
     computed: {
       ...mapState({
-        mapShown: state => state.map.mapShown,
-        trailerShown: state => state.trailer.trailerShown
+        mapShown: state => state.ui.mapShown,
+        trailerShown: state => state.ui.trailerShown
       })
     },
     created () {
