@@ -15,17 +15,23 @@ const state = () => ({
     image_desktop: null,
     image_mobile: null
   },
-  showings: []
+  showings: [],
+  request: {
+    loading: false,
+    fetched: false,
+    error: null
+  }
 })
 
 const getters = {
   getShowingDatesByCity: (state) => (selectedCity) => {
     const selectedCityShowingDates = state.showings.filter(showingInfo => showingInfo.city === selectedCity)[0].dates
     return selectedCityShowingDates ? selectedCityShowingDates.map(dateItem => {
+      const date = Vue.moment(dateItem.date).format('YYYY-MM-DD')
       return {
-        title: 'Сеанс',
-        start: Vue.moment(dateItem.date).format('YYYY-MM-DD'),
-        end: Vue.moment(dateItem.date).format('YYYY-MM-DD')
+        title: Vue.moment(dateItem.date).format('DD'),
+        start: date,
+        end: date
       }
     }) : []
   },
@@ -100,6 +106,15 @@ const mutations = {
   },
   [types.UPDATE_FILM_MOBILE_IMAGE] (state, payload) {
     state.general.image_mobile = payload
+  },
+  [types.SAVE_FILM_REQUEST] (state) {
+    state.request = { ...state.request, fetched: false, loading: true }
+  },
+  [types.SAVE_FILM_SUCCESS] (state, payload) {
+    state.request = { ...state.request, fetched: true, loading: false }
+  },
+  [types.SAVE_FILM_ERROR] (state, payload) {
+    state.request = { ...state.request, fetched: false, loading: false, error: payload.error }
   }
 }
 
@@ -140,7 +155,16 @@ const actions = {
   updateFilmMobileImage ({ commit }, updateFilmMobileImage) {
     commit(types.UPDATE_FILM_MOBILE_IMAGE, updateFilmMobileImage)
   },
+  async saveFilm ({ state, commit }) {
+    commit(types.SAVE_FILM_REQUEST)
+    try {
+      const savedFilm = await this.$axios.$post('/api/films', { general: state.general, showings: state.showings})
 
+      commit(types.SAVE_FILM_SUCCESS)
+    } catch (error) {
+      commit(types.SAVE_FILM_ERROR, error)
+    }
+  }
 }
 
 function checkIfShowingCityExist (showingsArray, city) {

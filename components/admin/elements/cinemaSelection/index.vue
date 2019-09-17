@@ -4,10 +4,11 @@
       v-if="selectedDate"
       class="cinemas-list"
     >
-      <div class="cinemas-list__date">
+      <h3 class="cinemas-list__date">
         {{ selectedDate }}
-      </div>
-      <div class="input-item">
+      </h3>
+      <div class="cinema__input-item">
+        <h4 class="cinemas-list__label">Кінотеатри:</h4>
         <vue-select
           :data="cinemasWithoutSelected"
           @change="selectCinema"
@@ -23,9 +24,9 @@
         </vue-select>
       </div>
       <div class="cinema-list-container">
-        Обрані кінотеатри
+        <h4 class="cinemas-list__label">Обрані кінотеатри:</h4>
         <ul
-          class="cinema-list"
+          class="cinemas-list"
           v-if="selectedCinemas"
         >
           <li
@@ -34,19 +35,19 @@
           >
             <div>
               {{ cinema }}
-              <div
-                class="delete"
-                @click="deleteCinema(cinema)"
-              >
-                Delete
-              </div>
+            </div>
+            <div
+              class="delete"
+              @click="deleteCinema(cinema)"
+            >
+              Delete
             </div>
           </li>
         </ul>
       </div>
       <div class="action-buttons">
         <div
-          class="button action-buttons__save"
+          :class="{'button action-buttons__save': true, 'action-button--disabled': !selectedCinemas.length }"
           @click="saveForm"
         >
           Зберегти
@@ -63,7 +64,7 @@
       class="select-date-block"
       v-else
     >
-      Оберіть дату
+      Щоб додати кінотеатр, обери дату
     </div>
   </div>
 </template>
@@ -145,10 +146,68 @@
     flex-flow: row nowrap;
   }
 
+  .edit-block {
+    flex: 1;
+    position: relative;
+    margin-left: 16px;
+  }
+
+  .select-date-block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, .1);
+  }
+
   .button {
-    background-color: yellow;
+    background-color: #000;
+    color: #fff;
     padding: 8px 12px;
+    flex: 1;
+    text-align: center;
     max-width: 48%;
     cursor: pointer;
+    pointer: cursor;
+  }
+
+  .action-buttons__cancel {
+    background-color: red;
+  }
+
+  .action-button--disabled {
+    pointer-events: none;
+    opacity: .2;
+  }
+
+  .cinemas-list__date {
+    margin-bottom: 15px;
+  }
+
+  .cinemas-list__label {
+    margin-bottom: 4px;
+  }
+
+  .cinema__input-item {
+    margin-bottom: 20px;
+  }
+
+  .cinemas-list {
+    list-style: none;
+    margin: 12px 0 24px;
+    padding: 0;
+
+    li {
+      padding: 16px 12px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: 0 0 4px 0 rgba(0, 0, 0, .1);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
   }
 </style>

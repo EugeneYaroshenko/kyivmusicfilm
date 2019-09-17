@@ -22,7 +22,7 @@ const mutations = {
     state.request = { ...state.request, fetched: true, loading: false }
   },
   [types.GET_FILMS_ERROR] (state, payload) {
-    state.request = { ...state.request, fetched: false, loading: false, errors: payload.error }
+    state.request = { ...state.request, fetched: false, loading: false, error: payload.error }
   }
 }
 

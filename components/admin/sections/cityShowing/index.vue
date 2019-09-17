@@ -8,9 +8,10 @@
         :add-showing-date="addShowingDate"
         :edit-showing-date="editShowingDate"
         :calendar-events="calendarEvents"
+        :selected-date="selectedDateForCity"
       />
       <cinema-selection
-        :selected-date="dateInMillisecondsToUserFriendlyDate(this.selectedDateForCity)"
+        :selected-date="dateInMillisecondsToUserFriendlyDate(selectedDateForCity)"
         :cinemas-for-selected-date="showingCinemasForDateAndCity"
         :all-cinemas="allCinemas"
         :save-changes="saveChanges"
