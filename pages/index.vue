@@ -52,6 +52,7 @@
         trailerShown: state => state.ui.trailerShown
       })
     },
+    // TODO change to NUXT async method
     created () {
       this.$store.dispatch('ui/showLoader')
       this.$store.dispatch('map/getGeolocation')

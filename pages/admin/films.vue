@@ -5,7 +5,11 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    fetch ({ store }) {
+      return store.dispatch('films/getAll')
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

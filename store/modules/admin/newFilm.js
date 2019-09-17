@@ -5,6 +5,7 @@ import * as types from '@/store/mutationTypes'
 import { transliterate } from '@/utils/textUtils'
 
 const state = () => ({
+  id: null,
   general: {
     name: null,
     url: null,
