@@ -200,7 +200,7 @@ const actions = {
     commit(types.SAVE_FILM_REQUEST)
 
     try {
-      const apiURL = state.film._id ? `/api/films/${state.film._id}` : '/api/films'
+      const apiURL = state.film._id ? `https://kyivmusicfilm.herokuapp.com/api/films/${state.film._id}` : 'https://kyivmusicfilm.herokuapp.com/api/films'
       const savedFilm = await this.$axios.$post(apiURL, { general: state.film.general, showings: state.film.showings })
 
       commit(types.SAVE_FILM_SUCCESS)
