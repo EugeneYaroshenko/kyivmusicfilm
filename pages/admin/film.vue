@@ -1,5 +1,11 @@
 <template>
-  <section class="admin-container">
+  <section class="edit-container">
+    <edit-popup
+      v-if="fetchedFilmRequest"
+      :error="filmRequest.error"
+      :film-url="filmURL"
+      :reset="resetRequest"
+    />
     <div class="cover-block">
       <div class="cover-image" />
       <div class="cover-content">
@@ -196,6 +202,7 @@
   import cityShowing from '~/components/admin/sections/cityShowing'
   import { mapState } from 'vuex'
   import inputComponent from '~/components/admin/elements/form/input'
+  import editPopup from '~/components/admin/elements/editPopup'
 
   export default {
     data () {
@@ -230,13 +237,15 @@
     },
     components: {
       cityShowing,
-      inputComponent
+      inputComponent,
+      editPopup
     },
     computed: {
       ...mapState({
-                    cityShowings: state => state.newFilm.showings,
+                    cityShowings: state => state.newFilm.film.showings,
                     allLocations: state => state.locations.all,
-                    filmInformation: state => state.newFilm.general
+                    filmInformation: state => state.newFilm.film.general,
+                    filmRequest: state => state.newFilm.request
       }),
       formCanBeSubmitted () {
         return this.ifFilmInformationFilledIn() && this.ifCityShowingsFilledIn()
@@ -258,6 +267,12 @@
         } else {
           return null
         }
+      },
+      fetchedFilmRequest () {
+        return this.filmRequest.fetched
+      },
+      filmURL () {
+        return `/showings/${this.filmInformation.url}`
       }
     },
     methods: {
@@ -310,6 +325,9 @@
       removeShowingCity (city) {
         this.$store.dispatch('newFilm/removeShowingCity', { city })
       },
+      resetRequest () {
+        this.$store.dispatch('newFilm/resetRequest')
+      },
       saveFilm () {
         this.$store.dispatch('newFilm/saveFilm')
       },
@@ -358,6 +376,25 @@
 </script>
 
 <style lang="scss" scoped>
+  .edit-container {
+    position: relative;
+  }
+
+  .popup-edit {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: green;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+  }
+
   .content-headline {
     text-align: center;
   }

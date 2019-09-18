@@ -6,7 +6,10 @@
       class="main"
       v-if="filmFetched"
     >
-      <div :class="{'preview-image': true, 'preview-image--expanded': trailerShown}">
+      <div
+        :class="{'preview-image': true, 'preview-image--expanded': trailerShown}"
+        :style="{ backgroundImage: 'url(' + filmInformation.image_desktop + ')' }"
+      >
         <trailer-component v-if="trailerShown" />
         <div class="preview-mobile">
           <preview-trailer-interaction />
@@ -51,14 +54,18 @@
     },
     computed: {
       ...mapState({
-        mapShown: state => state.ui.mapShown,
-        trailerShown: state => state.ui.trailerShown,
-        filmFetched: state => state.film.request.fetched
+                    mapShown: state => state.ui.mapShown,
+                    trailerShown: state => state.ui.trailerShown,
+                    filmFetched: state => state.film.request.fetched,
+                    filmInformation: state => state.film.general
       })
     },
-    // TODO change to NUXT async method
     created () {
-      this.$store.dispatch('ui/showLoader')
+      const url = this.$route.path.replace('/showings/', '')
+
+      // this.$store.dispatch('ui/showLoader')
+
+      return this.$store.dispatch('film/getFilmByName', { url })
     },
     methods: {
       // displayLocationInfo (position) {
@@ -98,7 +105,6 @@
   }
 
   .preview-image {
-    background-image: url('../assets/images/preview__image.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

@@ -24,13 +24,13 @@ async function start () {
     await nuxt.ready()
   }
 
-  app.use(bodyParser.json())
+  app.use(bodyParser.json({ limit: '50mb' }))
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use('/api', apiRoutes)
   app.use(nuxt.render)
 
 
-  mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true })
+  mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/test', { useNewUrlParser: true })
 
   const db = mongoose.connection
 

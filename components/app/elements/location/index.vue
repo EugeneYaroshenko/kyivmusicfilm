@@ -20,13 +20,18 @@
         @click="expandLocation"
       />
       <div :class="{ 'current-location': true, 'current-location--is-expanded': isLocationMenuShown }">
-        <div class="location-city"> {{ selectedLocation ? capitalize(selectedLocation.name) : null }}</div>
+        <div class="location-city">
+          {{ selectedLocation ? capitalize(selectedLocation.name) : null }}
+        </div>
       </div>
-      <div class="cities-select"  >
+      <div class="cities-select">
         <span>{{ locationText }} </span>
       </div>
     </div>
-    <div class="cities-list__container" v-if="isLocationMenuShown">
+    <div
+      class="cities-list__container"
+      v-if="isLocationMenuShown"
+    >
       <ul
         class="cities-list"
         v-if="availableLocations"
@@ -48,14 +53,13 @@
 
 <script>
   import Icon from '~/components/app/elements/icon'
-  import Location from '~/assets/icons/vueIcons/location'
   import Close from '~/assets/icons/vueIcons/close'
   import { mapState } from 'vuex'
 
   export default {
     computed: {
       ...mapState({
-        allLocations: state => state.film.location,
+        allLocations: state => state.filmLocations.all,
         selectedLocation: state => state.map.location,
         isLocationMenuShown: state => state.ui.locationMenuShown,
         locationMenuType: state => state.ui.locationMenuType
@@ -93,7 +97,6 @@
     },
     components: {
       Icon,
-      Location,
       Close
     }
   }

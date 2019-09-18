@@ -4,7 +4,7 @@ const state = () => ({
       location: 'kyiv',
       cinema_array: [
         {
-          name: 'жовтень',
+          name: 'Жовтень',
           address: 'вулиця Костянтинівська, 26',
           position: { lat: 50.4684062, lng: 30.5079804 }
         },

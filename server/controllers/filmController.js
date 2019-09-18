@@ -2,12 +2,10 @@ const consola = require('consola')
 const Film = require('../models/filmModel')
 
 exports.index = async function (req, res) {
-  consola.info('here')
   try {
     const films = await Film.find({})
 
     consola.success(`films were retrieved successfully`)
-    consola.info(films)
     return res.status(200).send({ data: films })
   } catch (err) {
     consola.error(`$error retrieving films: ${err}`)
@@ -23,7 +21,7 @@ exports.new = async function (req, res) {
 
     const savedFilm = await film.save()
 
-    consola.success(`film with id ${req.params.film_id} was created successfully`)
+    consola.success(`film was created successfully`)
     return res.status(200).send({ data: savedFilm })
   } catch (err) {
     consola.error(`error saving new film: ${err}`)
@@ -48,6 +46,21 @@ exports.update = async function (req, res) {
     }
   } catch (err) {
     consola.error(`error updating film: ${err}`)
+    return res.status(400).send({ error: err })
+  }
+}
+
+exports.view = async function (req, res) {
+  try {
+    const film = await Film.find({ 'general.url': req.params.film_url })
+
+    if (film && film.length) {
+      return res.status(200).send({ data: film[0] })
+    } else {
+      throw new Error(`Film with url ${req.params.film_url} could not be found`)
+    }
+  } catch (err) {
+    consola.error(`error viewing film: ${err}`)
     return res.status(400).send({ error: err })
   }
 }

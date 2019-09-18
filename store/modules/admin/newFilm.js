@@ -4,18 +4,41 @@ import Vue from 'vue'
 import * as types from '@/store/mutationTypes'
 import { transliterate } from '@/utils/textUtils'
 
-const state = () => ({
-  id: null,
-  general: {
-    name: null,
-    url: null,
-    description_full: null,
-    description_short: null,
-    trailer: null,
-    image_desktop: null,
-    image_mobile: null
+const initialFilmState = {
+  film: {
+    id: null,
+    general: {
+      name: null,
+      url: null,
+      description_full: null,
+      description_short: null,
+      trailer: null,
+      image_desktop: null,
+      image_mobile: null
+    },
+    showings: []
   },
-  showings: [],
+  request: {
+    loading: false,
+    fetched: false,
+    error: null
+  }
+}
+
+const state = () => ({
+  film: {
+    id: null,
+    general: {
+      name: null,
+      url: null,
+      description_full: null,
+      description_short: null,
+      trailer: null,
+      image_desktop: null,
+      image_mobile: null
+    },
+    showings: []
+  },
   request: {
     loading: false,
     fetched: false,
@@ -25,7 +48,7 @@ const state = () => ({
 
 const getters = {
   getShowingDatesByCity: (state) => (selectedCity) => {
-    const selectedCityShowingDates = state.showings.filter(showingInfo => showingInfo.city === selectedCity)[0].dates
+    const selectedCityShowingDates = state.film.showings.filter(showingInfo => showingInfo.city === selectedCity)[0].dates
     return selectedCityShowingDates ? selectedCityShowingDates.map(dateItem => {
       const date = Vue.moment(dateItem.date).format('YYYY-MM-DD')
       return {
@@ -37,7 +60,7 @@ const getters = {
   },
   getShowingCinemasForDateAndCity: (state) => ({ city, date }) => {
     // TODO simplify
-    const showingCity = state.showings.filter(showingItem => showingItem.city === city)[0]
+    const showingCity = state.film.showings.filter(showingItem => showingItem.city === city)[0]
     const selectedShowingDate = showingCity.dates.filter(dateItem => dateItem.date === date)[0]
 
     return selectedShowingDate.cinema_array
@@ -45,67 +68,73 @@ const getters = {
 }
 
 const mutations = {
+  [types.EDIT_FILM] (state, payload) {
+    state.film = payload
+  },
+  [types.CREATE_FILM] (state) {
+    state = initialFilmState
+  },
   [types.ADD_SHOWING_DATE] (state, payload) {
     const newShowingDate = { date: payload.date, cinema_array: null }
 
-    if (checkIfShowingCityExist(state.showings, payload.city)) {
-      const updatedShowings = state.showings.map(showingInfo => {
+    if (checkIfShowingCityExist(state.film.showings, payload.city)) {
+      const updatedShowings = state.film.showings.map(showingInfo => {
         return showingInfo.city === payload.city
           ? { ...showingInfo, dates: [...showingInfo.dates, ...[newShowingDate]] }
           : showingInfo
       })
 
-      state.showings = updatedShowings
+      state.film.showings = updatedShowings
     } else {
-      state.showings = [...state.showings, [{ city: payload.city, dates: [newShowingDate] }]]
+      state.film.showings = [...state.film.showings, [{ city: payload.city, dates: [newShowingDate] }]]
     }
   },
   [types.REMOVE_SHOWING_DATE] (state, payload) {
-    const updatedShowingsWithoutRemovedDate = state.showings.map(showingInfo => {
+    const updatedShowingsWithoutRemovedDate = state.film.showings.map(showingInfo => {
       return showingInfo.city === payload.city
         ? { ...showingInfo, ...{ dates: showingInfo.dates.filter(dateItem => dateItem.date !== payload.date) } }
         : showingInfo
     })
 
-    state.showings = updatedShowingsWithoutRemovedDate
+    state.film.showings = updatedShowingsWithoutRemovedDate
   },
   [types.UPDATE_SHOWING_DATE] (state, payload) {
-    const updatedShowings = state.showings.map(showingInfo => {
+    const updatedShowings = state.film.showings.map(showingInfo => {
       return showingInfo.city === payload.city
       ? { ...showingInfo, ...{ dates: updateShowingDates(showingInfo.dates, payload.date, payload.cinemas) } }
       : showingInfo
     })
 
-    state.showings = updatedShowings
+    state.film.showings = updatedShowings
   },
   [types.ADD_SHOWING_CITY] (state, payload) {
     const newShowingCity = { city: payload.city, dates: [] }
-    state.showings = [...state.showings, ...[newShowingCity]]
+    state.film.showings = [...state.film.showings, ...[newShowingCity]]
   },
   [types.REMOVE_SHOWING_CITY] (state, payload) {
-    const showingCitiesWithoutRemovedCity = state.showings.filter(showingItem => showingItem.city !== payload.city)
-    state.showings = showingCitiesWithoutRemovedCity
+    const showingCitiesWithoutRemovedCity = state.film.showings.filter(showingItem => showingItem.city !== payload.city)
+    state.film.showings = showingCitiesWithoutRemovedCity
   },
   [types.UPDATE_FILM_NAME] (state, payload) {
-    state.general.name = payload
+    state.film.general.name = payload
   },
   [types.UPDATE_FILM_URL] (state, payload) {
-    state.general.url = transliterate(payload).toLowerCase()
+    state.film.general.url = transliterate(payload).toLowerCase()
   },
   [types.UPDATE_FILM_FULL_DESCRIPTION] (state, payload) {
-    state.general.description_full = payload
+    state.film.general.description_full = payload
   },
   [types.UPDATE_FILM_SHORT_DESCRIPTION] (state, payload) {
-    state.general.description_short = payload
+    state.film.general.description_short = payload
   },
   [types.UPDATE_FILM_TRAILER] (state, payload) {
-    state.general.trailer = payload
+    state.film.general.trailer = payload
   },
   [types.UPDATE_FILM_DESKTOP_IMAGE] (state, payload) {
-    state.general.image_desktop = payload
+    state.film.general.image_desktop = payload
   },
   [types.UPDATE_FILM_MOBILE_IMAGE] (state, payload) {
-    state.general.image_mobile = payload
+    state.film.general.image_mobile = payload
   },
   [types.SAVE_FILM_REQUEST] (state) {
     state.request = { ...state.request, fetched: false, loading: true }
@@ -115,10 +144,22 @@ const mutations = {
   },
   [types.SAVE_FILM_ERROR] (state, payload) {
     state.request = { ...state.request, fetched: false, loading: false, error: payload.error }
+  },
+  [types.RESET_FILM] (state) {
+    state = initialFilmState
+  },
+  [types.RESET_FILM_REQUEST] (state) {
+    state.request = { fetched: false, loading: false, error: null }
   }
 }
 
 const actions = {
+  createFilm ({ commit }) {
+    commit(types.CREATE_FILM)
+  },
+  editFilm ({ commit }, payload) {
+    commit(types.EDIT_FILM, payload)
+  },
   addShowingDate ({ commit }, payload) {
    commit(types.ADD_SHOWING_DATE, payload)
   },
@@ -157,13 +198,21 @@ const actions = {
   },
   async saveFilm ({ state, commit }) {
     commit(types.SAVE_FILM_REQUEST)
+
     try {
-      const savedFilm = await this.$axios.$post('/api/films', { general: state.general, showings: state.showings})
+      const apiURL = state.film._id ? `/api/films/${state.film._id}` : '/api/films'
+      const savedFilm = await this.$axios.$post(apiURL, { general: state.film.general, showings: state.film.showings })
 
       commit(types.SAVE_FILM_SUCCESS)
     } catch (error) {
       commit(types.SAVE_FILM_ERROR, error)
     }
+  },
+  resetRequest ({ commit }) {
+    commit(types.RESET_FILM_REQUEST)
+  },
+  resetFilm ({ commit }) {
+    commit(types.RESET_FILM)
   }
 }
 

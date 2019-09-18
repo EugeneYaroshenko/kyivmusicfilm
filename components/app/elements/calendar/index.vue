@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar__container" v-if="filmDates">
+  <div class="calendar__container" v-if="filmShowings">
     <div class="calendar-dates">
       <div
         :class="{'control back': true, 'disabled': !isScrollLeftPossible}"
@@ -20,16 +20,16 @@
           :style="{left: `${scrollOffset}px`}"
         >
           <div
-            v-for="(dateItem, index) in filmDates"
-            :class="{ 'date': true, 'selected': dateItem.date === selectedDate.date }"
+            v-for="(filmShowing, index) in filmShowings"
+            :class="{ 'date': true, 'selected': filmShowing.date === selectedShowingDate }"
             :key="index"
-            @click="selectDate(dateItem)"
+            @click="selectShowing(filmShowing)"
           >
             <div class="date__day">
-              {{ setDay(dateItem.date) }}
+              {{ setDay(filmShowing.date) }}
             </div>
             <div class="date__month">
-              {{ setMonth(dateItem.date) }}
+              {{ setMonth(filmShowing.date) }}
             </div>
           </div>
         </div>
@@ -65,21 +65,12 @@
         isScrollLeftPossible: false
       }
     },
-    mounted () {
-      this.$store.subscribe((mutation, state) => {
-        switch (mutation.type) {
-          case 'filmDate/SET_FILM_DATES':
-
-            break
-        }
-      })
-    },
     components: {
       Icon,
       ArrowLeft
     },
     watch: {
-      filmDates: function (val, oldVal) {
+      filmShowings: function (val, oldVal) {
         if (val && val !== oldVal) {
           this.setScrollVisibleArea()
           this.defineScrollableZone()
@@ -88,15 +79,16 @@
       }
     },
     computed: {
-      filmDates () {
-        return this.$store.state.filmDate.dates
+      filmShowings () {
+        return this.$store.state.filmShowings.allShowingsForCity
       },
-      selectedDate () {
-        return this.$store.state.filmDate.selectedDate
+      selectedShowingDate () {
+        return this.$store.state.filmShowings.selectedShowingDate
       }
     },
     methods: {
       setDay (time) {
+        // TODO change the way moment handles time
         if (process.client) {
           return this.$moment(time).format('D')
         }
@@ -106,14 +98,14 @@
           return this.$moment(time).format('MMM')
         }
       },
-      selectDate (date) {
-        this.$store.dispatch('filmDate/selectDate', date)
+      selectShowing (showing) {
+        this.$store.dispatch('filmShowings/selectShowing', showing)
       },
       setScrollVisibleArea (datesArray = []) {
-        this.scrollVisibleArea = datesArray.length ? datesArray : this.filmDates.slice(0, 5)
+        this.scrollVisibleArea = datesArray.length ? datesArray : this.filmShowings.slice(0, 5)
       },
       ifLongListOfDates () {
-        this.longListOfDates = this.filmDates && this.filmDates.length > 5
+        this.longListOfDates = this.filmShowings && this.filmShowings.length > 5
       },
       defineScrollableZone () {
         this.checkIfScrollRightPossible()
@@ -121,9 +113,9 @@
       },
       scrollRight () {
         const scrollLastVisibleElement = this.scrollVisibleArea.slice(-1)[0]
-        const scrollLastVisibleElementIndex = this.filmDates.indexOf(scrollLastVisibleElement) + 1
+        const scrollLastVisibleElementIndex = this.filmShowings.indexOf(scrollLastVisibleElement) + 1
 
-        this.scrollVisibleArea = this.filmDates.slice(scrollLastVisibleElementIndex, scrollLastVisibleElementIndex + 5)
+        this.scrollVisibleArea = this.filmShowings.slice(scrollLastVisibleElementIndex, scrollLastVisibleElementIndex + 5)
 
         this.scrollOffset = this.scrollOffset - this.$refs.datesContainer.clientWidth
 
@@ -133,9 +125,9 @@
       },
       scrollLeft () {
         const scrollFirstVisibleElement = this.scrollVisibleArea.slice(0)[0]
-        const scrollFirstVisibleElementIndex = this.filmDates.indexOf(scrollFirstVisibleElement)
+        const scrollFirstVisibleElementIndex = this.filmShowings.indexOf(scrollFirstVisibleElement)
 
-        this.scrollVisibleArea = this.filmDates.slice(scrollFirstVisibleElementIndex - 5, scrollFirstVisibleElementIndex)
+        this.scrollVisibleArea = this.filmShowings.slice(scrollFirstVisibleElementIndex - 5, scrollFirstVisibleElementIndex)
 
         this.scrollOffset = this.scrollOffset + this.$refs.datesContainer.clientWidth
 
@@ -146,13 +138,13 @@
 
       checkIfScrollRightPossible () {
         const scrollLastVisibleElement = this.scrollVisibleArea.slice(-1)[0]
-        const datesLastElement = this.filmDates.slice(-1)[0]
+        const datesLastElement = this.filmShowings.slice(-1)[0]
 
         this.isScrollRightPossible = scrollLastVisibleElement !== datesLastElement
       },
       checkIfScrollLeftPossible () {
         const scrollFirstVisibleElement = this.scrollVisibleArea.slice(0)[0]
-        const datesFirstElement = this.filmDates.slice(0)[0]
+        const datesFirstElement = this.filmShowings.slice(0)[0]
 
         this.isScrollLeftPossible = scrollFirstVisibleElement !== datesFirstElement
       }

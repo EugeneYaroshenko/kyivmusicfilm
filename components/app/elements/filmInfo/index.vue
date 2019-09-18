@@ -9,7 +9,7 @@
       </h4>
       <div class="information-description">
         <p class="information-description__text">
-          «Геніальний кутюр’є» — документальна стрічка про останні роки легендарного Іва Сен-Лорана та його модний дім.
+          {{ filmDescription }}
         </p>
       </div>
     </div>
@@ -26,7 +26,8 @@
     },
     computed: {
       ...mapState({
-                    isMapShown: state => state.ui.mapShown
+                    isMapShown: state => state.ui.mapShown,
+                    filmDescription: state => state.film.general.description_full
                   })
     }
   }

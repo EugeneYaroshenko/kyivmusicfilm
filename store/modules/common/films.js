@@ -23,7 +23,16 @@ const mutations = {
   },
   [types.GET_FILMS_ERROR] (state, payload) {
     state.request = { ...state.request, fetched: false, loading: false, error: payload.error }
-  }
+  },
+  [types.DELETE_FILM_REQUEST] (state) {
+    state.request = { ...state.request, fetched: false, loading: true }
+  },
+  [types.DELETE_FILM_SUCCESS] (state, payload) {
+    state.request = { ...state.request, fetched: true, loading: false }
+  },
+  [types.DELETE_FILM_ERROR] (state, payload) {
+    state.request = { ...state.request, fetched: false, loading: false, error: payload.error }
+  },
 }
 
 const actions = {
@@ -36,7 +45,20 @@ const actions = {
     } catch (error) {
       commit(types.GET_FILMS_ERROR, error)
     }
-  }
+  },
+  async deleteFilm ({ commit }, film) {
+    commit(types.DELETE_FILM_REQUEST)
+
+    console.log(film._id)
+
+    try {
+      const deletedFilm = await this.$axios.$delete(`/api/films/${film._id}`)
+
+      commit(types.DELETE_FILM_SUCCESS)
+    } catch (error) {
+      commit(types.DELETE_FILM_ERROR, error)
+    }
+  },
 }
 
 export default {

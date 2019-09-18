@@ -5,7 +5,7 @@ function matchUserLocationWithFilmLocation (userCurrentLocation, availableCities
   const userLocation = userCurrentLocation.toLowerCase()
 
   availableCities.forEach(location => {
-    if (userLocation.includes(location.name_eng)) {
+    if (userLocation.includes(location.name)) {
       currentLocation = location
     }
   })
@@ -218,19 +218,20 @@ const mutations = {
 const actions = {
   selectLocation ({ commit, dispatch }, location) {
     commit(types.SELECT_LOCATION, location)
-    dispatch('filmDate/saveDatesForLocation', location.name, { root: true })
+    dispatch('filmShowings/saveShowingsForForLocation', location.name, { root: true })
   },
+
   async getGeolocation ({ commit, rootState, dispatch }) {
     try {
       const geolocationAPI = 'https://geoip-db.com/json/'
       const location = await this.$axios.$get(geolocationAPI)
 
       if (location) {
-        const userLocationWithFilm = matchUserLocationWithFilmLocation(location.city, rootState.film.location)
+        const userLocationWithFilm = matchUserLocationWithFilmLocation(location.city, rootState.filmLocations.all)
 
         if (userLocationWithFilm) {
           commit(types.SELECT_LOCATION, userLocationWithFilm)
-          dispatch('filmDate/saveDatesForLocation', userLocationWithFilm.name, { root: true })
+          dispatch('filmShowings/saveShowingsForLocation', userLocationWithFilm.name, { root: true })
         } else {
           dispatch('ui/showLocationMenu', { different_location: true }, { root: true })
         }

@@ -124,4 +124,8 @@
   .comp-full-calendar {
     padding: 0;
   }
+
+  .dates-bg {
+    width: 100%;
+  }
 </style>

@@ -110,10 +110,12 @@
         this.selectedCinemas = [...this.selectedCinemas, ...[cinema]]
       },
       saveForm () {
-        return this.saveChanges(this.selectedCinemas)
+        this.saveChanges(this.selectedCinemas)
+        this.selectedCinemas = []
       },
       cancelForm () {
-        return this.cancelChanges()
+        this.cancelChanges()
+        this.selectedCinemas = []
       },
       deleteCinema (cinemaToDelete) {
         this.selectedCinemas = this.selectedCinemas.filter(cinemaName => cinemaName !== cinemaToDelete)

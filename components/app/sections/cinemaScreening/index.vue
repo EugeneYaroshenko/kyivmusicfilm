@@ -2,7 +2,7 @@
   <div class="cinema-screening">
     <location-component />
     <h3 class="title">
-      Геніальний Кутюр'є
+      {{ filmInformation.name }}
     </h3>
     <div class="screening-block">
       <h4 class="screening-block__title">
@@ -16,11 +16,11 @@
       </h4>
       <div
         class="cinemas"
-        v-if="dateCinemas"
+        v-if="cinemas"
       >
         <div
           class="cinema"
-          v-for="(cinema, index) in dateCinemas.cinema_array"
+          v-for="(cinema, index) in cinemas"
           :key="index"
         >
           <div class="cinema-name">
@@ -73,11 +73,10 @@
       ...mapState({
         mapShown: state => state.ui.mapShown,
         loaderShown: state => state.ui.loading,
-        location: state => state.map.location
-                  }),
-      dateCinemas () {
-        return this.$store.state.filmDate.selectedDate
-      }
+        location: state => state.map.location,
+        filmInformation: state => state.film.general,
+        cinemas: state => state.filmShowings.selectedShowingCinemas
+      })
     }
   }
 </script>

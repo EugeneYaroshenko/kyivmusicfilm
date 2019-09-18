@@ -5,8 +5,11 @@ router.route('/films')
   .get(filmController.index)
   .post(filmController.new)
 
+router.route('/films/:film_url')
+  .get(filmController.view)
+
 router.route('/films/:film_id')
-  .put(filmController.update)
+  .post(filmController.update)
   .delete(filmController.delete)
 
 module.exports = router

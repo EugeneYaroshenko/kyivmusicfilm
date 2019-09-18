@@ -3,7 +3,7 @@
     <div class="trailer-container">
       <iframe
         class="trailer"
-        src="https://www.youtube.com/embed/wUVo65Ce8Rs?autoplay=1"
+        :src="trailerLink"
         allowFullScreen
         frameBorder="0"
       />
@@ -28,6 +28,7 @@
 <script>
   import Icon from '~/components/app/elements/icon'
   import Close from '~/assets/icons/vueIcons/close'
+  import { mapState } from 'vuex'
 
   export default {
     components: {
@@ -37,6 +38,14 @@
     methods: {
       hideTrailer () {
         return this.$store.dispatch('ui/hideTrailer')
+      }
+    },
+    computed: {
+      ...mapState({
+                    trailer: state => state.film.general.trailer
+      }),
+      trailerLink () {
+        return `${this.trailer}?autoplay=1`
       }
     }
   }

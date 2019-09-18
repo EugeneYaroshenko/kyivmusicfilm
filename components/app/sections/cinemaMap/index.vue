@@ -57,13 +57,14 @@
       ...mapState({
         location: state => state.map.location,
         mapStyle: state => state.map.style,
+        selectedDate: state => state.filmDate.selectedDate,
         // GETTER FOR CURRENT CITY
-        allCinemas: state => state.film.cinema
+        cinemas: state => state.filmCinemas.all
       }),
     },
     methods: {
       setMarkers () {
-        const cinemas = this.allCinemas.filter(cityCinemas => cityCinemas.location === this.location.name)
+        const cinemas = this.cinemas.filter(cityCinemas => cityCinemas.location === this.location.name)
 
         this.markers = cinemas[0].cinema_array.map(cinema => {
           return {
