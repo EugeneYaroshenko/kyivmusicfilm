@@ -39,54 +39,49 @@
           </div>
 
           <div :class="{'content-info': true, 'general-info--expanded': generalSectionExpanded }">
-            <div class="input-item">
-              <label class="input-item__label">Назва</label>
-              <vue-input
-                type="text"
-                name="name"
-                :value="filmInformation.name"
-                @input="updateFilmName"
-              />
-            </div>
-            <div class="input-item">
-              <label class="input-item__label">Назва в URL посиланні (заповнюється автоматично)</label>
-              <vue-input
-                placeholder="film-url"
-                :value="filmInformation.url"
-                :disabled="true"
-              >
-                <template slot="prepend">
-                  /
-                </template>
-              </vue-input>
-            </div>
-            <div class="input-item">
-              <label class="input-item__label">Посилання на трейлер</label>
-              <vue-input
-                type="text"
-                name="name"
-                :value="filmInformation.trailer"
-                @input="updateFilmTrailer"
-              />
-            </div>
-            <div class="input-item">
-              <label class="input-item__label">Опис фільму</label>
-              <vue-input
-                type="textarea"
-                class="input-item__textarea"
-                :value="filmInformation.description_full"
-                @input="updateFilmFullDescription"
-              />
-            </div>
-            <div class="input-item">
-              <label class="input-item__label">Короткий опис для Facebook, Google відображення</label>
-              <vue-input
-                type="textarea"
-                class="input-item__textarea"
-                :value="filmInformation.description_short"
-                @input="updateFilmShortDescription"
-              />
-            </div>
+            <input-component
+              input-type="text"
+              input-name="назва"
+              label="Назва"
+              :validation="validations.name"
+              :input-value="filmInformation.name"
+              :on-input="updateFilmName"
+              :validate="validateName"
+            />
+            <input-component
+              input-type="text"
+              input-name="url"
+              label="Назва в URL посиланні (заповнюється автоматично)"
+              :input-value="filmInformation.url"
+              :disabled="true"
+            />
+            <input-component
+              input-type="text"
+              input-name="трейлер"
+              label="Посилання на трейлер"
+              :validation="validations.trailer"
+              :input-value="filmInformation.trailer"
+              :on-input="updateFilmTrailer"
+              :validate="validateTrailer"
+            />
+            <input-component
+              input-type="textarea"
+              input-name="description-full"
+              label="Опис фільму"
+              :validation="validations.description_full"
+              :input-value="filmInformation.description_full"
+              :on-input="updateFilmFullDescription"
+              :validate="validateFullDescription"
+            />
+            <input-component
+              input-type="textarea"
+              input-name="description-short"
+              label="Короткий опис для Facebook, Google відображення"
+              :validation="validations.description_short"
+              :input-value="filmInformation.description_short"
+              :on-input="updateFilmShortDescription"
+              :validate="validateShortDescription"
+            />
             <div class="input-item">
               <label class="input-item__label">Постер широкоформатний</label>
               <div class="input-item__photos">
@@ -186,7 +181,13 @@
           </div>
         </div>
       </no-ssr>
-      <div class="action-button" @click="saveFilm">Зберегти Фільм</div>
+      <button
+        class="action-button"
+        @click="saveFilm"
+        :disabled="!formCanBeSubmitted"
+      >
+        Зберегти Фільм
+      </button>
     </section>
   </section>
 </template>
@@ -194,17 +195,42 @@
 <script>
   import cityShowing from '~/components/admin/sections/cityShowing'
   import { mapState } from 'vuex'
+  import inputComponent from '~/components/admin/elements/form/input'
 
   export default {
     data () {
       return {
         // TODO move to Vuex
         generalSectionExpanded: false,
-        calendarSectionExpanded: false
+        calendarSectionExpanded: false,
+        validations: {
+          name: {
+            validation_error: false,
+            validation_message: 'У кожного фільму повинне бути своє ім\'я',
+            validated: false
+          },
+          trailer: {
+            regex: /\b((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))/,
+            validation_error: false,
+            validation_message: 'Щось не так із посиланням на трейлер',
+            validated: false
+          },
+          description_short: {
+            validation_error: false,
+            validation_message: 'Короткий опис для пошукових систем би не завадив',
+            validated: false
+          },
+          description_full: {
+            validation_error: false,
+            validation_message: 'Про що фільм? Усі хочуть знати',
+            validated: false
+          }
+        }
       }
     },
     components: {
-      cityShowing
+      cityShowing,
+      inputComponent
     },
     computed: {
       ...mapState({
@@ -212,6 +238,9 @@
                     allLocations: state => state.locations.all,
                     filmInformation: state => state.newFilm.general
       }),
+      formCanBeSubmitted () {
+        return this.ifFilmInformationFilledIn() && this.ifCityShowingsFilledIn()
+      },
       locationsWithoutSelected () {
         if (this.allLocations) {
           const allLocationsForSelection = this.allLocations.reduce((resultArray, location) => {
@@ -259,21 +288,21 @@
           ? { backgroundImage: 'url(\'' + image + '\')' }
           : { background: '#3db5ea' }
       },
-      updateFilmName (name) {
-        this.$store.dispatch('newFilm/updateFilmName', name)
-        this.updateFilmURL(name)
+      updateFilmName (e) {
+        this.$store.dispatch('newFilm/updateFilmName', e.target.value)
+        this.updateFilmURL(e.target.value)
       },
-      updateFilmURL (shortURL) {
-        this.$store.dispatch('newFilm/updateFilmURL', shortURL)
+      updateFilmURL (name) {
+        this.$store.dispatch('newFilm/updateFilmURL', name)
       },
-      updateFilmTrailer (trailer) {
-        this.$store.dispatch('newFilm/updateFilmTrailer', trailer)
+      updateFilmTrailer (e) {
+        this.$store.dispatch('newFilm/updateFilmTrailer', e.target.value)
       },
-      updateFilmFullDescription (fullDescription) {
-        this.$store.dispatch('newFilm/updateFilmFullDescription', fullDescription)
+      updateFilmFullDescription (e) {
+        this.$store.dispatch('newFilm/updateFilmFullDescription', e.target.value)
       },
-      updateFilmShortDescription (shortDescription) {
-        this.$store.dispatch('newFilm/updateFilmShortDescription', shortDescription)
+      updateFilmShortDescription (e) {
+        this.$store.dispatch('newFilm/updateFilmShortDescription', e.target.value)
       },
       addShowingCity (city) {
         this.$store.dispatch('newFilm/addShowingCity', { city })
@@ -283,6 +312,46 @@
       },
       saveFilm () {
         this.$store.dispatch('newFilm/saveFilm')
+      },
+      // validations
+      validateName (e) {
+        this.validations.name.validation_error = !e.target.value.length
+
+        this.validations.name.validated = true
+      },
+      validateTrailer (e) {
+        this.validations.trailer.validation_error = !this.validations.trailer.regex.test(e.target.value)
+
+        this.validations.trailer.validated = true
+      },
+      validateFullDescription (e) {
+        this.validations.description_full.validation_error = !e.target.value.length
+
+        this.validations.description_full.validated = true
+      },
+      validateShortDescription (e) {
+        this.validations.description_short.validation_error = !e.target.value.length
+
+        this.validations.description_short.validated = true
+      },
+      ifFilmInformationFilledIn () {
+        const validationErrors = this.validations.name.validation_error ||
+          this.validations.trailer.validation_error ||
+          this.validations.description_full.validation_error ||
+          this.validations.description_short.validation_error
+
+        const inputValues = this.filmInformation.name &&
+          this.filmInformation.trailer &&
+          this.filmInformation.description_full &&
+          this.filmInformation.description_short &&
+          this.filmInformation.image_desktop &&
+          this.filmInformation.image_mobile
+
+        return inputValues && !validationErrors
+      },
+      // TODO check if city was added with calendar date and showing (check onSave)
+      ifCityShowingsFilledIn () {
+        return this.cityShowings && this.cityShowings.length
       }
     }
   }
@@ -372,23 +441,6 @@
     margin-bottom: 32px;
   }
 
-  .input-item {
-    margin-bottom: 24px;
-  }
-
-  .input-item__label {
-    font-weight: 600;
-    padding-bottom: 8px;
-    display: block;
-  }
-
-  .input-item__textarea {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .upload-photo__btn {
     height: 100%;
     width: 100%;
@@ -470,5 +522,22 @@
     font-weight: bold;
     letter-spacing: .5px;
     cursor: pointer;
+    display: block;
+
+    &[disabled] {
+      opacity: .4;
+      pointer-events: none;
+    }
+  }
+
+  .input-item__label {
+    font-weight: 600;
+    padding-bottom: 8px;
+    display: block;
+  }
+
+  .input-item {
+    padding-bottom: 54px;
+    position: relative;
   }
 </style>
