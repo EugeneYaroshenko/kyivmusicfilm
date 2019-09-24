@@ -13,7 +13,7 @@
         }"
         :value="inputValue"
         @input="onInput"
-        @blur="validate"
+        @blur="validate($event, inputName)"
       >
       <textarea
         v-else
@@ -26,7 +26,7 @@
         }"
         :value="inputValue"
         @input="onInput"
-        @blur="validate"
+        @blur="validate($event, inputName)"
       />
       <span
         v-if="validation.validated && validation.validation_error"

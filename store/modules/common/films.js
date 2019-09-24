@@ -39,7 +39,7 @@ const actions = {
   async getAll ({ commit }) {
     commit(types.GET_FILMS_REQUEST)
     try {
-      const filmsRequest = await this.$axios.$get('https://kyivmusicfilm.herokuapp.com/api/films')
+      const filmsRequest = await this.$axios.$get('/api/films')
 
       commit(types.GET_FILMS_SUCCESS, filmsRequest)
     } catch (error) {
@@ -52,7 +52,7 @@ const actions = {
     console.log(film._id)
 
     try {
-      const deletedFilm = await this.$axios.$delete(`https://kyivmusicfilm.herokuapp.com/api/films/${film._id}`)
+      const deletedFilm = await this.$axios.$delete(`/api/films/${film._id}`)
 
       commit(types.DELETE_FILM_SUCCESS)
     } catch (error) {

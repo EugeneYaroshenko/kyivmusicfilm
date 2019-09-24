@@ -27,6 +27,7 @@ const mutations = {
 }
 
 const actions = {
+
   saveShowingsForLocation ({ commit, rootState }, location) {
     const filmShowings = rootState.film.showings
 

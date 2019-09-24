@@ -54,9 +54,9 @@ const state = () => ({
 })
 
 const getters = {
-  getAllCinemasForCity: (state) => (city) => {
+  getAllCinemasForLocation: (state) => (city) => {
     const cinemas = state.all.filter(cinemaItem => cinemaItem.location === city)[0].cinema_array
-    return cinemas.map(cinema => cinema.name)
+    return cinemas
   }
 }
 

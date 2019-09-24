@@ -125,12 +125,12 @@
       cinemasWithoutSelected () {
         if (this.allCinemas) {
           const allCinemasForSelection = this.allCinemas.reduce((resultArray, cinema) => {
-            resultArray.push({ value: cinema, label: cinema })
+            resultArray.push({ value: JSON.stringify(cinema), label: cinema.name })
             return resultArray
           }, [])
 
           return this.selectedCinemas
-            ? allCinemasForSelection.filter(cinema => !this.selectedCinemas.includes(cinema.value))
+            ? allCinemasForSelection.filter(cinema => !this.selectedCinemas.includes(cinema.label))
             : allCinemasForSelection
         } else {
           return null

@@ -62,11 +62,11 @@
         return `/showings/${url}`
       },
       editFilm (film) {
-        this.$store.dispatch('newFilm/editFilm', film)
+        this.$store.dispatch('editFilm/editFilm', film)
         this.$router.push('/admin/film')
       },
       createFilm () {
-        this.$store.dispatch('newFilm/createFilm')
+        this.$store.dispatch('editFilm/createFilm')
         this.$router.push('/admin/film')
       },
       deleteFilm (film) {

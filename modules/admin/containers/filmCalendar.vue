@@ -29,30 +29,31 @@
       <div class="input-item">
         <div class="input-item__new">
           <div class="add-icon" />
-          <vue-select
-            :data="locationsWithoutSelected"
-            @change="addShowingCity"
-            placeholder="Додати Місто"
-          >
-            <vue-option
-              v-for="(location, index) in locationsWithoutSelected"
-              :key="index"
-              :value="location.value"
-              :label="location.label"
-            />
-          </vue-select>
+          <!--<vue-select-->
+            <!--:data="locationsWithoutSelected"-->
+            <!--@change="addShowingLocation"-->
+            <!--placeholder="Додати Місто"-->
+          <!--&gt;-->
+            <!--<vue-option-->
+              <!--v-for="(location, index) in locationsWithoutSelected"-->
+              <!--:key="index"-->
+              <!--:value="location.value"-->
+              <!--:label="location.label"-->
+            <!--/>-->
+          <!--</vue-select>-->
         </div>
       </div>
       <div
-        v-for="(showing, index) in film.showings"
+        v-for="(location, index) in selectedLocations"
         :key="index"
       >
+        <div class="remove-location" @click="removeShowingLocation(location)">Remove Location</div>
         <showings-for-city
-          :city="showing.city"
-          :events="calendarEvents(showing.city)"
-          :selected-date="selectedDateForCity(showing.city)"
-          :film-cinemas="showingCinemasForDateAndCity(showing.city)"
-          :all-cinemas="allCinemas(showing.city)"
+          :location="location.name"
+          :events="calendarEvents(location.name)"
+          :selected-date="selectedDateForLocation(location.name)"
+          :film-cinemas="showingCinemasForDate(location.name)"
+          :all-cinemas="allCinemas(location.name)"
           :add-date="addDate"
           :edit-date="editDate"
           :delete-date="deleteDate"
@@ -83,21 +84,23 @@
       showingsForCity
     },
     computed: {
-      ...mapState({ allLocations: state => state.locations.all }),
+      ...mapState({
+                    allLocations: state => state.locations.all,
+                    selectedLocations: state => state.editShowings.locations,
+                    selectedCinemas: state => state.editShowings.cinemas
+                  }),
       formCanBeSubmitted () {
         return this.ifFilmInformationFilledIn() && this.ifCityShowingsFilledIn()
       },
       locationsWithoutSelected () {
         if (this.allLocations) {
           const allLocationsForSelection = this.allLocations.reduce((resultArray, location) => {
-            resultArray.push({ value: location.name, label: location.name })
+            resultArray.push({ value: JSON.stringify(location), label: location.name })
             return resultArray
           }, [])
 
-          if (this.film.showings) {
-            const selectedLocations = this.film.showings.map(showing => showing.city)
-
-            return allLocationsForSelection.filter(location => !selectedLocations.includes(location.value))
+          if (this.selectedLocations) {
+            return allLocationsForSelection.filter(location => !this.selectedLocations.includes(location.label))
           } else {
             return allLocationsForSelection
           }
@@ -105,50 +108,52 @@
           return null
         }
       },
-      calendarEvents (city) {
-        return this.$store.getters['newFilm/getShowingDatesByCity'](city)
+      calendarEvents (location) {
+        return this.$store.getters['editShowings/getShowingDatesForLocation'](location)
       },
-      selectedDateForCity (city) {
-        return this.$store.getters['adminInterface/getSelectedDateForCity'](city)
+      selectedDateForLocation (location) {
+        return this.$store.getters['editShowings/getSelectedDateForLocation'](location)
       },
-      showingCinemasForDateAndCity (city) {
-        if (this.selectedDateForCity) {
-          return this.$store.getters['newFilm/getShowingCinemasForDateAndCity']({ city, date: this.selectedDateForCity })
-        } else {
-          return null
-        }
+      showingCinemasForDate (location) {
+        return this.$store.getters['editShowings/getShowingCinemasForDateAndLocation'](location)
       },
-      allCinemas (city) {
-        return this.$store.getters['cinemas/getAllCinemasForCity'](city)
+      allCinemas (location) {
+        return this.$store.getters['cinemas/getAllCinemasForLocation'](location)
       }
     },
     methods: {
       toggleEditBlock () {
         this.editBlockExpanded = !this.editBlockExpanded
       },
-      addDate ({ date, city }) {
-        this.$store.dispatch('newFilm/addShowingDate', { date, city })
-        this.$store.dispatch('adminInterface/selectDate', { date, city })
+      addDate ({ date, location }) {
+        this.$store.dispatch('editShowings/addShowingDate', { date, location })
+        this.$store.dispatch('editShowings/selectDate', { date, location })
       },
-      editDate ({ date, city }) {
-        this.$store.dispatch('adminInterface/selectDate', { date, city })
+      editDate ({ date, location }) {
+        this.$store.dispatch('editShowings/selectDate', { date, location })
       },
-      deleteDate ({ date, city }) {
-        this.$store.dispatch('newFilm/removeShowingDate', { date, city })
+      deleteDate ({ date, location }) {
+        this.$store.dispatch('editShowings/removeShowingDate', { date, location })
 
-        this.removeUISelectedDate({ city })
+        this.removeUISelectedDate({ location })
       },
-      removeUISelectedDate () {
+      addShowingLocation (location) {
+        this.$store.dispatch('editShowings/addShowingLocation', { location: JSON.parse(location) })
+      },
+      removeShowingLocation (location) {
+        this.$store.dispatch('editShowings/removeShowingLocation', { location })
+      },
+      removeUISelectedDate ({ location }) {
         this.$store.dispatch(
-          'adminInterface/removeSelectedDate', { city: this.city }
+          'editShowings/removeSelectedDate', { location }
         )
       },
-      saveEdit ({ city, date, cinemas }) {
+      saveEdit ({ location, date, cinemas }) {
         this.$store.dispatch(
-          'newFilm/updateShowingDate',
-          { city, date, cinemas })
+          'editShowings/updateShowingDate',
+          { location, date, cinemas })
 
-        this.removeUISelectedDate({ city })
+        this.removeUISelectedDate({ location })
       }
     }
   }

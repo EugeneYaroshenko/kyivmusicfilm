@@ -27,7 +27,8 @@
 
   export default {
     props: {
-      city: {
+      location: {
+      location: {
         type: String,
         required: true
       },
@@ -74,16 +75,16 @@
     },
     methods: {
       addShowingDate (date) {
-        return this.addDate({ date, city: this.city })
+        return this.addDate({ date, location: this.location })
       },
       editShowingDate (date) {
-        return this.editDate({ date, city: this.city })
+        return this.editDate({ date, location: this.location })
       },
       deleteShowingDate () {
-        return this.deleteDate({ date: this.selectedDate, city: this.city })
+        return this.deleteDate({ date: this.selectedDate, location: this.location })
       },
       saveChanges (updatedCinemas) {
-        return this.saveEdit({ city: this.city, date: this.selectedDate, cinemas: updatedCinemas })
+        return this.saveEdit({ location: this.location, date: this.selectedDate, cinemas: updatedCinemas })
       },
       cancelChanges () {
         if (!this.filmCinemas) {
