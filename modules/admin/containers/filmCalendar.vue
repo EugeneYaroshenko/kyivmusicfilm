@@ -29,25 +29,30 @@
       <div class="input-item">
         <div class="input-item__new">
           <div class="add-icon" />
-          <!--<vue-select-->
-            <!--:data="locationsWithoutSelected"-->
-            <!--@change="addShowingLocation"-->
-            <!--placeholder="Додати Місто"-->
-          <!--&gt;-->
-            <!--<vue-option-->
-              <!--v-for="(location, index) in locationsWithoutSelected"-->
-              <!--:key="index"-->
-              <!--:value="location.value"-->
-              <!--:label="location.label"-->
-            <!--/>-->
-          <!--</vue-select>-->
+          <vue-select
+            :data="locationsWithoutSelected"
+            @change="addShowingLocation"
+            placeholder="Додати Місто"
+          >
+            <vue-option
+              v-for="(location, index) in locationsWithoutSelected"
+              :key="index"
+              :value="location.value"
+              :label="location.label"
+            />
+          </vue-select>
         </div>
       </div>
       <div
         v-for="(location, index) in selectedLocations"
         :key="index"
       >
-        <div class="remove-location" @click="removeShowingLocation(location)">Remove Location</div>
+        <div
+          class="remove-location"
+          @click="removeShowingLocation(location)"
+        >
+          Remove Location
+        </div>
         <showings-for-city
           :location="location.name"
           :events="calendarEvents(location.name)"
@@ -58,6 +63,7 @@
           :edit-date="editDate"
           :delete-date="deleteDate"
           :save-edit="saveEdit"
+          :cancel-edit="cancelEdit"
         />
       </div>
     </div>
@@ -66,15 +72,9 @@
 
 <script>
   import { mapState } from 'vuex'
-  import showingsForCity from '~/modules/admin/components/showingsForCity';
+  import showingsForCity from '~/modules/admin/components/showingsForCity'
 
   export default {
-    props: {
-      film: {
-        type: Object,
-        required: true
-      }
-    },
     data () {
       return {
         editBlockExpanded: false
@@ -95,19 +95,22 @@
       locationsWithoutSelected () {
         if (this.allLocations) {
           const allLocationsForSelection = this.allLocations.reduce((resultArray, location) => {
-            resultArray.push({ value: JSON.stringify(location), label: location.name })
+            if (
+              !this.selectedLocation ||
+              (this.selectedLocations && !this.selectedLocations.filter(selectedLocation => selectedLocation.name === location.name).length)) {
+                resultArray.push({ value: JSON.stringify(location), label: location.name })
+            }
+
             return resultArray
           }, [])
 
-          if (this.selectedLocations) {
-            return allLocationsForSelection.filter(location => !this.selectedLocations.includes(location.label))
-          } else {
-            return allLocationsForSelection
-          }
+          return allLocationsForSelection
         } else {
           return null
         }
       },
+    },
+    methods: {
       calendarEvents (location) {
         return this.$store.getters['editShowings/getShowingDatesForLocation'](location)
       },
@@ -115,13 +118,11 @@
         return this.$store.getters['editShowings/getSelectedDateForLocation'](location)
       },
       showingCinemasForDate (location) {
-        return this.$store.getters['editShowings/getShowingCinemasForDateAndLocation'](location)
+        return this.$store.getters['editShowings/getShowingCinemasForDate'](location)
       },
       allCinemas (location) {
         return this.$store.getters['cinemas/getAllCinemasForLocation'](location)
-      }
-    },
-    methods: {
+      },
       toggleEditBlock () {
         this.editBlockExpanded = !this.editBlockExpanded
       },
@@ -137,8 +138,11 @@
 
         this.removeUISelectedDate({ location })
       },
+      cancelEdit ({ location }) {
+        this.removeUISelectedDate({ location })
+      },
       addShowingLocation (location) {
-        this.$store.dispatch('editShowings/addShowingLocation', { location: JSON.parse(location) })
+        this.$store.dispatch('editShowings/addShowingLocation', JSON.parse(location))
       },
       removeShowingLocation (location) {
         this.$store.dispatch('editShowings/removeShowingLocation', { location })

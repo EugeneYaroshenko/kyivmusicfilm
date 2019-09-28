@@ -28,25 +28,25 @@ const mutations = {
     state = { ...state, ...description }
   },
   [types.UPDATE_FILM_NAME] (state, payload) {
-    state.film.general.name = payload
+    state.name = payload
   },
   [types.UPDATE_FILM_URL] (state, payload) {
-    state.film.general.url = transliterate(payload).toLowerCase()
+    state.url = transliterate(payload).toLowerCase()
   },
   [types.UPDATE_FILM_FULL_DESCRIPTION] (state, payload) {
-    state.film.general.description_full = payload
+    state.description_full = payload
   },
   [types.UPDATE_FILM_SHORT_DESCRIPTION] (state, payload) {
-    state.film.general.description_short = payload
+    state.description_short = payload
   },
   [types.UPDATE_FILM_TRAILER] (state, payload) {
-    state.film.general.trailer = payload
+    state.trailer = payload
   },
   [types.UPDATE_FILM_DESKTOP_IMAGE] (state, payload) {
-    state.film.general.image_desktop = payload
+    state.image_desktop = payload
   },
   [types.UPDATE_FILM_MOBILE_IMAGE] (state, payload) {
-    state.film.general.image_mobile = payload
+    state.image_mobile = payload
   },
   [types.RESET_FILM] (state) {
     state = initialFilmState

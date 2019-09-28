@@ -9,10 +9,9 @@
     <section class="edit-blocks">
       <no-ssr>
         <film-form-container
-          :film="film"
           :save-film="saveFilm"
         />
-        <film-calendar-container :film="film"/>
+        <film-calendar-container />
       </no-ssr>
     </section>
   </div>
@@ -25,11 +24,6 @@
   import filmCalendarContainer from '~/modules/admin/containers/filmCalendar'
 
   export default {
-    data () {
-      return {
-        calendarSectionExpanded: false,
-      }
-    },
     components: {
       editPopup,
       filmFormContainer,
@@ -37,8 +31,7 @@
     },
     computed: {
       ...mapState({
-                    film: state => state.newFilm.film,
-                    filmRequestInformation: state => state.newFilm.request
+                    filmRequestInformation: state => state.editFilm.request
       }),
       fetchedFilmRequest () {
         return this.filmRequestInformation.fetched

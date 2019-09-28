@@ -8,7 +8,9 @@
         {{ selectedDate }}
       </h3>
       <div class="cinema__input-item">
-        <h4 class="cinemas-list__label">Кінотеатри:</h4>
+        <h4 class="cinemas-list__label">
+          Кінотеатри:
+        </h4>
         <vue-select
           :data="cinemasWithoutSelected"
           @change="selectCinema"
@@ -24,7 +26,9 @@
         </vue-select>
       </div>
       <div class="cinema-list-container">
-        <h4 class="cinemas-list__label">Обрані кінотеатри:</h4>
+        <h4 class="cinemas-list__label">
+          Обрані кінотеатри:
+        </h4>
         <ul
           class="cinemas-list"
           v-if="selectedCinemas"
@@ -102,12 +106,12 @@
     },
     watch: {
       cinemasForSelectedDate () {
-        this.selectedCinemas = this.cinemasForSelectedDate
+        this.selectedCinemas = this.cinemasForSelectedDate || []
       }
     },
     methods: {
       selectCinema (cinema) {
-        this.selectedCinemas = [...this.selectedCinemas, ...[cinema]]
+        this.selectedCinemas = [...this.selectedCinemas, ...[JSON.parse(cinema)]]
       },
       saveForm () {
         this.saveChanges(this.selectedCinemas)
@@ -124,14 +128,14 @@
     computed: {
       cinemasWithoutSelected () {
         if (this.allCinemas) {
-          const allCinemasForSelection = this.allCinemas.reduce((resultArray, cinema) => {
-            resultArray.push({ value: JSON.stringify(cinema), label: cinema.name })
+          const cinemasWithoutSelected = this.allCinemas.reduce((resultArray, cinema) => {
+            if (this.selectedCinemas && !this.selectedCinemas.filter(selectedCinema => selectedCinema.name === cinema.name).length) {
+              resultArray.push({ value: JSON.stringify(cinema), label: cinema.name })
+            }
             return resultArray
           }, [])
 
-          return this.selectedCinemas
-            ? allCinemasForSelection.filter(cinema => !this.selectedCinemas.includes(cinema.label))
-            : allCinemasForSelection
+          return cinemasWithoutSelected
         } else {
           return null
         }

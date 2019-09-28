@@ -1,7 +1,7 @@
 <template>
   <div class="showing-section">
     <div class="input-item">
-      <div>{{ city }}</div>
+      <div>{{ location }}</div>
     </div>
     <div class="calendar-block">
       <calendar-for-date
@@ -27,7 +27,6 @@
 
   export default {
     props: {
-      location: {
       location: {
         type: String,
         required: true
@@ -63,8 +62,12 @@
         type: Function,
         required: true
       },
+      cancelEdit: {
+        type: Function,
+        required: true,
+      },
       selectedDate: {
-        type: String,
+        type: Number,
         required: false,
         default: null
       }
@@ -90,6 +93,8 @@
         if (!this.filmCinemas) {
           this.deleteShowingDate()
         }
+
+        this.cancelEdit({ location: this.location })
       },
       dateInMillisecondsToUserFriendlyDate (date) {
         return date ? this.$moment(date).format('DD MMMM') : ''

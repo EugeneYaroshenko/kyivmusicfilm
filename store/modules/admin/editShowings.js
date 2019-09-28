@@ -20,24 +20,24 @@ const state = () => ({
 
 const getters = {
   getShowingDatesForLocation: (state) => (selectedLocation) => {
-    const selectedLocationShowingDates = state.dates[selectedLocation]
+    const selectedLocationShowingDates = state.dates && state.dates[selectedLocation]
     return selectedLocationShowingDates && selectedLocationShowingDates.length ? selectedLocationShowingDates.map(dateItem => {
-      const date = Vue.moment(dateItem.date).format('YYYY-MM-DD')
+      const date = Vue.moment(dateItem).format('YYYY-MM-DD')
       return {
-        title: Vue.moment(dateItem.date).format('DD'),
+        title: Vue.moment(dateItem).format('DD'),
         start: date,
         end: date
       }
     }) : []
   },
   getShowingCinemasForDate: (state) => (selectedLocation) => {
-    return state.ui.selectedDateForLocation
+    return state.cinemas && state.cinemas[selectedLocation] && state.ui.selectedDateForLocation
       ? state.cinemas[selectedLocation][state.ui.selectedDateForLocation[selectedLocation]]
       : null
   },
   getSelectedDateForLocation: (state) => (location) => {
     const selectedDate = state.ui.selectedDateForLocation
-      ? state.ui.selectedShowingDatesByCity[location]
+      ? state.ui.selectedDateForLocation[location]
       : null
 
     return selectedDate
@@ -49,10 +49,10 @@ const mutations = {
     state = { ...state, ...showings }
   },
   [types.ADD_SHOWING_DATE] (state, { location, date }) {
-    if (state.dates && state.dates[location]) {
-      state.dates[location] = uniq([...state.dates[location], ...[date]])
+    if (state.dates) {
+      state.dates[location] = state.dates[location] ? uniq([...state.dates[location], ...[date]]) : [date]
     } else {
-      state.dates[location] = [date]
+      state.dates = { [location]: [date] }
     }
   },
   [types.REMOVE_SHOWING_DATE] (state, { location, date }) {
@@ -66,15 +66,19 @@ const mutations = {
     state.ui.selectedDateForLocation = updatedSelectedDate
   },
   [types.UI_REMOVE_SELECTED_SHOWING_DATE_FOR_LOCATION] (state, payload) {
-    const selectedDateWithoutRemoved = removeSelectedShowingDate(state.selectedShowingDatesByCity, payload)
+    const selectedDateWithoutRemoved = removeSelectedShowingDate(state.ui.selectedDateForLocation, payload)
 
-    state.selectedShowingDatesByCity = selectedDateWithoutRemoved
+    state.ui.selectedDateForLocation = selectedDateWithoutRemoved
   },
   [types.UPDATE_SHOWING_CINEMAS] (state, { location, date, cinemas }) {
-    if (state.cinemas && state.cinemas[location]) {
-      state.cinemas[location][date] = cinemas
+    if (state.cinemas) {
+      if (state.cinemas[location]) {
+        state.cinemas[location][date] = cinemas
+      } else {
+        state.cinemas[location] = { [date]: cinemas }
+      }
     } else {
-      state.cinemas[location] = { date: cinemas }
+      state.cinemas = { [location]: { [date]: cinemas } }
     }
   },
   [types.ADD_SHOWING_LOCATION] (state, location) {
@@ -82,8 +86,8 @@ const mutations = {
   },
   [types.REMOVE_SHOWING_LOCATION] (state, locationToRemove) {
     const updatedLocations = state.locations.filter(location => location.name !== locationToRemove.name)
-    const updatedDates = omitBy(state.dates, includesKey(value, key, locationToRemove.name))
-    const updatedCinemas = omitBy(state.cinemas, includesKey(value, key, locationToRemove.name))
+    const updatedDates = omitBy(state.dates, (value, key) => includesKey(value, key, locationToRemove.name))
+    const updatedCinemas = omitBy(state.cinemas, (value, key) => includesKey(value, key, locationToRemove.name))
 
     state.locations = updatedLocations
     state.dates = updatedDates
@@ -100,6 +104,9 @@ const actions = {
   },
   selectDate ({ commit }, payload) {
     commit(types.UI_ADD_SELECTED_SHOWING_DATE_FOR_LOCATION, payload)
+  },
+  removeSelectedDate ({ commit }, payload) {
+    commit(types.UI_REMOVE_SELECTED_SHOWING_DATE_FOR_LOCATION, payload)
   },
   addShowingDate ({ commit }, payload) {
    commit(types.ADD_SHOWING_DATE, payload)
@@ -131,7 +138,7 @@ function updateSelectedShowingDates (showingDates, { location, date }) {
 }
 
 function removeSelectedShowingDate (showingDates, { location }) {
-  return omitBy(showingDates, includesKey(value, key, location.name))
+  return omitBy(showingDates, (value, key) => includesKey(value, key, location))
 }
 
 export default {
