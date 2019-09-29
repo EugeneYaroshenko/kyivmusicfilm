@@ -40,6 +40,7 @@
   import { mapState } from 'vuex'
 
   export default {
+    auth: false,
     components: {
       NavigationComponent,
       FilmInfoComponent,

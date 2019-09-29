@@ -85,7 +85,7 @@
     },
     computed: {
       ...mapState({
-                    allLocations: state => state.locations.all,
+                    allLocations: state => state.data.locations,
                     selectedLocations: state => state.editShowings.locations,
                     selectedCinemas: state => state.editShowings.cinemas
                   }),
@@ -121,7 +121,7 @@
         return this.$store.getters['editShowings/getShowingCinemasForDate'](location)
       },
       allCinemas (location) {
-        return this.$store.getters['cinemas/getAllCinemasForLocation'](location)
+        return this.$store.getters['data/getAllCinemasForLocation'](location)
       },
       toggleEditBlock () {
         this.editBlockExpanded = !this.editBlockExpanded

@@ -1,5 +1,3 @@
-// TODO divide into two different files - general and showings
-
 import * as types from '@/store/mutationTypes'
 
 const initialFilmState = {

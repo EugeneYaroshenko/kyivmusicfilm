@@ -1,5 +1,7 @@
 const router = require('express').Router()
 const filmController = require('./controllers/filmController')
+const authController = require('./controllers/authController')
+const googleController = require('./controllers/googleController')
 
 router.route('/films')
   .get(filmController.index)
@@ -11,5 +13,17 @@ router.route('/films/:film_url')
 router.route('/films/:film_id')
   .post(filmController.update)
   .delete(filmController.delete)
+
+router.route('/auth/login')
+  .post(authController.login)
+
+router.route('/auth/logout')
+  .post(authController.logout)
+
+router.route('/auth/user')
+  .get(authController.user)
+
+router.route('/data')
+  .get(googleController.getData)
 
 module.exports = router

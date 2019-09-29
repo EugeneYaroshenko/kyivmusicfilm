@@ -84,10 +84,10 @@ const mutations = {
   [types.ADD_SHOWING_LOCATION] (state, location) {
     state.locations = state.locations ? [...state.locations, ...[location]] : [location]
   },
-  [types.REMOVE_SHOWING_LOCATION] (state, locationToRemove) {
-    const updatedLocations = state.locations.filter(location => location.name !== locationToRemove.name)
-    const updatedDates = omitBy(state.dates, (value, key) => includesKey(value, key, locationToRemove.name))
-    const updatedCinemas = omitBy(state.cinemas, (value, key) => includesKey(value, key, locationToRemove.name))
+  [types.REMOVE_SHOWING_LOCATION] (state, { location }) {
+    const updatedLocations = state.locations.filter(locationItem => locationItem.name !== location.name)
+    const updatedDates = omitBy(state.dates, (value, key) => includesKey(value, key, location.name))
+    const updatedCinemas = omitBy(state.cinemas, (value, key) => includesKey(value, key, location.name))
 
     state.locations = updatedLocations
     state.dates = updatedDates

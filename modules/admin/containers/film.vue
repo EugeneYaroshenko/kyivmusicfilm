@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="dataFetched">
     <edit-popup
       v-if="fetchedFilmRequest"
       :error="filmRequestInformation.error"
@@ -29,9 +29,13 @@
       filmFormContainer,
       filmCalendarContainer
     },
+    created () {
+      this.$store.dispatch('data/getData')
+    },
     computed: {
       ...mapState({
-                    filmRequestInformation: state => state.editFilm.request
+                    filmRequestInformation: state => state.editFilm.request,
+                    dataFetched: state => state.data.request.fetched
       }),
       fetchedFilmRequest () {
         return this.filmRequestInformation.fetched
@@ -45,10 +49,10 @@
         this.calendarSectionExpanded = !this.calendarSectionExpanded
       },
       resetRequest () {
-        this.$store.dispatch('newFilm/resetRequest')
+        this.$store.dispatch('editFilm/resetRequest')
       },
       saveFilm () {
-        this.$store.dispatch('newFilm/saveFilm')
+        this.$store.dispatch('editFilm/saveFilm')
       }
     }
   }

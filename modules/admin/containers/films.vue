@@ -70,7 +70,7 @@
     },
     computed: {
       ...mapState({
-                    allLocations: state => state.locations.all,
+                    allLocations: state => state.data.locations,
                     film: state => state.newFilm.film,
                     filmRequestInformation: state => state.newFilm.request
       }),
