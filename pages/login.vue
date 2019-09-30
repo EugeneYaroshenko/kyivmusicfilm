@@ -16,7 +16,12 @@
         form: {
           username: null,
           password: null
-        }
+        },
+        locations: [
+          { label: 'really very long name for the sake of all people', value: '32' }, { label: 'name', value: '40' },
+          { label: 'name', value: '32' }, { label: 'name', value: '40' },
+          { label: 'name', value: '32' }, { label: 'name', value: '40' }
+        ]
       }
     },
     // created () {
@@ -24,9 +29,15 @@
     //     this.$router.replace({ name: 'index' })
     //   }
     // },
+    components: {
+      VueSelect,
+      VueOption
+    },
     methods: {
+      changeLocation () {
+        console.log('change Location')
+      },
       async requestLogin () {
-        console.log('here')
         try {
           await this.$auth.loginWith('local', {
             data: {

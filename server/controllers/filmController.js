@@ -16,7 +16,7 @@ exports.index = async function (req, res) {
 exports.new = async function (req, res) {
   try {
     const film = new Film()
-    film.general = req.body.general
+    film.description = req.body.description
     film.showings = req.body.showings
 
     const savedFilm = await film.save()
@@ -34,8 +34,8 @@ exports.update = async function (req, res) {
     const film = await Film.findById(req.params.film_id)
 
     if (film) {
-      film.general = req.body.general
-      film.showing = req.body.showings
+      film.description = req.body.description
+      film.showings = req.body.showings
 
       const updatedFilm = await film.save()
 

@@ -1,9 +1,5 @@
 <template>
   <div class="admin-calendar">
-    <div
-      class="calendar-overlay"
-      v-if="selectedDate"
-    />
     <full-calendar
       :events="calendarEvents"
       @dayClick="addNewDate"
@@ -47,7 +43,7 @@
 
 <style lang="scss">
   .admin-calendar {
-    width: 50%;
+    width: 100%;
     position: relative;
     padding-top: 16px;
   }

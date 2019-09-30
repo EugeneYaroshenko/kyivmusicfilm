@@ -6,7 +6,10 @@ import * as types from '@/store/mutationTypes'
 const initialFilmState = {
   dates: null,
   cinemas: null,
-  locations: null
+  locations: null,
+  ui: {
+    selectedDateForLocation: null
+  }
 }
 
 const state = () => ({
@@ -46,7 +49,9 @@ const getters = {
 
 const mutations = {
   [types.SAVE_FILM_SHOWINGS] (state, showings) {
-    state = { ...state, ...showings }
+    state.cinemas = showings.cinemas
+    state.locations = showings.locations
+    state.dates = showings.dates
   },
   [types.ADD_SHOWING_DATE] (state, { location, date }) {
     if (state.dates) {
@@ -82,7 +87,7 @@ const mutations = {
     }
   },
   [types.ADD_SHOWING_LOCATION] (state, location) {
-    state.locations = state.locations ? [...state.locations, ...[location]] : [location]
+    state.locations = state.locations ? [...[location], ...state.locations] : [location]
   },
   [types.REMOVE_SHOWING_LOCATION] (state, { location }) {
     const updatedLocations = state.locations.filter(locationItem => locationItem.name !== location.name)

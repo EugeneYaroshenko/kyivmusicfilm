@@ -51,7 +51,6 @@ module.exports = {
   plugins: [
     { src: '~/plugins/vue2-google-maps', ssr: false },
     { src: '~/plugins/vue-moment', ssr: false },
-    { src: '~/plugins/vfc', ssr: false },
     { src: '~/plugins/vue-fullcalendar', ssr: false }
   ]
 

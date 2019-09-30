@@ -1,7 +1,11 @@
 <template>
   <div class="showing-section">
-    <div class="input-item">
-      <div>{{ location }}</div>
+    <div class="location-name">
+      <div class="name">{{ uiName }}</div>
+      <div
+        class="remove-location remove-icon"
+        @click="removeLocation"
+      />
     </div>
     <div class="calendar-block">
       <calendar-for-date
@@ -16,6 +20,7 @@
         :all-cinemas="allCinemas"
         :save-changes="saveChanges"
         :cancel-changes="cancelChanges"
+        :delete-date="deleteShowingDate"
       />
     </div>
   </div>
@@ -28,6 +33,10 @@
   export default {
     props: {
       location: {
+        type: String,
+        required: true
+      },
+      uiName: {
         type: String,
         required: true
       },
@@ -64,12 +73,16 @@
       },
       cancelEdit: {
         type: Function,
-        required: true,
+        required: true
       },
       selectedDate: {
         type: Number,
         required: false,
         default: null
+      },
+      removeLocation: {
+        type: Function,
+        required: true
       }
     },
     components: {
@@ -109,11 +122,39 @@
   }
 
   .admin-calendar {
-    width: 50%;
+    width: 100%;
   }
 
   .calendar-block {
-    display: flex;
+    position: relative;
+    height: 400px;
+  }
+  .remove-icon {
+    background-image: url('../../../assets/icons/delete-icon.svg');
+    width: 32px;
+    height: 32px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: .7;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
+  .location-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 4px 4px 12px;
+    border-bottom: 2px solid #000;
+    margin-bottom: 24px;
+
+    .name {
+      font-size: 1.4em;
+      font-weight: bold;
+    }
+  }
 </style>

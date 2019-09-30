@@ -6,22 +6,16 @@
       class="content-heading"
       @click="toggleEditBlock"
     >
-      <h3 class="content-heading__header">
+      <h4 class="content-heading__header">
         Загальна Інформація
-      </h3>
+      </h4>
       <div
         class="content-heading__controls"
       >
         <div
-          v-if="editBlockExpanded"
-        >
-          Close
-        </div>
-        <div
-          v-else
-        >
-          Open
-        </div>
+        class="dropdown-icon"
+        :class="{'close-icon': editBlockExpanded, 'open-icon': !editBlockExpanded}"
+        />
       </div>
     </div>
 
@@ -247,33 +241,29 @@
         this.validations[inputName].validated = true
       },
       ifCinemasForLocation () {
-        return this.selectedCinemas
+        return this.selectedCinemas && Object.keys(this.selectedCinemas).length
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  .edit-block {
+    flex: 1;
+
+    &:hover .dropdown-icon {
+      opacity: 1;
+    }
+  }
+
   .content-headline {
     text-align: center;
   }
 
-  .content {
-    max-width: 800px;
-    margin: 0px auto 24px;
-  }
-
   .content-heading__header {
     margin: 0;
-  }
-
-  .content-heading {
-    position: relative;
-    box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, .1);
-    padding: 16px 16px 16px 32px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 32px;
+    font-size: 1.2em;
+    letter-spacing: .1px;
   }
 
   .content-heading__controls {
@@ -369,20 +359,26 @@
   }
 
   .action-button {
-    background-color: forestgreen;
-    padding: 16px 12px;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 400px;
+    background-color: #4DB077;
+    padding: 16px 12px 18px;
+    max-width: 1200px;
     margin: 0 auto;
+    text-align: center;
     color: #ffffff;
     font-weight: bold;
     letter-spacing: .5px;
     cursor: pointer;
     display: block;
+    position: fixed;
+    outline: 0;
+    border: none;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 
     &[disabled] {
-      opacity: .4;
+      background-color: #C5F2D8;
       pointer-events: none;
     }
   }
@@ -396,5 +392,19 @@
   .input-item {
     padding-bottom: 54px;
     position: relative;
+  }
+
+  .dropdown-icon {
+    width: 24px;
+    height: 24px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: .7;
+    background-image: url('../../../assets/icons/dropdown-icon.svg');
+  }
+
+  .close-icon {
+    transform: rotate(180deg);
   }
 </style>

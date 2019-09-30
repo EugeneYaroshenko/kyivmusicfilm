@@ -1,16 +1,14 @@
 <template>
-  <div class="edit-block">
-    <div
-      v-if="selectedDate"
-      class="cinemas-list"
-    >
-      <h3 class="cinemas-list__date">
-        {{ selectedDate }}
-      </h3>
-      <div class="cinema__input-item">
-        <h4 class="cinemas-list__label">
-          Кінотеатри:
-        </h4>
+  <div
+    v-if="selectedDate"
+    class="cinemas-container"
+  >
+    <div class="close-icon" @click="cancelForm"/>
+    <div class="cinemas-list__date">
+      {{ selectedDate }} <span class="small-text" @click="deleteDate">Видалити</span>
+    </div>
+    <div class="cinema__input-item">
+      <div class="input-components">
         <vue-select
           :data="cinemasWithoutSelected"
           @change="selectCinema"
@@ -25,55 +23,45 @@
           />
         </vue-select>
       </div>
-      <div class="cinema-list-container">
-        <h4 class="cinemas-list__label">
-          Обрані кінотеатри:
-        </h4>
-        <ul
-          class="cinemas-list"
-          v-if="selectedCinemas"
-        >
-          <li
-            v-for="(cinema, index) in selectedCinemas"
-            :key="index"
-          >
-            <div>
-              {{ cinema }}
-            </div>
-            <div
-              class="delete"
-              @click="deleteCinema(cinema)"
-            >
-              Delete
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="action-buttons">
-        <div
-          :class="{'button action-buttons__save': true, 'action-button--disabled': !selectedCinemas.length }"
-          @click="saveForm"
-        >
-          Зберегти
-        </div>
-        <div
-          class="button action-buttons__cancel"
-          @click="cancelForm"
-        >
-          Скасувати
-        </div>
-      </div>
     </div>
-    <div
-      class="select-date-block"
-      v-else
-    >
-      Щоб додати кінотеатр, обери дату
+    <div class="cinema-list-container">
+      <h4 class="cinemas-list__label">
+        Обрані кінотеатри ({{ selectedCinemas.length }}):
+      </h4>
+      <ul
+        class="cinemas-list"
+        v-if="selectedCinemas"
+      >
+        <li
+          v-for="(cinema, index) in selectedCinemas"
+          class="cinema-item"
+          :key="index"
+          @click="deleteCinema(cinema)"
+        >
+          <div
+            class="remove-icon"
+          />
+          <div>
+            {{ cinema.name }}
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="action-buttons">
+      <div
+        :class="{'button': true, 'action-button--disabled': !selectedCinemas.length }"
+        @click="saveForm"
+      >
+        Зберегти
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import VueSelect from '~/components/select/select'
+  import VueOption from '~/components/select/option'
+
   export default {
     props: {
       selectedDate: {
@@ -96,13 +84,20 @@
       cancelChanges: {
         type: Function,
         required: true
+      },
+      deleteDate: {
+        type: Function,
+        required: true
       }
-
     },
     data () {
       return {
         selectedCinemas: []
       }
+    },
+    components: {
+      VueSelect,
+      VueOption
     },
     watch: {
       cinemasForSelectedDate () {
@@ -150,6 +145,7 @@
     align-items: center;
     justify-content: space-between;
     flex-flow: row nowrap;
+    flex: 0;
   }
 
   .edit-block {
@@ -158,27 +154,18 @@
     margin-left: 16px;
   }
 
-  .select-date-block {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, .1);
-  }
-
   .button {
-    background-color: #000;
+    background-color: #4DB077;
     color: #fff;
     padding: 8px 12px;
     flex: 1;
     text-align: center;
+    margin: 0 auto;
+    border-radius: 16px;
     max-width: 48%;
     cursor: pointer;
-    pointer: cursor;
+    box-shadow: 0 3px 8px 0px rgba(#57FF84, .43%);
+    transition: box-shadow 150ms ease-in-out, border-radius 250ms ease-in;
   }
 
   .action-buttons__cancel {
@@ -188,10 +175,16 @@
   .action-button--disabled {
     pointer-events: none;
     opacity: .2;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .cinemas-list__date {
     margin-bottom: 15px;
+    font-size: 1.4em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
   }
 
   .cinemas-list__label {
@@ -199,21 +192,87 @@
   }
 
   .cinema__input-item {
-    margin-bottom: 20px;
+    margin-bottom: 42px;
+    position: relative;
+  }
+
+  .input-components {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+  }
+
+  .cinemas-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(#fff, 1);
+    border: 1px solid #000;
+    z-index: 100;
+    padding: 28px 32px;
+    display: flex;
+    flex-flow: column nowrap;
   }
 
   .cinemas-list {
     list-style: none;
-    margin: 12px 0 24px;
-    padding: 0;
+    margin: 0px 0 12px;
+    padding: 12px 0;
+    z-index: 1000;
+    flex: 1;
+    overflow-y: scroll;
+    height: 150px;
 
     li {
-      padding: 16px 12px;
+      padding: 8px;
       display: flex;
-      justify-content: space-between;
-      box-shadow: 0 0 4px 0 rgba(0, 0, 0, .1);
-      border-radius: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 4px;
+      cursor: pointer;
+
+      &:hover .remove-icon {
+        opacity: 1;
+      }
+    }
+
+    .remove-icon {
+      background-image: url('../../../assets/icons/delete-icon.svg');
+      width: 24px;
+      height: 24px;
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: .7;
+      cursor: pointer;
+      margin-right: 4px;
+    }
+  }
+
+  .close-icon {
+    background-image: url('../../../assets/icons/close.svg');
+    width: 16px;
+    height: 16px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    cursor: pointer;
+  }
+
+  .small-text {
+    font-size: .8rem;
+    color: #FF3C71;
+    margin-left: 8px;
+    opacity: .8;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
     }
   }
 </style>

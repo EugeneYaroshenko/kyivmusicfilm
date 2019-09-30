@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const filmSchema = mongoose.Schema({
-  general: {
+  description: {
     name: String,
     url: String,
     description_full: String,
@@ -10,7 +10,7 @@ const filmSchema = mongoose.Schema({
     image_desktop: String,
     image_mobile: String
   },
-  showings: Array
+  showings: Object
 })
 
 module.exports = mongoose.model('film', filmSchema)

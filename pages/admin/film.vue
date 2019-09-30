@@ -1,15 +1,15 @@
 <template>
   <section class="film-container">
-    <film />
+    <Film />
   </section>
 </template>
 
 <script>
-  import film from '~/modules/admin/containers/film'
+  import Film from '~/modules/admin/containers/film'
 
   export default {
     components: {
-      film
+      Film
     }
   }
 </script>

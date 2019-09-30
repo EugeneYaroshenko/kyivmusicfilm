@@ -4,35 +4,25 @@
       class="content-heading"
       @click="toggleEditBlock"
     >
-      <h3 class="content-heading__header">
-        Сеанси
-      </h3>
+      <h4 class="content-heading__header">
+        Календар
+      </h4>
       <div
         class="content-heading__controls"
       >
         <div
-          v-if="editBlockExpanded"
-        >
-          Close
-        </div>
-        <div
-          v-else
-        >
-          Open
-        </div>
+          class="dropdown-icon"
+          :class="{'close-icon': editBlockExpanded, 'open-icon': !editBlockExpanded}"
+        />
       </div>
     </div>
     <div :class="{'content-info': true, 'calendar-info--expanded': editBlockExpanded }">
-      <div class="info-text">
-        Обери місто, де буде відбуватися кінопоказ стрічки.
-      </div>
       <div class="input-item">
         <div class="input-item__new">
-          <div class="add-icon" />
           <vue-select
             :data="locationsWithoutSelected"
             @change="addShowingLocation"
-            placeholder="Додати Місто"
+            placeholder="Обрати місто"
           >
             <vue-option
               v-for="(location, index) in locationsWithoutSelected"
@@ -45,16 +35,12 @@
       </div>
       <div
         v-for="(location, index) in selectedLocations"
+        class="location-container"
         :key="index"
       >
-        <div
-          class="remove-location"
-          @click="removeShowingLocation(location)"
-        >
-          Remove Location
-        </div>
         <showings-for-city
           :location="location.name"
+          :ui-name="location.UI_NAME"
           :events="calendarEvents(location.name)"
           :selected-date="selectedDateForLocation(location.name)"
           :film-cinemas="showingCinemasForDate(location.name)"
@@ -64,6 +50,7 @@
           :delete-date="deleteDate"
           :save-edit="saveEdit"
           :cancel-edit="cancelEdit"
+          :remove-location="() => removeShowingLocation(location)"
         />
       </div>
     </div>
@@ -73,6 +60,8 @@
 <script>
   import { mapState } from 'vuex'
   import showingsForCity from '~/modules/admin/components/showingsForCity'
+  import VueSelect from '~/components/select/select'
+  import VueOption from '~/components/select/option'
 
   export default {
     data () {
@@ -81,7 +70,9 @@
       }
     },
     components: {
-      showingsForCity
+      showingsForCity,
+      VueSelect,
+      VueOption
     },
     computed: {
       ...mapState({
@@ -96,9 +87,9 @@
         if (this.allLocations) {
           const allLocationsForSelection = this.allLocations.reduce((resultArray, location) => {
             if (
-              !this.selectedLocation ||
+              !this.selectedLocations ||
               (this.selectedLocations && !this.selectedLocations.filter(selectedLocation => selectedLocation.name === location.name).length)) {
-                resultArray.push({ value: JSON.stringify(location), label: location.name })
+              resultArray.push({ value: JSON.stringify(location), label: location.UI_NAME })
             }
 
             return resultArray
@@ -108,7 +99,7 @@
         } else {
           return null
         }
-      },
+      }
     },
     methods: {
       calendarEvents (location) {
@@ -146,6 +137,7 @@
       },
       removeShowingLocation (location) {
         this.$store.dispatch('editShowings/removeShowingLocation', { location })
+        this.removeUISelectedDate({ location: location.name })
       },
       removeUISelectedDate ({ location }) {
         this.$store.dispatch(
@@ -164,21 +156,22 @@
 </script>
 
 <style lang="scss" scoped>
+  .edit-block {
+    flex: 2;
+
+    &:hover .dropdown-icon {
+      opacity: 1;
+    }
+  }
+
   .content-headline {
     text-align: center;
   }
 
   .content-heading__header {
     margin: 0;
-  }
-
-  .content-heading {
-    position: relative;
-    box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, .1);
-    padding: 16px 16px 16px 32px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 32px;
+    font-size: 1.2em;
+    letter-spacing: .1px;
   }
 
   .content-heading__controls {
@@ -191,6 +184,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    width: 24px;
+    height: 24px;
   }
 
   .content-info {
@@ -201,6 +196,8 @@
 
   .general-info--expanded, .calendar-info--expanded {
     max-height: 2000px;
+    overflow: auto;
+    min-height: 1000px;
   }
 
   .input-item__label {
@@ -210,7 +207,29 @@
   }
 
   .input-item {
-    padding-bottom: 54px;
+    margin-bottom: 100px;
     position: relative;
+    z-index: 200;
+  }
+
+  .input-item__new {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+  }
+
+  .dropdown-icon {
+    width: 24px;
+    height: 24px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: .7;
+    background-image: url('../../../assets/icons/dropdown-icon.svg');
+  }
+
+  .close-icon {
+    transform: rotate(180deg);
   }
 </style>

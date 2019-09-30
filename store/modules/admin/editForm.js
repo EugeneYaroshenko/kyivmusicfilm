@@ -25,7 +25,13 @@ const getters = {}
 
 const mutations = {
   [types.SAVE_FILM_DESCRIPTION] (state, description) {
-    state = { ...state, ...description }
+    state.name = description.name
+    state.url = description.url
+    state.description_full = description.description_full
+    state.description_short = description.description_short
+    state.trailer = description.trailer
+    state.image_desktop = description.image_desktop
+    state.image_mobile = description.image_mobile
   },
   [types.UPDATE_FILM_NAME] (state, payload) {
     state.name = payload

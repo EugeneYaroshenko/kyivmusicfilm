@@ -41,6 +41,8 @@ const actions = {
     try {
       const filmsRequest = await this.$axios.$get('/api/films')
 
+      console.log(filmsRequest)
+
       commit(types.GET_FILMS_SUCCESS, filmsRequest)
     } catch (error) {
       commit(types.GET_FILMS_ERROR, error)
