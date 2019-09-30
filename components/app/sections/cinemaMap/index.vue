@@ -44,8 +44,8 @@
       }
     },
     watch: {
-      location: function (val, oldVal) {
-        if (val && val.name !== oldVal.name) {
+      selectedDate: function (val, oldVal) {
+        if (val && val !== oldVal) {
           this.setMarkers()
         }
       }
@@ -57,16 +57,14 @@
       ...mapState({
         location: state => state.map.location,
         mapStyle: state => state.map.style,
-        selectedDate: state => state.filmDate.selectedDate,
+        selectedDate: state => state.filmShowings.selectedShowingDate,
         // GETTER FOR CURRENT CITY
-        cinemas: state => state.filmCinemas.all
+        cinemas: state => state.filmShowings.selectedShowingCinemas
       }),
     },
     methods: {
       setMarkers () {
-        const cinemas = this.cinemas.filter(cityCinemas => cityCinemas.location === this.location.name)
-
-        this.markers = cinemas[0].cinema_array.map(cinema => {
+        this.markers = this.cinemas.map(cinema => {
           return {
             position: cinema.position,
             title: JSON.stringify({ title: cinema.name, address: cinema.address })

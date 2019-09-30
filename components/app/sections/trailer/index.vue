@@ -42,7 +42,7 @@
     },
     computed: {
       ...mapState({
-                    trailer: state => state.film.general.trailer
+                    trailer: state => state.film.description.trailer
       }),
       trailerLink () {
         return `${this.trailer}?autoplay=1`

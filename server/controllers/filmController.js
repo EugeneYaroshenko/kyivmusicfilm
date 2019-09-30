@@ -52,7 +52,7 @@ exports.update = async function (req, res) {
 
 exports.view = async function (req, res) {
   try {
-    const film = await Film.find({ 'general.url': req.params.film_url })
+    const film = await Film.find({ 'description.url': req.params.film_url })
 
     if (film && film.length) {
       return res.status(200).send({ data: film[0] })

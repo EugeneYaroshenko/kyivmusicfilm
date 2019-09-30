@@ -8,7 +8,7 @@
     >
       <div
         :class="{'preview-image': true, 'preview-image--expanded': trailerShown}"
-        :style="{ backgroundImage: 'url(' + filmInformation.image_desktop + ')' }"
+        :style="{ backgroundImage: 'url(' + filmDescription.image_desktop + ')' }"
       >
         <trailer-component v-if="trailerShown" />
         <div class="preview-mobile">
@@ -57,7 +57,7 @@
                     mapShown: state => state.ui.mapShown,
                     trailerShown: state => state.ui.trailerShown,
                     filmFetched: state => state.film.request.fetched,
-                    filmInformation: state => state.film.general
+                    filmDescription: state => state.film.description
       })
     },
     created () {

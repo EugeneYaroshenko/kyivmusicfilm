@@ -59,7 +59,7 @@
   export default {
     computed: {
       ...mapState({
-        allLocations: state => state.filmLocations.all,
+        allLocations: state => state.film.showings.locations,
         selectedLocation: state => state.map.location,
         isLocationMenuShown: state => state.ui.locationMenuShown,
         locationMenuType: state => state.ui.locationMenuType

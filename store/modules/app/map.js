@@ -221,13 +221,13 @@ const actions = {
     dispatch('filmShowings/saveShowingsForForLocation', location.name, { root: true })
   },
 
-  async getGeolocation ({ commit, rootState, dispatch }) {
+  async getGeolocation ({ commit, rootState, dispatch }, filmLocations) {
     try {
       const geolocationAPI = 'https://geoip-db.com/json/'
       const location = await this.$axios.$get(geolocationAPI)
 
       if (location) {
-        const userLocationWithFilm = matchUserLocationWithFilmLocation(location.city, rootState.filmLocations.all)
+        const userLocationWithFilm = matchUserLocationWithFilmLocation(location.city, filmLocations)
 
         if (userLocationWithFilm) {
           commit(types.SELECT_LOCATION, userLocationWithFilm)

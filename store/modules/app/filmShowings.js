@@ -1,48 +1,50 @@
 import * as types from '@/store/mutationTypes'
 
-function hidePreviousDates (filmShowings, today) {
-  return filmShowings.filter(filmShowings => filmShowings.date >= today)
+function hidePreviousDates (filmDates, today) {
+  return filmDates.filter(filmDate => filmDate >= today)
 }
 
 function sortShowings (data) {
-  return data.sort((a, b) => a.date.localeCompare(b.date))
+  return data.sort((a, b) => a - b)
 }
 
 const state = () => ({
   selectedShowingDate: null,
   selectedShowingCinemas: null,
-  allShowingsForCity: null
+  allActualDates: null
 })
 
 const getters = {}
 
 const mutations = {
   [types.SAVE_ALL_SHOWINGS_FOR_CITY] (state, payload) {
-    state.allShowingsForCity = payload
+    state.allActualDates = payload
   },
   [types.SELECT_SHOWING_FOR_CITY] (state, payload) {
     state.selectedShowingDate = payload.date
-    state.selectedShowingCinemas = payload.cinema_array
+    state.selectedShowingCinemas = payload.cinemas
   }
 }
 
 const actions = {
 
-  saveShowingsForLocation ({ commit, rootState }, location) {
-    const filmShowings = rootState.film.showings
+  saveShowingsForLocation ({ commit, rootState }, locationName) {
+    const filmCinemas = rootState.film.showings.cinemas
+    const filmDates = rootState.film.showings.dates[locationName]
 
-    const filmShowingsForLocation = filmShowings.filter(item => item.city === location)[0]
+    if (filmDates && filmDates.length) {
+      const actualDates = sortShowings(hidePreviousDates(filmDates, new Date().getMilliseconds()))
+      const closestDate = actualDates[0]
 
-    if (filmShowingsForLocation && filmShowingsForLocation.dates) {
-      const actualShowings = sortShowings(hidePreviousDates(filmShowingsForLocation.dates, new Date().getMilliseconds()))
-      const closestFilmShowing = actualShowings[0]
-
-      commit(types.SAVE_ALL_SHOWINGS_FOR_CITY, actualShowings)
-      commit(types.SELECT_SHOWING_FOR_CITY, closestFilmShowing)
+      commit(types.SAVE_ALL_SHOWINGS_FOR_CITY, actualDates)
+      commit(types.SELECT_SHOWING_FOR_CITY, { date: closestDate, cinemas: filmCinemas[locationName][closestDate] })
     }
   },
-  selectShowing ({ commit }, payload) {
-    commit(types.SELECT_SHOWING_FOR_CITY, payload)
+  selectShowing ({ commit, rootState }, payload) {
+    const filmCinemas = rootState.film.showings.cinemas
+    const filmLocation = rootState.map.location.name
+
+    commit(types.SELECT_SHOWING_FOR_CITY, { date: payload.date, cinemas: filmCinemas[filmLocation][payload.date] })
   }
 }
 

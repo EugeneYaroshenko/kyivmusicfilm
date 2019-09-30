@@ -27,7 +27,7 @@
     computed: {
       ...mapState({
                     isMapShown: state => state.ui.mapShown,
-                    filmDescription: state => state.film.general.description_full
+                    filmDescription: state => state.film.description.description_full
                   })
     }
   }

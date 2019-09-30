@@ -4,12 +4,14 @@
     v-if="!isMapShown"
     @click="showTrailer"
   >
-    <icon
-      view-box="0 0 70.118 99.546"
-      size="100px"
-    >
-      <play-button />
-    </icon>
+    <div class="icon">
+      <icon
+        view-box="0 0 24 26.48"
+        size="150px"
+      >
+        <play-button />
+      </icon>
+    </div>
   </div>
 </template>
 

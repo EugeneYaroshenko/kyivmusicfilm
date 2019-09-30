@@ -1,6 +1,23 @@
 <template>
   <div class="cinema-screening">
-    <location-component />
+    <!--<location-component />-->
+    <div class="locations-selection">
+      <div class="locations-selection__block">
+        <vue-select
+          :data="locationsWithoutSelected"
+          @change="changeLocation"
+          :placeholder="location.UI_NAME"
+          v-if="location"
+        >
+          <vue-option
+            v-for="(otherLocation, index) in locationsWithoutSelected"
+            :key="index"
+            :value="otherLocation"
+            :label="otherLocation.UI_NAME"
+          />
+        </vue-select>
+      </div>
+    </div>
     <h3 class="title">
       {{ filmInformation.name }}
     </h3>
@@ -8,7 +25,7 @@
       <h4 class="screening-block__title">
         Сеанси
       </h4>
-      <calendar-component />
+      <calendar-component/>
     </div>
     <div class="screening-block">
       <h4 class="screening-block__title">
@@ -24,7 +41,7 @@
           :key="index"
         >
           <div class="cinema-name">
-            {{ cinema }}
+            {{ cinema.name }}
           </div>
         </div>
       </div>
@@ -35,11 +52,11 @@
         @click="toggleMap"
       >
         <icon
-          view-box="0 0 14.67 22.4"
-          size="36"
+          view-box="0 0 447.65 585.2"
+          size="70"
           icon-name="map"
         >
-          <map-icon />
+          <map-icon/>
         </icon>
       </div>
     </div>
@@ -49,34 +66,47 @@
 <script>
   import CalendarComponent from '~/components/app/elements/calendar'
   import LocationComponent from '~/components/app/elements/location'
+  import VueSelect from '~/components/select/select'
+  import VueOption from '~/components/select/option'
   import Icon from '~/components/app/elements/icon'
   import MapIcon from '~/assets/icons/vueIcons/map'
-  import { mapState } from 'vuex'
+  import {mapState} from 'vuex'
 
   export default {
     components: {
       CalendarComponent,
       LocationComponent,
       Icon,
-      MapIcon
+      MapIcon,
+      VueSelect,
+      VueOption
     },
     methods: {
-      toggleMap () {
+      toggleMap() {
         if (this.mapShown) {
           this.$store.dispatch('ui/hideMap')
         } else {
           this.$store.dispatch('ui/showMap')
         }
+      },
+      locationsWithoutSelected() {
+        if (this.allLocations) {
+          return this.location ? this.allLocations.filter(locationItem => locationItem.name !== this.location.name) : this.allLocations
+        }
+      },
+      changeLocation(location) {
+        this.$store.dispatch('map/selectLocation', location.value)
       }
     },
     computed: {
       ...mapState({
-        mapShown: state => state.ui.mapShown,
-        loaderShown: state => state.ui.loading,
-        location: state => state.map.location,
-        filmInformation: state => state.film.general,
-        cinemas: state => state.filmShowings.selectedShowingCinemas
-      })
+                    mapShown: state => state.ui.mapShown,
+                    loaderShown: state => state.ui.loading,
+                    location: state => state.map.location,
+                    allLocations: state => state.film.showings.locations,
+                    filmInformation: state => state.film.description,
+                    cinemas: state => state.filmShowings.selectedShowingCinemas
+                  })
     }
   }
 </script>
@@ -153,10 +183,33 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    padding: 16px 8px 12px 16px;
-    box-shadow: 0 3px 6px 0px rgba(#C8D7D4, 1);
+    background-color: rgba(#333333, 1);
+    padding: 24px 0 0 2px;
+    box-shadow: 0 3px 6px 0px rgba(#000, 1);
     cursor: pointer;
     display: none;
+    overflow: hidden;
+    border-radius: 24px 0 0 0;
+  }
+
+  .toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -6px;
+  }
+
+  .locations-selection {
+    position: relative;
+    max-width: 300px;
+    margin: 0 auto 16px;
+
+    .locations-selection__block {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
   }
 
   @media screen and (min-width: 960px) {
