@@ -125,7 +125,7 @@
       },
       scrollLeft () {
         const scrollFirstVisibleElement = this.scrollVisibleArea.slice(0)[0]
-        const scrollFirstVisibleElementIndex = this.ffilmDates.indexOf(scrollFirstVisibleElement)
+        const scrollFirstVisibleElementIndex = this.filmDates.indexOf(scrollFirstVisibleElement)
 
         this.scrollVisibleArea = this.filmDates.slice(scrollFirstVisibleElementIndex - 5, scrollFirstVisibleElementIndex)
 
