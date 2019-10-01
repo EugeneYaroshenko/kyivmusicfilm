@@ -68,11 +68,10 @@ export default {
     color: $color-grey;
     &[disabled] {
       cursor: no-drop !important;
-      color: $color-grey;
+      color: lighten(#000, 20%)
     }
     &:hover {
-      background-color: $color-grey-light;
-      color: $color-grey-dark;
+      color: #000;
 
       .select-text {
         display: flex;
