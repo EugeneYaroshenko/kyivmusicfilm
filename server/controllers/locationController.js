@@ -2,7 +2,6 @@ const consola = require('consola')
 const axios = require('axios')
 
 exports.location = async function (req, res) {
-
   try {
     const geolocationAPI = 'https://geoip-db.com/json/'
 

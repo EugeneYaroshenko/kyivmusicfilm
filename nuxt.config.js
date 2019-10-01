@@ -34,7 +34,8 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    '@nuxtjs/proxy'
   ],
   auth: {
     watchLoggedIn: false
