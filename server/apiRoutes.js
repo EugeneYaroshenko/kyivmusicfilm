@@ -2,6 +2,7 @@ const router = require('express').Router()
 const filmController = require('./controllers/filmController')
 const authController = require('./controllers/authController')
 const googleController = require('./controllers/googleController')
+const locationController = require('./controllers/locationController')
 
 router.route('/films')
   .get(filmController.index)
@@ -25,5 +26,8 @@ router.route('/auth/user')
 
 router.route('/data')
   .get(googleController.getData)
+
+router.route('/location')
+.get(locationController.location)
 
 module.exports = router
