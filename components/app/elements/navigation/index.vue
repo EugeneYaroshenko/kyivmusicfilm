@@ -78,10 +78,10 @@
     top: 0;
     left: 0;
     width: 100%;
-    display: flex;
     flex-flow: row nowrap;
     align-items: center;
     z-index: 10000;
+    display: none;
   }
 
   .navigation-block {

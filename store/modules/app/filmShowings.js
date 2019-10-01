@@ -33,7 +33,7 @@ const actions = {
     const filmDates = rootState.film.showings.dates[locationName]
 
     if (filmDates && filmDates.length) {
-      const actualDates = sortShowings(hidePreviousDates(filmDates, new Date().getMilliseconds()))
+      const actualDates = sortShowings(hidePreviousDates(filmDates, new Date().setHours(0, 0, 0, 0)))
       const closestDate = actualDates[0]
 
       commit(types.SAVE_ALL_SHOWINGS_FOR_CITY, actualDates)

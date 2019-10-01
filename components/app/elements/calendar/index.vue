@@ -210,25 +210,32 @@
     align-items: center;
     justify-content: center;
     flex-flow: column nowrap;
+    opacity: .8;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   .date__day {
     margin: 0;
+    font-size: 1.1em;
   }
 
   .date__month {
-    font-size: .6em;
+    font-size: .8em;
     font-weight: 400;
     margin: 0;
   }
 
   .selected {
     font-weight: 600;
-    font-size: 1.4em;
+    color: #0001BF;
+    font-size: 1em;
+    opacity: 1;
 
     .date__month {
       font-weight: 600;
-      font-size: .8em;
     }
   }
 

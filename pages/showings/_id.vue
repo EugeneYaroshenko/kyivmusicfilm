@@ -1,7 +1,24 @@
 <template>
   <section class="container">
-    <loader-component />
-    <navigation-component />
+    <loader-component v-if="!filmFetched"/>
+    <div
+      class="main-menu"
+      :class="{'main-menu--shown': isMenuShown}"
+    >
+      <div
+        class="main-menu__navigation"
+        :class="{'main-menu__navigation--collapsed': !isMenuShown}"
+        @click="toggleMainMenu"
+      />
+      <div class="main-menu__content">
+        <div class="logo" />
+        <div class="navigation-links">
+          <h3><a target="_blank" href="https://www.facebook.com/KyivMusicFilm/">Facebook</a></h3>
+          <h3><a target="_blank" href="https://www.instagram.com/kyivmusicfilm/">Instagram</a></h3>
+          <h3><a target="_blank" href="https://www.youtube.com/channel/UCOW9MxduCFNClCOPqbQZTjg">Youtube</a></h3>
+        </div>
+      </div>
+    </div>
     <div
       class="main"
       v-if="filmFetched"
@@ -24,7 +41,6 @@
       </div>
       <div
         :class="{'main__film-map': true, 'main__film-map--condensed': !mapShown}"
-        v-if="mapShown"
       >
         <cinema-map-component />
       </div>
@@ -52,6 +68,11 @@
       PreviewTrailerInteraction,
       LoaderComponent
     },
+    data () {
+      return {
+        isMenuShown: false
+      }
+    },
     computed: {
       ...mapState({
                     mapShown: state => state.ui.mapShown,
@@ -60,6 +81,7 @@
                     filmDescription: state => state.film.description
       })
     },
+
     created () {
       const url = this.$route.path.replace('/showings/', '')
 
@@ -68,6 +90,9 @@
       return this.$store.dispatch('film/getFilmByName', { url })
     },
     methods: {
+      toggleMainMenu () {
+        this.isMenuShown = !this.isMenuShown
+      }
       // displayLocationInfo (position) {
       //   const longitude = position.coords.longitude
       //   const latitude = position.coords.latitude
@@ -87,10 +112,27 @@
 
 <style lang="scss" scoped>
   .container {
-    max-width: 1600px;
     display: flex;
     align-items: stretch;
     position: relative;
+    background-image: url('../../assets/icons/background-main.svg');
+    background-size: cover;
+  }
+
+  .main-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+    transform: translateY(-100%);
+    transition: all 300ms ease-in-out;
+  }
+
+  .main-menu--shown {
+    transform: translateY(0);
   }
 
   .main {
@@ -102,6 +144,61 @@
     padding: 100px 16px;
     flex: 1;
     max-width: 100%;
+  }
+
+  .main-menu__content {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 40px;
+    height: 100%;
+  }
+
+  .navigation-links {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+
+    a {
+      text-decoration: none;
+      color: #000;
+    }
+  }
+
+  .main-menu__navigation {
+    width: 32px;
+    height: 32px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: .8;
+    cursor: pointer;
+    padding: 8px;
+    position: absolute;
+    right: 12px;
+    top: 24px;
+    background-image: url('../../assets/icons/navigationIcon.svg');
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .logo {
+    background-size: contain;
+    background-position: center;
+    background-image: url('../../assets/icons/logo.svg');
+    height: 100px;
+    width: 100px;
+    margin-bottom: 40px;
+  }
+
+  .main-menu__navigation--collapsed {
+    top: auto;
+    bottom: -56px;
+    right: 12px;
   }
 
   .preview-image {
@@ -139,15 +236,15 @@
   }
 
   .main__film-info {
-    flex: 1.6;
-    max-width: 100%;
+    flex: 1;
+    max-width: 50%;
     position: relative;
     transition: all 500ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
     order: 2;
   }
 
   .main__film-info--condensed {
-    max-width: 100px;
+    max-width: 0px;
   }
 
   .film-info__overflow {
@@ -168,7 +265,7 @@
 
   @media screen and (min-width: 960px) {
     .main__film-map {
-      flex: 1.6;
+      flex: 1;
       display: flex;
       flex-flow: row nowrap;
     }
@@ -183,11 +280,10 @@
     }
 
     .preview-image {
-      background-position: right top;
-      background-blend-mode: luminosity;
+      background-position: center;
       position: fixed;
       width: 100%;
-      max-width: 62.5%;
+      max-width: 50%;
       left: 0;
       top: 0;
       height: 100%;
@@ -214,6 +310,21 @@
 
     .main__film-info {
       order: 1;
+    }
+  }
+
+  @media screen and (min-width: 1500px) {
+    .main__film-map--condensed {
+      max-width: 50%;
+      opacity: 1;
+    }
+
+    .preview-image {
+      max-width: 33.5%;
+    }
+
+    .main__film-info--condensed {
+      max-width: 1000px;
     }
   }
 </style>

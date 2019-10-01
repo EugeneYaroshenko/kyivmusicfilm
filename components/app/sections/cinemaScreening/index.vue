@@ -18,19 +18,16 @@
         </vue-select>
       </div>
     </div>
-    <h3 class="title">
+    <h2 class="title">
       {{ filmInformation.name }}
-    </h3>
+    </h2>
     <div class="screening-block">
-      <h4 class="screening-block__title">
-        Сеанси
-      </h4>
-      <calendar-component/>
+      <h3 class="screening-block__title">
+        Сеанси у кіно
+      </h3>
+      <calendar-component />
     </div>
     <div class="screening-block">
-      <h4 class="screening-block__title">
-        Кінотеатри
-      </h4>
       <div
         class="cinemas"
         v-if="cinemas"
@@ -46,7 +43,21 @@
         </div>
       </div>
     </div>
-    <div class="map-control">
+    <div class="map-control left-control" :class="{'hidden-control': !mapShown}">
+      <div
+        class="play-icon"
+        @click="toggleMap"
+      >
+        <icon
+          view-box="0 0 24 26.48"
+          size="50"
+          icon-name="map"
+        >
+          <play-icon />
+        </icon>
+      </div>
+    </div>
+    <div class="map-control right-control" :class="{'hidden-control': mapShown}">
       <div
         class="toggle-icon"
         @click="toggleMap"
@@ -56,7 +67,7 @@
           size="70"
           icon-name="map"
         >
-          <map-icon/>
+          <map-icon />
         </icon>
       </div>
     </div>
@@ -70,7 +81,8 @@
   import VueOption from '~/components/select/option'
   import Icon from '~/components/app/elements/icon'
   import MapIcon from '~/assets/icons/vueIcons/map'
-  import {mapState} from 'vuex'
+  import PlayIcon from '~/assets/icons/vueIcons/playIcon'
+  import { mapState } from 'vuex'
 
   export default {
     components: {
@@ -78,24 +90,20 @@
       LocationComponent,
       Icon,
       MapIcon,
+      PlayIcon,
       VueSelect,
       VueOption
     },
     methods: {
-      toggleMap() {
+      toggleMap () {
         if (this.mapShown) {
           this.$store.dispatch('ui/hideMap')
         } else {
           this.$store.dispatch('ui/showMap')
         }
       },
-      locationsWithoutSelected() {
-        if (this.allLocations) {
-          return this.location ? this.allLocations.filter(locationItem => locationItem.name !== this.location.name) : this.allLocations
-        }
-      },
-      changeLocation(location) {
-        this.$store.dispatch('map/selectLocation', location.value)
+      changeLocation (location) {
+        this.$store.dispatch('map/selectLocation', location)
       }
     },
     computed: {
@@ -106,7 +114,14 @@
                     allLocations: state => state.film.showings.locations,
                     filmInformation: state => state.film.description,
                     cinemas: state => state.filmShowings.selectedShowingCinemas
-                  })
+                  }),
+      locationsWithoutSelected () {
+        if (this.allLocations) {
+          return this.location ? this.allLocations.filter(locationItem => locationItem.name !== this.location.name) : this.allLocations
+        } else {
+          return null
+        }
+      }
     }
   }
 </script>
@@ -121,9 +136,9 @@
   .title {
     text-transform: uppercase;
     text-align: center;
-    letter-spacing: 2px;
-    font-weight: 600;
-    margin: 54px 0 2em 0;
+    letter-spacing: 1px;
+    font-weight: 300;
+    margin: 64px 0;
   }
 
   .screening-block {
@@ -136,35 +151,34 @@
     text-transform: uppercase;
     letter-spacing: .5px;
     text-align: center;
+    font-size: 1.2em;
   }
 
   .cinemas {
     margin-top: 16px;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
+    max-height: 200px;
+    overflow-y: scroll;
   }
 
   .cinema {
     padding: 8px 12px;
     margin-bottom: 4px;
-    display: flex;
-    justify-content: space-between;
     transition: all .2s ease-in-out;
     cursor: pointer;
-    font-size: .8em;
+    font-size: 1.3em;
     text-align: center;
-    color: #06A4FF;
+    color: #0001BF;
 
     &:hover {
-      color: darken(#06A4FF, 20%);
+      color: rgb(0, 1, 255);
     }
 
   }
 
   .cinema-name {
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 400;
+    letter-spacing: .2px;
   }
 
   .time {
@@ -182,14 +196,29 @@
   .map-control {
     position: absolute;
     bottom: 0;
-    right: 0;
-    background-color: rgba(#333333, 1);
-    padding: 24px 0 0 2px;
-    box-shadow: 0 3px 6px 0px rgba(#000, 1);
+    max-height: 200px;
     cursor: pointer;
     display: none;
     overflow: hidden;
-    border-radius: 24px 0 0 0;
+    transition: all 350ms ease-in-out;
+  }
+
+  .hidden-control {
+    max-height: 0;
+  }
+
+  .right-control {
+    right: 0;
+    background-color: rgba(#333333, 1);
+    box-shadow: 0 3px 6px 0px rgba(#000, 1);
+    border-radius: 24px 0 0px 0;
+  }
+
+  .left-control {
+    left: 0;
+    background-color: #0000FF;
+    border-radius: 0 40px 0px 0;
+    box-shadow: 1px -3px 6px 0px rgba(#0000FF, .6);
   }
 
   .toggle-icon {
@@ -197,6 +226,14 @@
     align-items: center;
     justify-content: center;
     margin-right: -6px;
+    padding: 24px 0 0 2px;
+  }
+
+  .play-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 12px 12px 8px;
   }
 
   .locations-selection {
@@ -220,6 +257,12 @@
     .cinema-screening {
       flex: 1.2;
       padding: 40px 32px 12px 24px;
+    }
+  }
+
+  @media screen and (min-width: 1500px) {
+    .map-control {
+      display: none;
     }
   }
 </style>

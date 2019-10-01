@@ -218,7 +218,7 @@ const mutations = {
 const actions = {
   selectLocation ({ commit, dispatch }, location) {
     commit(types.SELECT_LOCATION, location)
-    dispatch('filmShowings/saveShowingsForForLocation', location.name, { root: true })
+    dispatch('filmShowings/saveShowingsForLocation', location.name, { root: true })
   },
 
   async getGeolocation ({ commit, rootState, dispatch }, filmLocations) {

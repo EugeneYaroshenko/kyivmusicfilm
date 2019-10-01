@@ -64,12 +64,19 @@
     },
     methods: {
       setMarkers () {
-        this.markers = this.cinemas.map(cinema => {
-          return {
-            position: cinema.position,
-            title: JSON.stringify({ title: cinema.name, address: cinema.address })
-          }
-        })
+        if (this.cinemas) {
+          this.markers = this.cinemas.map(cinema => {
+            return {
+              position: cinema.position,
+              title: JSON.stringify({ title: cinema.name, address: cinema.address }),
+              icon: {
+                url: require('../../../../assets/icons/markerIcon.png'),
+                size: { width: 44, height: 60.34, f: 'px', b: 'px' },
+                scaledSize: { width: 40, height: 55, f: 'px', b: 'px' }
+              }
+            }
+          })
+        }
       },
       showInfoWindow (data) {
         this.markerPosition = data.position

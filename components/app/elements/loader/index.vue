@@ -1,15 +1,6 @@
 <template>
-  <div :class="{'loader-container': true, 'loader-container--hidden': !isLoaderShown}">
-    <div class="loader-stripes" />
-    <div class="loader-stripes" />
-    <div class="loader-stripes" />
-    <div class="loader-stripes" />
-    <div class="loader-stripes" />
-    <div class="loader-block">
-      <div class="loader" />
-      <div class="loader-text">
-        Вантажимо фільм
-      </div>
+  <div :class="{'loader-container': true}">
+    <div class="kmf-loader">
     </div>
   </div>
 </template>
@@ -31,12 +22,15 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     display: flex;
     flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
+    z-index: 10000;
+    background-color: #FF00BA;
   }
 
   .loader-container--hidden {
@@ -86,11 +80,11 @@
     height: 200px;
   }
 
-  .loader {
-    height: 150px;
-    width: 120px;
+  .kmf-loader {
+    height: 300px;
+    width: 400px;
     margin: 0 auto 12px;
-    background-image: url('../../../../assets/icons/logo.svg');
+    background-image: url('../../../../assets/icons/kmf-loader.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
