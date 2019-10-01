@@ -22,6 +22,8 @@ exports.logout = async function (req, res) {
 exports.user = async function (req, res) {
   let token = req.headers['x-access-token'] || req.headers['authorization']
 
+  consola.info(token)
+
   if (token.startsWith('Bearer ')) {
     token = token.slice(7, token.length)
   }
