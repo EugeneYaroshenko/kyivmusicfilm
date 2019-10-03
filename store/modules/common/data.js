@@ -35,7 +35,6 @@ const mutations = {
 
 const actions = {
   async getData ({ commit }) {
-    console.log('HEEERE')
     commit(types.GET_DATA_REQUEST)
 
     try {

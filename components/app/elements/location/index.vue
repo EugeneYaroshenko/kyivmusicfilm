@@ -1,49 +1,25 @@
 <template>
-  <div :class="{ 'location-container': true, 'location-container--is-expanded': isLocationMenuShown }">
-    <div
-      :class="{'close-icon': true, 'close-icon--shown': isLocationMenuShown} "
-      @click="minimizeLocation"
-    >
-      <icon
-        view-box="0 0 27.051 27.051"
-        size="40"
-        icon-name="location"
-        class="location-icon"
-      >
-        <close />
-      </icon>
-    </div>
-    <div :class="{ 'location-component': true, 'location-component--is-expanded': isLocationMenuShown }">
-      <div
-        class="expand-component"
-        v-if="!isLocationMenuShown"
-        @click="expandLocation"
-      />
-      <div :class="{ 'current-location': true, 'current-location--is-expanded': isLocationMenuShown }">
-        <div class="location-city">
-          {{ selectedLocation ? capitalize(selectedLocation.name) : null }}
-        </div>
-      </div>
+  <div :class="{ 'location-container': true, 'location-container--is-expanded': true }">
+    <div :class="{ 'location-component': true, 'location-component--is-expanded': true }">
       <div class="cities-select">
-        <span>{{ locationText }} </span>
+        <h3>Обери місто для перегляду: </h3>
       </div>
     </div>
     <div
       class="cities-list__container"
-      v-if="isLocationMenuShown"
     >
       <ul
         class="cities-list"
-        v-if="availableLocations"
+        v-if="allLocations"
       >
         <li
-          v-for="(location) in availableLocations"
+          v-for="(location) in allLocations"
           :key="location.name"
           class="city-item"
           @click="selectLocation(location)"
         >
           <span class="city-item__city">
-            {{ capitalize(location.name) }}
+            {{ capitalize(location.UI_NAME) }}
           </span>
         </li>
       </ul>
@@ -61,14 +37,8 @@
       ...mapState({
         allLocations: state => state.film.showings.locations,
         selectedLocation: state => state.map.location,
-        isLocationMenuShown: state => state.ui.locationMenuShown,
         locationMenuType: state => state.ui.locationMenuType
       }),
-      availableLocations () {
-        return this.selectedLocation
-          ? this.allLocations.filter(location => location.name !== this.selectedLocation.name)
-          : this.allLocations
-      },
       locationText () {
         switch (this.locationMenuType) {
           case 'ERROR_TYPE':
@@ -140,8 +110,6 @@
 
   .location-container--is-expanded {
     height: 100%;
-    clip-path: circle(100% at 50% 20%);
-    background-color: #FFF9F6;
     position: fixed;
   }
 
@@ -179,11 +147,11 @@
 
   .cities-list {
     list-style: none;
-    padding: 0 32px 24px;
+    padding: 12px 18px 24px;
     overflow-y: scroll;
     position: relative;
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row wrap;
     justify-content: space-between;
     width: 100%;
     margin: 0;
@@ -191,8 +159,8 @@
     .city-item {
       padding: 16px 12px 16px 12px;
       flex: 1;
-      min-width: 150px;
-      max-width: 100%;
+      min-width: 50%;
+      max-width: 50%;
       margin-bottom: 12px;
       cursor: pointer;
       display: flex;
@@ -202,10 +170,11 @@
       transition: all .4s ease-in-out;
       border-radius: 4px;
       font-size: 1.2em;
+      opacity: .7;
+      font-weight: 400;
 
       &:hover {
-        box-shadow: 0 0 8px 0 rgba(#000000, .1);
-        background-color: #fff;
+        opacity: 1;
       }
     }
 
@@ -215,7 +184,7 @@
     }
 
     .city-item__city {
-      font-size: 1.1em;
+      font-size: 1.3em;
     }
   }
 
@@ -234,7 +203,6 @@
 
   .cities-select {
     display: none;
-    width: 300px;
     text-align: center;
     margin: 40px auto 16px;
   }
@@ -245,14 +213,11 @@
 
   @media screen and (min-width: 960px) {
     .location-container {
-      clip-path: circle(80px at 50% 20%);
-      transition: clip-path .5s ease-out;
       background-color: #fff;
     }
 
     .location-container--is-expanded {
-      clip-path: circle(100% at 50% 20%);
-      background-color: #FFF9F6;
+      background-color: #FFF;
       position: absolute;
     }
   }

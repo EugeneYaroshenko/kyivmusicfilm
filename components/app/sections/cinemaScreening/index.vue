@@ -1,75 +1,102 @@
 <template>
   <div class="cinema-screening">
-    <!--<location-component />-->
-    <div class="locations-selection">
-      <div class="locations-selection__block">
-        <vue-select
-          :data="locationsWithoutSelected"
-          @change="changeLocation"
-          :placeholder="location.UI_NAME"
-          v-if="location"
-        >
-          <vue-option
-            v-for="(otherLocation, index) in locationsWithoutSelected"
-            :key="index"
-            :value="otherLocation"
-            :label="otherLocation.UI_NAME"
-          />
-        </vue-select>
+    <div
+      class="cinema-content"
+      v-if="location"
+    >
+      <div class="locations-selection">
+        <div class="locations-selection__block">
+          <vue-select
+            :data="locationsWithoutSelected"
+            @change="changeLocation"
+            :placeholder="location.UI_NAME"
+            v-if="location"
+          >
+            <vue-option
+              v-for="(otherLocation, index) in locationsWithoutSelected"
+              :key="index"
+              :value="otherLocation"
+              :label="otherLocation.UI_NAME"
+            />
+          </vue-select>
+        </div>
       </div>
-    </div>
-    <h2 class="title">
-      {{ filmInformation.name }}
-    </h2>
-    <div class="screening-block">
-      <h3 class="screening-block__title">
-        Сеанси у кіно
-      </h3>
-      <calendar-component />
-    </div>
-    <div class="screening-block">
-      <div
-        class="cinemas"
-        v-if="cinemas"
-      >
+      <h2 class="title">
+        {{ filmInformation.name }}
+      </h2>
+      <div class="screening-block">
+        <h3 class="screening-block__title">
+          Сеанси у кіно
+        </h3>
+        <calendar-component />
+      </div>
+      <div class="screening-block">
         <div
-          class="cinema"
-          v-for="(cinema, index) in cinemas"
-          :key="index"
+          class="cinemas"
+          v-if="cinemas"
         >
-          <div class="cinema-name">
-            {{ cinema.name }}
+          <div
+            class="cinema"
+            v-for="(cinema, index) in cinemas"
+            :key="index"
+          >
+            <div
+              class="cinema-name active-link"
+              v-if="cinema.url"
+            >
+              <a
+                :href="cinema.url"
+                target="_blank"
+              >
+                {{ cinema.name }}
+              </a>
+            </div>
+            <div
+              class="cinema-name"
+              v-else
+            >
+              {{ cinema.name }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="map-control left-control" :class="{'hidden-control': !mapShown}">
       <div
-        class="play-icon"
-        @click="toggleMap"
+        class="map-control left-control"
+        :class="{'hidden-control': !mapShown}"
       >
-        <icon
-          view-box="0 0 24 26.48"
-          size="50"
-          icon-name="map"
+        <div
+          class="play-icon"
+          @click="toggleMap"
         >
-          <play-icon />
-        </icon>
+          <icon
+            view-box="0 0 24 26.48"
+            size="50"
+            icon-name="map"
+          >
+            <play-icon />
+          </icon>
+        </div>
+      </div>
+      <div
+        class="map-control right-control"
+        :class="{'hidden-control': mapShown}"
+      >
+        <div
+          class="toggle-icon"
+          @click="toggleMap"
+        >
+          <icon
+            view-box="0 0 447.65 585.2"
+            size="70"
+            icon-name="map"
+          >
+            <map-icon />
+          </icon>
+        </div>
       </div>
     </div>
-    <div class="map-control right-control" :class="{'hidden-control': mapShown}">
-      <div
-        class="toggle-icon"
-        @click="toggleMap"
-      >
-        <icon
-          view-box="0 0 447.65 585.2"
-          size="70"
-          icon-name="map"
-        >
-          <map-icon />
-        </icon>
-      </div>
+    <div v-else>
+      <location-component />
     </div>
   </div>
 </template>
@@ -129,8 +156,11 @@
 <style lang="scss">
   .cinema-screening {
     flex: 1;
-    padding: 32px 16px 12px;
     position: relative;
+  }
+
+  .cinema-content {
+    padding: 32px 16px 12px;
   }
 
   .title {
@@ -164,21 +194,33 @@
     padding: 8px 12px;
     margin-bottom: 4px;
     transition: all .2s ease-in-out;
-    cursor: pointer;
-    font-size: 1.3em;
+    cursor: default;
+    font-size: 1.2em;
     text-align: center;
-    color: #0001BF;
-
-    &:hover {
-      color: rgb(0, 1, 255);
-    }
-
   }
 
   .cinema-name {
     text-transform: uppercase;
     font-weight: 400;
     letter-spacing: .2px;
+    opacity: .6;
+    pointer-events: none;
+    color: #0001BF;
+
+    &:hover {
+      color: rgb(0, 1, 255);
+    }
+  }
+
+  .active-link {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
 
   .time {

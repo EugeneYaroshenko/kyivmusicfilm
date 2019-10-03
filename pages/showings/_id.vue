@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <loader-component v-if="!filmFetched"/>
+    <loader-component/>
     <div
       class="main-menu"
       :class="{'main-menu--shown': isMenuShown}"
@@ -85,7 +85,7 @@
     created () {
       const url = this.$route.path.replace('/showings/', '')
 
-      // this.$store.dispatch('ui/showLoader')
+      this.$store.dispatch('ui/showLoader')
 
       return this.$store.dispatch('film/getFilmByName', { url })
     },

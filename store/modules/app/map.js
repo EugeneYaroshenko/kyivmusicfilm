@@ -13,12 +13,6 @@ function matchUserLocationWithFilmLocation (userCurrentLocation, availableCities
   return currentLocation
 }
 
-function hideLoader (dispatch) {
-  setTimeout(() => {
-    dispatch('ui/hideLoader', {}, { root: true })
-  }, 4000)
-}
-
 const state = () => ({
   location: null,
   cinemas: null,
@@ -219,29 +213,33 @@ const actions = {
   selectLocation ({ commit, dispatch }, location) {
     commit(types.SELECT_LOCATION, location)
     dispatch('filmShowings/saveShowingsForLocation', location.name, { root: true })
+    localStorage.setItem('location', JSON.stringify(location))
   },
 
   async getGeolocation ({ commit, rootState, dispatch }, filmLocations) {
     try {
       this.$axios.setHeader('Authorization', null)
-      const location = await this.$axios.$get('https://geoip-db.com/json/')
 
-      if (location) {
-        const userLocationWithFilm = matchUserLocationWithFilmLocation(location.city, filmLocations)
+      let userLocation
+      const locationFromLocalStorage = process.browser ? localStorage.getItem('location') : null
 
-        if (userLocationWithFilm) {
-          commit(types.SELECT_LOCATION, userLocationWithFilm)
-          dispatch('filmShowings/saveShowingsForLocation', userLocationWithFilm.name, { root: true })
-        } else {
-          dispatch('ui/showLocationMenu', { different_location: true }, { root: true })
-        }
+      if (locationFromLocalStorage) {
+        userLocation = matchUserLocationWithFilmLocation(JSON.parse(locationFromLocalStorage).name, filmLocations)
       } else {
-        throw new Error('no location')
+        const geoLocation = await this.$axios.$get('https://geoip-db.com/json/')
+
+        userLocation = geoLocation ? matchUserLocationWithFilmLocation(geoLocation.city, filmLocations) : null
       }
 
-      hideLoader(dispatch)
+      if (userLocation) {
+        commit(types.SELECT_LOCATION, userLocation)
+        dispatch('filmShowings/saveShowingsForLocation', userLocation.name, { root: true })
+      }
+
+      dispatch('ui/hideLoader', {}, { root: true })
     } catch (error) {
       console.log(error, error)
+      dispatch('ui/hideLoader', {}, { root: true })
     }
   }
 }

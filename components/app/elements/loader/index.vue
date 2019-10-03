@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'loader-container': true}">
+  <div class="loader-container" :class="{'loader-container--hidden': !isLoaderShown}">
     <div class="kmf-loader">
     </div>
   </div>
@@ -78,6 +78,11 @@
     margin: auto;
     width: 200px;
     height: 200px;
+  }
+
+  .loader-container--hidden {
+    opacity: 0;
+    visibility: hidden;
   }
 
   .kmf-loader {
