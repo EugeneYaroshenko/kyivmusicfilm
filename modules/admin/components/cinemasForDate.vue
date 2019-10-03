@@ -3,9 +3,15 @@
     v-if="selectedDate"
     class="cinemas-container"
   >
-    <div class="close-icon" @click="cancelForm"/>
+    <div
+      class="close-icon"
+      @click="cancelForm"
+    />
     <div class="cinemas-list__date">
-      {{ selectedDate }} <span class="small-text" @click="deleteDate">Видалити</span>
+      {{ selectedDate }} <span
+        class="small-text"
+        @click="deleteDate"
+      >Видалити</span>
     </div>
     <div class="cinema__input-item">
       <div class="input-components">
@@ -36,13 +42,24 @@
           v-for="(cinema, index) in selectedCinemas"
           class="cinema-item"
           :key="index"
-          @click="deleteCinema(cinema)"
         >
           <div
             class="remove-icon"
+            @click="deleteCinema(cinema)"
           />
           <div>
             {{ cinema.name }}
+          </div>
+          <div class="cinema-input">
+            <div class="input-name">
+              URL:
+            </div>
+            <input
+              type="text"
+              @input="changeCinemaURL($event, cinema.name)"
+              placeholder="Без посилання на показ"
+              :value="cinema.url || ''"
+            >
           </div>
         </li>
       </ul>
@@ -101,12 +118,19 @@
     },
     watch: {
       cinemasForSelectedDate () {
+        console.log(this.cinemasForSelectedDate)
         this.selectedCinemas = this.cinemasForSelectedDate || []
       }
     },
     methods: {
       selectCinema (cinema) {
-        this.selectedCinemas = [...this.selectedCinemas, ...[JSON.parse(cinema)]]
+        const selectedCinema = { ...JSON.parse(cinema), ...{ url: null } }
+        this.selectedCinemas = [...this.selectedCinemas, selectedCinema]
+      },
+      changeCinemaURL (e, name) {
+        this.selectedCinemas = this.selectedCinemas.map(cinema => {
+          return cinema.name === name ? { ...cinema, ...{ url: e.target.value } } : cinema
+        })
       },
       saveForm () {
         this.saveChanges(this.selectedCinemas)
@@ -227,15 +251,38 @@
     overflow-y: scroll;
     height: 150px;
 
-    li {
+    .cinema-item {
       padding: 8px;
       display: flex;
       margin-bottom: 4px;
       cursor: pointer;
+      align-items: center;
 
       &:hover .remove-icon {
         opacity: 1;
       }
+    }
+
+    .cinema-input {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      margin-left: 12px;
+
+      .input-name {
+        font-weight: bold;
+      }
+
+      input {
+        outline: 0;
+        border: 1px solid #000;
+        padding: 4px 6px;
+        margin-left: 4px;
+      }
+    }
+
+    .cinema-name {
+      flex: 1;
     }
 
     .remove-icon {

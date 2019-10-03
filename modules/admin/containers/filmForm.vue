@@ -33,8 +33,10 @@
         input-type="text"
         input-name="url"
         label="Назва в URL посиланні (заповнюється автоматично)"
+        :validation="validations.url"
         :input-value="description.url"
-        :disabled="true"
+        :on-input="updateFilmURL"
+        :validate="validateInputField"
       />
       <input-component
         input-type="text"
@@ -138,6 +140,11 @@
             validation_message: 'У кожного фільму повинне бути своє ім\'я',
             validated: false
           },
+          url: {
+            validation_error: false,
+            validation_message: 'У кожного фільму також має бути посилання',
+            validated: false
+          },
           trailer: {
             regex: /\b((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))/,
             validation_error: false,
@@ -198,10 +205,10 @@
       },
       updateFilmName (e) {
         this.$store.dispatch('editForm/updateFilmName', e.target.value)
-        this.updateFilmURL(e.target.value)
+        this.updateFilmURL(e)
       },
-      updateFilmURL (name) {
-        this.$store.dispatch('editForm/updateFilmURL', name)
+      updateFilmURL (e) {
+        this.$store.dispatch('editForm/updateFilmURL', e.target.value)
       },
       updateFilmTrailer (e) {
         this.$store.dispatch('editForm/updateFilmTrailer', e.target.value)
@@ -212,7 +219,7 @@
       updateFilmShortDescription (e) {
         this.$store.dispatch('editForm/updateFilmShortDescription', e.target.value)
       },
-      createInlineBackground (image) {
+      async createInlineBackground (image) {
         return image
           ? { backgroundImage: 'url(\'' + image + '\')' }
           : { background: '#3db5ea' }

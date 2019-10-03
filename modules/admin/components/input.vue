@@ -1,7 +1,7 @@
 <template>
   <div class="input-item">
     <label class="input-item__label">{{ label }}</label>
-    <div v-if="validation">
+    <div v-if="inputName !== 'url'">
       <input
         v-if="inputType === 'text'"
         :type="inputType"
@@ -45,7 +45,12 @@
         :name="inputName"
         class="input"
         :value="inputValue"
-        :disabled="true"
+        @input="onInput"
+        :class="{
+          'input': true,
+          'is-error': validation.validated && validation.validation_error,
+          'is-success': validation.validated && !validation.validation_error,
+        }"
       >
     </div>
   </div>
