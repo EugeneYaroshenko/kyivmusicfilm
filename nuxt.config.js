@@ -40,9 +40,9 @@ module.exports = {
   auth: {
     watchLoggedIn: false
   },
-  // axios: {
-  //   baseURL: 'https://kyivmusicfilm.herokuapp.com'
-  // },
+  axios: {
+    baseURL: 'http://kyivmusicfilm.com'
+  },
   /*
   ** Build configuration
   */
