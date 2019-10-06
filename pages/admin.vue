@@ -1,9 +1,58 @@
 <template>
   <section class="admin-container">
-    <nuxt-child />
+    <div v-if="dataFetched && filmsFetched">
+      <nuxt-child />
+    </div>
+    <div
+      class="loader"
+      v-else
+    />
   </section>
 </template>
 
 <script>
-  export default {}
+  import { mapState } from 'vuex'
+
+  export default {
+    created () {
+      this.$store.dispatch('films/getAll')
+      this.$store.dispatch('data/getData')
+    },
+    computed: {
+      ...mapState({
+                    dataFetched: state => state.data.request.fetched,
+                    filmsFetched: state => state.films.request.fetched
+                  })
+    }
+  }
 </script>
+
+<style lang="scss" scoped>
+  .loader {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: 5px solid #000;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    animation: loading 1s linear infinite;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  @keyframes loading {
+    from {
+      transform: rotate(0deg)
+    }
+    to {
+      transform: rotate(359deg)
+    }
+  }
+
+  .admin-container {
+    min-height: 100vh;
+  }
+</style>

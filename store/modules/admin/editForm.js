@@ -56,7 +56,7 @@ const mutations = {
   },
   [types.RESET_FILM] (state) {
     state = initialFilmState
-  },
+  }
 }
 
 const actions = {
@@ -78,7 +78,7 @@ const actions = {
   updateFilmShortDescription ({ commit }, updatedShortDescription) {
     commit(types.UPDATE_FILM_SHORT_DESCRIPTION, updatedShortDescription)
   },
-  updateFilmDesktopImage ({ commit }, updateFilmDesktopImage) {
+  async updateFilmDesktopImage ({ commit }, updateFilmDesktopImage) {
     commit(types.UPDATE_FILM_DESKTOP_IMAGE, updateFilmDesktopImage)
   },
   updateFilmMobileImage ({ commit }, updateFilmMobileImage) {

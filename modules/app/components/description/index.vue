@@ -65,6 +65,7 @@
     padding: 14px 8px 8px 40px;
     background-color: #000;
     position: relative;
+    width: 100%;
   }
 
   .description__toggle-icon {

@@ -5,9 +5,6 @@
       v-if="error"
     >
       <h2>На жаль, фільм не був збережений</h2>
-      <div class="go-to">
-        Спробувати знову
-      </div>
     </div>
     <div
       class="popup-edit__block success"
@@ -56,11 +53,11 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2000;
+    z-index: 100;
     color: #fff;
   }
 
-  .success {
+  .popup-edit__block {
     height: 100%;
     width: 100%;
     display: flex;
@@ -74,6 +71,10 @@
       text-decoration: none;
       color: #fff;
     }
+  }
+
+  .success {
+    background-color: #10A756;
   }
 
   .error {

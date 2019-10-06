@@ -66,7 +66,6 @@ const mutations = {
     state.request = { fetched: false, loading: false, error: null }
   },
   [types.SAVE_FILM_REQUEST] (state, payload) {
-    state.film = payload
     state.request = { fetched: false, loading: true, error: null }
   },
   [types.SAVE_FILM_SUCCESS] (state) {
@@ -96,17 +95,46 @@ const actions = {
         dates: rootState.editShowings.dates
       }
     }
-    const description = { description: rootState.editForm }
+    const description = { description: Object.assign({}, rootState.editForm) }
 
     const film = { ...state.film, ...showings, ...description }
 
-    commit(types.SAVE_FILM_REQUEST, film)
+    commit(types.SAVE_FILM_REQUEST)
 
     try {
+      if (typeof (film.description.image_desktop) !== 'string') {
+        const formData = new FormData()
+        formData.append('photos', film.description.image_desktop)
+
+        const image = await this.$axios.$post(
+          '/api/upload',
+          formData,
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        )
+
+        film.description.image_desktop = image.location
+      }
+
+      if (typeof (film.description.image_mobile) !== 'string') {
+        const formData = new FormData()
+        formData.append('photos', film.description.image_mobile)
+
+        const image = await this.$axios.$post(
+          '/api/upload',
+          formData,
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        )
+
+        film.description.image_mobile = image.location
+      }
+
       const apiURL = state.film._id ? `/api/films/${state.film._id}` : '/api/films'
+
       const savedFilm = await this.$axios.$post(apiURL, film)
 
-      commit(types.SAVE_FILM_SUCCESS)
+      console.log(savedFilm)
+
+      commit(types.SAVE_FILM_SUCCESS, savedFilm)
     } catch (error) {
       commit(types.SAVE_FILM_ERROR, error)
     }

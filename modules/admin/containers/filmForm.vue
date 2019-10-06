@@ -13,8 +13,8 @@
         class="content-heading__controls"
       >
         <div
-        class="dropdown-icon"
-        :class="{'close-icon': editBlockExpanded, 'open-icon': !editBlockExpanded}"
+          class="dropdown-icon"
+          :class="{'close-icon': editBlockExpanded, 'open-icon': !editBlockExpanded}"
         />
       </div>
     </div>
@@ -67,17 +67,27 @@
       />
       <div class="input-item">
         <label class="input-item__label">Постер широкоформатний</label>
-        <div class="input-item__photos">
+        <p
+          @click="changeDesktopImage"
+          v-if="description.image_desktop"
+          class="input-change"
+        >
+          Змінити
+        </p>
+        <div
+          class="input-item__photos"
+          v-else
+        >
           <div
             class="upload-photo"
           >
             <label
               for="screen-photo"
               class="upload-photo__btn"
-              :style="createInlineBackground(description.image_desktop)"
+              :style="{backgroundImage: `url('${this.desktopPreviewImage}')` }"
             >
               <span class="photo-icon" />
-              <span>1920 x 1080</span>
+              <span>1200 x 1400 (max 1.5 MB)</span>
               <input
                 id="screen-photo"
                 class="input-file"
@@ -89,16 +99,26 @@
         </div>
       </div>
       <div class="input-item">
-        <label class="input-item__label">Постер для мобільних</label>
-        <div class="input-item__photos">
+        <label class="input-item__label">Постер для Facebook</label>
+        <p
+          @click="changeMobileImage"
+          v-if="description.image_mobile"
+          class="input-change"
+        >
+          Змінити
+        </p>
+        <div
+          class="input-item__photos"
+          v-else
+        >
           <div class="upload-photo upload-photo--mobile">
             <label
               for="mobile-image"
               class="upload-photo__btn"
-              :style="createInlineBackground(description.image_mobile)"
+              :style="{backgroundImage: `url('${this.mobilePreviewImage}')` }"
             >
               <span class="photo-icon" />
-              <span>1080x566</span>
+              <span>1200 * 630 (max 1 MB)</span>
               <input
                 id="mobile-image"
                 class="input-file"
@@ -134,6 +154,8 @@
     data () {
       return {
         editBlockExpanded: false,
+        desktopPreviewImage: null,
+        mobilePreviewImage: null,
         validations: {
           name: {
             validation_error: false,
@@ -180,15 +202,21 @@
       toggleEditBlock () {
         this.editBlockExpanded = !this.editBlockExpanded
       },
+      changeMobileImage () {
+        this.$store.dispatch('editForm/updateFilmMobileImage', null)
+      },
+      changeDesktopImage () {
+        this.$store.dispatch('editForm/updateFilmDesktopImage', null)
+      },
       async uploadDesktopImage (e) {
-        const desktopImageBase64 = await this.uploadImage(e.target.files[0])
+        this.$store.dispatch('editForm/updateFilmDesktopImage', e.target.files[0])
 
-        this.$store.dispatch('editForm/updateFilmDesktopImage', desktopImageBase64)
+        this.desktopPreviewImage = await this.uploadImage(e.target.files[0])
       },
       async uploadMobileImage (e) {
-        const mobileImageBase64 = await this.uploadImage(e.target.files[0])
+        this.$store.dispatch('editForm/updateFilmMobileImage', e.target.files[0])
 
-        this.$store.dispatch('editForm/updateFilmMobileImage', mobileImageBase64)
+        this.mobilePreviewImage = await this.uploadImage(e.target.files[0])
       },
       async uploadImage (imageFile) {
         const base64Image = await this.toBase64(imageFile)
@@ -219,11 +247,6 @@
       updateFilmShortDescription (e) {
         this.$store.dispatch('editForm/updateFilmShortDescription', e.target.value)
       },
-      async createInlineBackground (image) {
-        return image
-          ? { backgroundImage: 'url(\'' + image + '\')' }
-          : { background: '#3db5ea' }
-      },
       ifFilmInformationFilledIn () {
         const validationErrors = this.validations.name.validation_error ||
           this.validations.trailer.validation_error ||
@@ -240,7 +263,6 @@
         return inputValues && !validationErrors
       },
       validateInputField (e, inputName) {
-        console.log(e, inputName)
         this.validations[inputName].validation_error = inputName === 'trailer'
           ? !this.validations.trailer.regex.test(e.target.value)
           : !e.target.value.length
@@ -335,12 +357,14 @@
     justify-content: center;
 
     .upload-photo {
+      background: #3db5ea;
       height: 432px;
       width: 100%;
     }
 
     .upload-photo--mobile {
-      width: 56%;
+      width: 100%;
+      height: 300px;
     }
   }
 
@@ -382,7 +406,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 99;
 
     &[disabled] {
       background-color: #C5F2D8;
@@ -413,5 +437,9 @@
 
   .close-icon {
     transform: rotate(180deg);
+  }
+
+  .input-change {
+    cursor: pointer;
   }
 </style>

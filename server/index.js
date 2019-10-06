@@ -25,8 +25,8 @@ async function start () {
     await nuxt.ready()
   }
 
-  app.use(bodyParser.json({ limit: '50mb' }))
-  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(bodyParser.json({ limit: '50mb', extended: true }))
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
   app.use(cors({
                  allowedHeaders: ['Content-Type'],
                  origin: '*',
@@ -36,7 +36,6 @@ async function start () {
                }))
   app.use('/api', apiRoutes)
   app.use(nuxt.render)
-
 
   mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/test', { useNewUrlParser: true })
 

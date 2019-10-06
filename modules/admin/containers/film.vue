@@ -6,6 +6,9 @@
       :film-url="filmURL"
       :reset="resetRequest"
     />
+    <div class="loader-container" v-if="loading">
+      <div class="loader"/>
+    </div>
     <div class="navigation">
       <nuxt-link to="/admin/films" class="icon exit-icon" />
     </div>
@@ -32,14 +35,12 @@
       filmFormContainer,
       filmCalendarContainer
     },
-    created () {
-      this.$store.dispatch('data/getData')
-    },
     computed: {
       ...mapState({
                     filmRequestInformation: state => state.editFilm.request,
                     dataFetched: state => state.data.request.fetched,
-                    film: state => state.editFilm.film
+                    film: state => state.editFilm.film,
+                    loading: state => state.editFilm.request.loading
       }),
       fetchedFilmRequest () {
         return this.filmRequestInformation.fetched
@@ -81,6 +82,43 @@
       border-radius: 8px;
       cursor: pointer;
       margin-bottom: 32px;
+    }
+  }
+
+  .loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-color: rgba(#fff, .9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .loader {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      border: 5px solid #000;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      animation: loading 1s linear infinite;
+      position: absolute;
+      right: 0;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+    @keyframes loading {
+      from {
+        transform: rotate(0deg)
+      }
+      to {
+        transform: rotate(359deg)
+      }
     }
   }
 

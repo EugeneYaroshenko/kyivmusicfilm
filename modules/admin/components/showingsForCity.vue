@@ -4,7 +4,7 @@
       <div class="name">{{ uiName }}</div>
       <div
         class="remove-location remove-icon"
-        @click="removeLocation"
+        @click="showRemoveLocationPopup"
       />
     </div>
     <div class="calendar-block">
@@ -86,6 +86,7 @@
       }
     },
     components: {
+      DeletePopup,
       CalendarForDate,
       CinemasForDate
     },
@@ -112,7 +113,7 @@
       dateInMillisecondsToUserFriendlyDate (date) {
         return date ? this.$moment(date).format('DD MMMM') : ''
       }
-    },
+    }
   }
 </script>
 

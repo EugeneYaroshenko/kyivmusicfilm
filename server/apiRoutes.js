@@ -2,7 +2,7 @@ const router = require('express').Router()
 const filmController = require('./controllers/filmController')
 const authController = require('./controllers/authController')
 const googleController = require('./controllers/googleController')
-const locationController = require('./controllers/locationController')
+const assetsController = require('./controllers/assetsController')
 
 router.route('/films')
   .get(filmController.index)
@@ -27,7 +27,7 @@ router.route('/auth/user')
 router.route('/data')
   .get(googleController.getData)
 
-router.route('/location')
-.get(locationController.location)
+router.route('/upload')
+  .post(assetsController.upload)
 
 module.exports = router

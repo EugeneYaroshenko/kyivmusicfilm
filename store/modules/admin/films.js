@@ -27,7 +27,10 @@ const mutations = {
   [types.DELETE_FILM_REQUEST] (state) {
     state.request = { ...state.request, fetched: false, loading: true }
   },
-  [types.DELETE_FILM_SUCCESS] (state, payload) {
+  [types.DELETE_FILM_SUCCESS] (state, deletedFilm) {
+    const updatedFilms = state.data.filter(film => film._id !== deletedFilm._id)
+
+    state.data = updatedFilms
     state.request = { ...state.request, fetched: true, loading: false }
   },
   [types.DELETE_FILM_ERROR] (state, payload) {
@@ -51,12 +54,10 @@ const actions = {
   async deleteFilm ({ commit }, film) {
     commit(types.DELETE_FILM_REQUEST)
 
-    console.log(film._id)
-
     try {
       const deletedFilm = await this.$axios.$delete(`/api/films/${film._id}`)
 
-      commit(types.DELETE_FILM_SUCCESS)
+      commit(types.DELETE_FILM_SUCCESS, film)
     } catch (error) {
       commit(types.DELETE_FILM_ERROR, error)
     }

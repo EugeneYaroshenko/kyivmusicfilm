@@ -41,7 +41,7 @@ module.exports = {
     watchLoggedIn: false
   },
   axios: {
-    baseURL: 'http://kyivmusicfilm.com'
+    baseURL: 'https://kyivmusicfilm.com'
   },
   /*
   ** Build configuration

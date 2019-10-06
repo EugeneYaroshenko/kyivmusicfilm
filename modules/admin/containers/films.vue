@@ -1,5 +1,11 @@
 <template>
   <section class="films-container">
+    <delete-popup
+      v-if="popupShown"
+      :cancel="hideDeletePopup"
+      :delete-film="deleteFilm"
+      :film-to-delete="filmToDelete"
+    />
     <div class="navigation">
       <div
         class="plus-icon"
@@ -39,7 +45,7 @@
               </div>
               <div
                 class="button delete-button"
-                @click="deleteFilm(film)"
+                @click="showDeletePopup(film)"
               >
                 Видалити
               </div>
@@ -53,15 +59,22 @@
 
 <script>
   import { mapState } from 'vuex'
+  import DeletePopup from '~/modules/admin/components/deletePopup'
 
   export default {
-    created () {
-      return this.$store.dispatch('films/getAll')
+    data () {
+      return {
+        popupShown: false,
+        filmToDelete: null
+      }
     },
     computed: {
       ...mapState({
                     films: state => state.films.data
                   })
+    },
+    components: {
+      DeletePopup
     },
     methods: {
       generateFilmLink (url) {
@@ -75,9 +88,18 @@
         this.$store.dispatch('editFilm/create')
         this.$router.push('/admin/film')
       },
-      deleteFilm (film) {
-        this.$store.dispatch('films/deleteFilm', film)
-      }
+      deleteFilm () {
+        this.$store.dispatch('films/deleteFilm', this.filmToDelete)
+        this.hideDeletePopup()
+      },
+      showDeletePopup (film) {
+        this.filmToDelete = film
+        this.popupShown = true
+      },
+      hideDeletePopup () {
+        this.popupShown = false
+        this.filmToDelete = null
+      },
     }
   }
 </script>
@@ -142,7 +164,6 @@
   .film-heading {
     margin-bottom: 12px;
   }
-
 
   .delete-button {
     color: #F70039;
