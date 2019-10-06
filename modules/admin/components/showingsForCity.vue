@@ -86,7 +86,6 @@
       }
     },
     components: {
-      DeletePopup,
       CalendarForDate,
       CinemasForDate
     },
