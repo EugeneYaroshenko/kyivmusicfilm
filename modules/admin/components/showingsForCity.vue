@@ -4,7 +4,7 @@
       <div class="name">{{ uiName }}</div>
       <div
         class="remove-location remove-icon"
-        @click="showRemoveLocationPopup"
+        @click="removeLocation"
       />
     </div>
     <div class="calendar-block">

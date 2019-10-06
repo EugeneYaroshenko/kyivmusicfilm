@@ -32,6 +32,7 @@
     },
     methods: {
       addNewDate (date) {
+        console.log('click here')
         this.addShowingDate(this.$moment(date).valueOf())
       },
       editEventDate (eventItem) {
