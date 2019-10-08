@@ -57,18 +57,21 @@ const mutations = {
     state.film = payload
   },
   [types.CREATE_FILM] (state) {
-    state = initialFilmState
+    state.film = initialFilmState.film
+    state.request = initialFilmState.request
   },
   [types.RESET_FILM] (state) {
-    state = initialFilmState
+    state.film = initialFilmState.film
+    state.request = initialFilmState.request
   },
   [types.RESET_FILM_REQUEST] (state) {
     state.request = { fetched: false, loading: false, error: null }
   },
-  [types.SAVE_FILM_REQUEST] (state, payload) {
+  [types.SAVE_FILM_REQUEST] (state) {
     state.request = { fetched: false, loading: true, error: null }
   },
-  [types.SAVE_FILM_SUCCESS] (state) {
+  [types.SAVE_FILM_SUCCESS] (state, data) {
+    state.film = data
     state.request = { fetched: true, loading: false, error: null }
   },
   [types.SAVE_FILM_ERROR] (state, error) {
@@ -132,9 +135,7 @@ const actions = {
 
       const savedFilm = await this.$axios.$post(apiURL, film)
 
-      console.log(savedFilm)
-
-      commit(types.SAVE_FILM_SUCCESS, savedFilm)
+      commit(types.SAVE_FILM_SUCCESS, savedFilm.data)
     } catch (error) {
       commit(types.SAVE_FILM_ERROR, error)
     }

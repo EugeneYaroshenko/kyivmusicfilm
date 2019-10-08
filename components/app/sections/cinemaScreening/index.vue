@@ -21,9 +21,9 @@
           </vue-select>
         </div>
       </div>
-      <h2 class="title">
+      <h3 class="title">
         {{ filmInformation.name }}
-      </h2>
+      </h3>
       <div class="screening-block">
         <h3 class="screening-block__title">
           Сеанси у кіно

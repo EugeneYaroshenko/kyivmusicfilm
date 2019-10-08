@@ -18,7 +18,7 @@ const getters = {}
 
 const mutations = {
   [types.SAVE_ALL_SHOWINGS_FOR_CITY] (state, payload) {
-    state.allActualDates = payload
+    state.allActualDates = payload.dates
   },
   [types.SELECT_SHOWING_FOR_CITY] (state, payload) {
     state.selectedShowingDate = payload.date
@@ -36,7 +36,7 @@ const actions = {
       const actualDates = sortShowings(hidePreviousDates(filmDates, new Date().setHours(0, 0, 0, 0)))
       const closestDate = actualDates[0]
 
-      commit(types.SAVE_ALL_SHOWINGS_FOR_CITY, actualDates)
+      commit(types.SAVE_ALL_SHOWINGS_FOR_CITY, { dates: actualDates })
       commit(types.SELECT_SHOWING_FOR_CITY, { date: closestDate, cinemas: filmCinemas[locationName][closestDate] })
     }
   },

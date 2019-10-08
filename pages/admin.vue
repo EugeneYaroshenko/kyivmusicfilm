@@ -1,6 +1,6 @@
 <template>
   <section class="admin-container">
-    <div v-if="dataFetched && filmsFetched">
+    <div v-if="dataFetched">
       <nuxt-child />
     </div>
     <div
@@ -15,13 +15,11 @@
 
   export default {
     created () {
-      this.$store.dispatch('films/getAll')
       this.$store.dispatch('data/getData')
     },
     computed: {
       ...mapState({
-                    dataFetched: state => state.data.request.fetched,
-                    filmsFetched: state => state.films.request.fetched
+                    dataFetched: state => state.data.request.fetched
                   })
     }
   }

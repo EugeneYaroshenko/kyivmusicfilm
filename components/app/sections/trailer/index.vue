@@ -15,7 +15,7 @@
           view-box="0 0 11.899 11.899"
           icon-name="close"
           class="close-icon"
-          fill="#333"
+          fill="#fff"
           size="18"
         >
           <close />
@@ -45,7 +45,8 @@
                     trailer: state => state.film.description.trailer
       }),
       trailerLink () {
-        return `${this.trailer}?autoplay=1`
+        const updatedTrailerLink = this.trailer.includes('watch?v=') ? this.trailer.replace('watch?v=', 'embed/') : this.trailer
+        return `${updatedTrailerLink}?autoplay=1&enablejsapi=1`
       }
     }
   }
@@ -83,7 +84,6 @@
 
   .icon-container {
     padding: 16px 0 16px 8px;
-    cursor: pointer;
     position: absolute;
     top: 0;
     height: 100%;
@@ -91,6 +91,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    cursor: pointer;
   }
 
   @media screen and (min-width: 960px) {
@@ -102,7 +103,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: rgba(0, 0, 0, .5);
+      background-color: rgba(0, 0, 0, .8);
     }
 
     .trailer-container {

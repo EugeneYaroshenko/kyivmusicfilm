@@ -1,5 +1,8 @@
 <template>
-  <div class="calendar__container" v-if="filmDates">
+  <div
+    class="calendar__container"
+    v-if="filmDates"
+  >
     <div class="calendar-dates">
       <div
         :class="{'control back': true, 'disabled': !isScrollLeftPossible}"
@@ -14,7 +17,10 @@
           <arrow-left />
         </icon>
       </div>
-      <div class="dates-container" ref="datesContainer">
+      <div
+        class="dates-container"
+        ref="datesContainer"
+      >
         <div
           :class="{'dates': true, 'dates--centered': !longListOfDates }"
           :style="{left: `${scrollOffset}px`}"
@@ -54,6 +60,7 @@
 <script>
   import Icon from '~/components/app/elements/icon'
   import ArrowLeft from '~/assets/icons/vueIcons/arrowLeft'
+  import { mapState } from 'vuex'
 
   export default {
     data () {
@@ -69,21 +76,23 @@
       Icon,
       ArrowLeft
     },
+    created () {
+      this.setScrollVisibleArea()
+      this.defineScrollableZone()
+    },
     watch: {
-      filmDates: function (val, oldVal) {
-        if (val && val !== oldVal) {
-          this.setScrollVisibleArea()
-          this.defineScrollableZone()
-          this.ifLongListOfDates()
-        }
+      longListOfDates () {
+        this.setScrollVisibleArea()
+        this.defineScrollableZone()
       }
     },
     computed: {
-      filmDates () {
-        return this.$store.state.filmShowings.allActualDates
-      },
-      selectedShowingDate () {
-        return this.$store.state.filmShowings.selectedShowingDate
+      ...mapState({
+                    filmDates: state => state.filmShowings.allActualDates,
+                    selectedShowingDate: state => state.filmShowings.selectedShowingDate
+                  }),
+      longListOfDates () {
+        return this.filmDates && this.filmDates.length > 5
       }
     },
     methods: {
@@ -101,11 +110,8 @@
       selectShowing (date) {
         this.$store.dispatch('filmShowings/selectShowing', { date })
       },
-      setScrollVisibleArea (datesArray = []) {
-        this.scrollVisibleArea = datesArray.length ? datesArray : this.filmDates.slice(0, 5)
-      },
-      ifLongListOfDates () {
-        this.longListOfDates = this.filmDates && this.filmDates.length > 5
+      setScrollVisibleArea () {
+        this.scrollVisibleArea = this.filmDates ? this.filmDates.slice(0, 5) : null
       },
       defineScrollableZone () {
         this.checkIfScrollRightPossible()
@@ -119,8 +125,6 @@
 
         this.scrollOffset = this.scrollOffset - this.$refs.datesContainer.clientWidth
 
-        console.log(scrollLastVisibleElementIndex, this.scrollVisibleArea, this.scrollOffset)
-
         this.defineScrollableZone()
       },
       scrollLeft () {
@@ -131,22 +135,26 @@
 
         this.scrollOffset = this.scrollOffset + this.$refs.datesContainer.clientWidth
 
-        console.log(scrollFirstVisibleElementIndex, this.scrollVisibleArea, this.scrollOffset)
-
         this.defineScrollableZone()
       },
-
+      // TODO make check simpler
       checkIfScrollRightPossible () {
-        const scrollLastVisibleElement = this.scrollVisibleArea.slice(-1)[0]
-        const datesLastElement = this.filmDates.slice(-1)[0]
+        if (this.scrollVisibleArea && this.filmDates) {
+          const scrollLastVisibleElement = this.scrollVisibleArea.slice(-1)[0]
+          const datesLastElement = this.filmDates.slice(-1)[0]
 
-        this.isScrollRightPossible = scrollLastVisibleElement !== datesLastElement
+          this.isScrollRightPossible = scrollLastVisibleElement !== datesLastElement
+        }
       },
       checkIfScrollLeftPossible () {
-        const scrollFirstVisibleElement = this.scrollVisibleArea.slice(0)[0]
-        const datesFirstElement = this.filmDates.slice(0)[0]
+        if (this.scrollVisibleArea && this.filmDates) {
+          const scrollFirstVisibleElement = this.scrollVisibleArea.slice(0)[0]
+          const datesFirstElement = this.filmDates.slice(0)[0]
 
-        this.isScrollLeftPossible = scrollFirstVisibleElement !== datesFirstElement
+          console.log(scrollFirstVisibleElement, datesFirstElement)
+
+          this.isScrollLeftPossible = scrollFirstVisibleElement !== datesFirstElement
+        }
       }
     }
   }
@@ -164,6 +172,7 @@
   .control {
     padding: 0 12px;
     display: flex;
+    width: 64px;
     align-items: center;
     justify-content: center;
     background: transparent;

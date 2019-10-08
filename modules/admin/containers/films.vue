@@ -1,59 +1,65 @@
 <template>
   <section class="films-container">
-    <delete-popup
-      v-if="popupShown"
-      :cancel="hideDeletePopup"
-      :delete-film="deleteFilm"
-      :film-to-delete="filmToDelete"
-    />
-    <div class="navigation">
-      <div
-        class="plus-icon"
-        @click="createFilm"
+    <div v-if="filmsFetched">
+      <delete-popup
+        v-if="popupShown"
+        :cancel="hideDeletePopup"
+        :delete-film="deleteFilm"
+        :film-to-delete="filmToDelete"
       />
-    </div>
-    <div
-      class="films-block"
-      v-if="films"
-    >
+      <div class="navigation">
+        <div
+          class="plus-icon"
+          @click="createFilm"
+        />
+      </div>
       <div
-        v-for="(film, index) in films"
-        :key="index"
-        class="film"
+        class="films-block"
+        v-if="films"
       >
-        <div>
-          <div class="film-info">
-            <h2 class="film-heading">
-              {{ film.description.name }}
-            </h2>
+        <div
+          v-for="(film, index) in films"
+          :key="index"
+          class="film"
+        >
+          <div>
+            <div class="film-info">
+              <h2 class="film-heading">
+                {{ film.description.name }}
+              </h2>
 
-            <div class="controls">
-              <div class="button link-button">
-                <nuxt-link
-                  :to="generateFilmLink(film.description.url)"
-                  class="link"
+              <div class="controls">
+                <div class="button link-button">
+                  <nuxt-link
+                    :to="generateFilmLink(film.description.url)"
+                    class="link"
+                  >
+                    Переглянути на сайті
+                  </nuxt-link>
+                </div>
+
+                <div
+                  class="button edit-button"
+                  @click="editFilm(film)"
                 >
-                  Переглянути на сайті
-                </nuxt-link>
-              </div>
-
-              <div
-                class="button edit-button"
-                @click="editFilm(film)"
-              >
-                Редагувати
-              </div>
-              <div
-                class="button delete-button"
-                @click="showDeletePopup(film)"
-              >
-                Видалити
+                  Редагувати
+                </div>
+                <div
+                  class="button delete-button"
+                  @click="showDeletePopup(film)"
+                >
+                  Видалити
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div
+      class="loader"
+      v-else
+    />
   </section>
 </template>
 
@@ -68,9 +74,13 @@
         filmToDelete: null
       }
     },
+    created () {
+      this.$store.dispatch('films/getAll')
+    },
     computed: {
       ...mapState({
-                    films: state => state.films.data
+                    films: state => state.films.data,
+                    filmsFetched: state => state.films.request.fetched
                   })
     },
     components: {
@@ -110,6 +120,7 @@
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
+    min-height: 100vh;
   }
 
   .films-container__heading {
@@ -193,6 +204,30 @@
     left: 0;
     z-index: 100;
     cursor: pointer;
+  }
+
+  .loader {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: 5px solid #000;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    animation: loading 1s linear infinite;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  @keyframes loading {
+    from {
+      transform: rotate(0deg)
+    }
+    to {
+      transform: rotate(359deg)
+    }
   }
 
 </style>

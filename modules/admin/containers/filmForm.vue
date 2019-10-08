@@ -175,12 +175,14 @@
           },
           description_short: {
             validation_error: false,
-            validation_message: 'Короткий опис для пошукових систем би не завадив',
+            maxCount: 167,
+            validation_message: 'Щось не так з описом',
             validated: false
           },
           description_full: {
             validation_error: false,
-            validation_message: 'Про що фільм? Усі хочуть знати',
+            maxCount: 268,
+            validation_message: 'Щось не так з описом',
             validated: false
           }
         }
@@ -249,12 +251,10 @@
       },
       ifFilmInformationFilledIn () {
         const validationErrors = this.validations.name.validation_error ||
-          this.validations.trailer.validation_error ||
           this.validations.description_full.validation_error ||
           this.validations.description_short.validation_error
 
         const inputValues = this.description.name &&
-          this.description.trailer &&
           this.description.description_full &&
           this.description.description_short &&
           this.description.image_desktop &&
@@ -263,9 +263,16 @@
         return inputValues && !validationErrors
       },
       validateInputField (e, inputName) {
-        this.validations[inputName].validation_error = inputName === 'trailer'
-          ? !this.validations.trailer.regex.test(e.target.value)
-          : !e.target.value.length
+        switch (inputName) {
+          case 'trailer':
+            this.validations[inputName].validation_error = !this.validations.trailer.regex.test(e.target.value)
+            break
+          case 'description_full' || 'description_short':
+            this.validations[inputName].validation_error = !e.target.value.length || e.target.value.length > this.validations[inputName].maxCount
+            break
+          default:
+            this.validations[inputName].validation_error = !e.target.value.length
+        }
 
         this.validations[inputName].validated = true
       },

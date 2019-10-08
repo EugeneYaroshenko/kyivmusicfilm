@@ -296,7 +296,6 @@
       max-width: 100%;
       z-index: 1000;
       background-position: center;
-      filter: grayscale(100%);
     }
 
     .main__film-cinema {

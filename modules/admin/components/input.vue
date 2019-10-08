@@ -1,6 +1,7 @@
 <template>
   <div class="input-item">
     <label class="input-item__label">{{ label }}</label>
+    <div class="trailer-example" v-if="inputName == 'trailer'">Приклад: https://www.youtube.com/watch?v=7FTln8fyiwo</div>
     <div v-if="inputName !== 'url'">
       <input
         v-if="inputType === 'text'"
@@ -15,19 +16,23 @@
         @input="onInput"
         @blur="validate($event, inputName)"
       >
-      <textarea
-        v-else
-        :type="inputType"
-        :name="inputName"
-        :class="{
-          'input-textarea': true,
-          'is-error': validation.validated && validation.validation_error,
-          'is-success': validation.validated && !validation.validation_error,
-        }"
-        :value="inputValue"
-        @input="onInput"
-        @blur="validate($event, inputName)"
-      />
+      <div v-else>
+        <div class="max-count">
+          Залишилось {{ maxCount }} символів
+        </div>
+        <textarea
+          :type="inputType"
+          :name="inputName"
+          :class="{
+            'input-textarea': true,
+            'is-error': validation.validated && validation.validation_error,
+            'is-success': validation.validated && !validation.validation_error,
+          }"
+          :value="inputValue"
+          @input="onInput"
+          @blur="validate($event, inputName)"
+        />
+      </div>
       <span
         v-if="validation.validated && validation.validation_error"
         class="error-message"
@@ -96,6 +101,16 @@
         required: false,
         default: false
       }
+    },
+    computed: {
+      maxCount () {
+        if (this.inputValue) {
+          const symbolsLeft = this.validation.maxCount - this.inputValue.length
+          return symbolsLeft > 0 ? symbolsLeft : 0
+        }
+
+        return this.validation.maxCount
+      }
     }
   }
 </script>
@@ -132,6 +147,10 @@
   .input-item {
     padding-bottom: 54px;
     position: relative;
+  }
+
+  .trailer-example {
+    font-size: .8em;
   }
 
   .input-textarea {
