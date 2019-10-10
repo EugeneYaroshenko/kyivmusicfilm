@@ -44,7 +44,7 @@ module.exports = {
     watchLoggedIn: false
   },
   axios: {
-    baseURL: process.env.NODE_ENV === 'production' ? 'https://kyivmusicfilm.com' : 'localhost:3000'
+    baseURL: process.env.NODE_ENV === 'production' ? 'https://kyivmusicfilm.com' : 'http://localhost:3000'
   },
   /*
   ** Build configuration

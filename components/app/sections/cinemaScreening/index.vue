@@ -309,6 +309,7 @@
     position: relative;
     max-width: 200px;
     margin: 0 auto 16px;
+    z-index: 100;
 
     .locations-selection__block {
       position: absolute;

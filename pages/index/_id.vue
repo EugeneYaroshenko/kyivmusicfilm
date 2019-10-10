@@ -4,7 +4,7 @@
     <navigation-component :map-shown="mapShown" />
     <div
       class="main"
-      v-if="film"
+      v-if="filmDescription"
     >
       <div
         class="preview-image"
@@ -47,7 +47,7 @@
       const url = route.path.replace('/', '')
 
       try {
-        const film = await store.dispatch('film/getFilmByName', { url })
+        const film = url.length ? await store.dispatch('film/getFilmByName', { url }) : null
         return {
           film
         }
@@ -56,15 +56,17 @@
       }
     },
     head () {
-      return {
-        meta: [
-          { property: 'og:url', content: `${process.env.baseUrl}/${this.film.description.url}` },
-          { hid: 'og:title', name: 'og:title', content: `${this.film.description.name}` },
-          { property: 'og:description', content: `${this.film.description.description_short}` },
-          { property: 'og:image', content: this.film.description.image_mobile },
-          { property: 'og:image:type', content: 'image/jpeg' },
-          { property: 'og:image:type', content: 'image/png' }
-        ]
+      if (this.film) {
+        return {
+          meta: [
+            { property: 'og:url', content: `${process.env.baseUrl}/${this.film.description.url}` },
+            { hid: 'og:title', name: 'og:title', content: `${this.film.description.name}` },
+            { property: 'og:description', content: `${this.film.description.description_short}` },
+            { property: 'og:image', content: this.film.description.image_mobile },
+            { property: 'og:image:type', content: 'image/jpeg' },
+            { property: 'og:image:type', content: 'image/png' }
+          ]
+        }
       }
     },
     components: {
