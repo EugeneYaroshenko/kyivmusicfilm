@@ -1,13 +1,12 @@
 <template>
   <div
     class="preview-image__overflow"
-    v-if="!isMapShown"
-    @click="showTrailer"
+    v-if="!isMapShown && filmTrailer"
   >
-    <div class="icon">
+    <div class="play-icon" @click="showTrailer">
       <icon
-        view-box="0 0 24 26.48"
-        size="150px"
+        view-box="0 0 216 238.3"
+        size="120px"
       >
         <play-button />
       </icon>
@@ -32,7 +31,8 @@
     },
     computed: {
       ...mapState({
-                    isMapShown: state => state.map.mapShown
+                    isMapShown: state => state.map.mapShown,
+                    filmTrailer: state => state.film.description.trailer
                   })
     }
   }
@@ -48,7 +48,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     z-index: 100;
+  }
+
+  .play-icon {
+    background-color: rgba(blue, .6);
+    padding: 40px 24px;
+    cursor: pointer;
+    fill: #FFF;
+    border-radius: 32px;
+    transition: all 350ms ease-in-out;
+
+    &:hover {
+      background-color: rgba(blue, 1);
+    }
   }
 </style>

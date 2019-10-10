@@ -61,7 +61,7 @@
         </div>
       </div>
       <div
-        class="map-control left-control"
+        class="control left-control"
         :class="{'hidden-control': !mapShown}"
       >
         <div
@@ -69,16 +69,16 @@
           @click="toggleMap"
         >
           <icon
-            view-box="0 0 24 26.48"
-            size="50"
-            icon-name="map"
+            view-box="0 0 216 238.3"
+            size="48"
+            icon-name="play"
           >
-            <play-icon />
+            <play-button />
           </icon>
         </div>
       </div>
       <div
-        class="map-control right-control"
+        class="control right-control"
         :class="{'hidden-control': mapShown}"
       >
         <div
@@ -86,14 +86,17 @@
           @click="toggleMap"
         >
           <icon
-            view-box="0 0 447.65 585.2"
-            size="70"
+            view-box="0 0 196.5 279.2"
+            size="54"
             icon-name="map"
           >
             <map-icon />
           </icon>
         </div>
       </div>
+      <description
+        :film-information="filmInformation"
+      />
     </div>
     <div v-else>
       <location-component />
@@ -104,11 +107,12 @@
 <script>
   import CalendarComponent from '~/components/app/elements/calendar'
   import LocationComponent from '~/components/app/elements/location'
+  import Description from '~/modules/app/components/description'
   import VueSelect from '~/components/select/select'
   import VueOption from '~/components/select/option'
   import Icon from '~/components/app/elements/icon'
   import MapIcon from '~/assets/icons/vueIcons/map'
-  import PlayIcon from '~/assets/icons/vueIcons/playIcon'
+  import PlayButton from '~/assets/icons/vueIcons/playButton'
   import { mapState } from 'vuex'
 
   export default {
@@ -117,9 +121,10 @@
       LocationComponent,
       Icon,
       MapIcon,
-      PlayIcon,
+      PlayButton,
       VueSelect,
-      VueOption
+      VueOption,
+      Description
     },
     methods: {
       toggleMap () {
@@ -153,10 +158,11 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .cinema-screening {
     flex: 1;
     position: relative;
+    overflow: hidden;
   }
 
   .cinema-content {
@@ -168,7 +174,8 @@
     text-align: center;
     letter-spacing: 1px;
     font-weight: 300;
-    margin: 64px 0;
+    padding: 0 8px;
+    margin: 64px 0 30px;
   }
 
   .screening-block {
@@ -186,8 +193,9 @@
 
   .cinemas {
     margin-top: 16px;
-    max-height: 200px;
-    overflow-y: scroll;
+    height: auto;
+    min-height: 100px;
+    transition: all 350ms ease-in-out;
   }
 
   .cinema {
@@ -235,7 +243,7 @@
     padding: 0 4px;
   }
 
-  .map-control {
+  .control {
     position: absolute;
     bottom: 0;
     max-height: 200px;
@@ -243,6 +251,7 @@
     display: none;
     overflow: hidden;
     transition: all 350ms ease-in-out;
+    z-index: 200;
   }
 
   .hidden-control {
@@ -251,16 +260,34 @@
 
   .right-control {
     right: 0;
-    background-color: rgba(#333333, 1);
+    background-color: rgba(#000000, 1);
     box-shadow: 0 3px 6px 0px rgba(#000, 1);
     border-radius: 24px 0 0px 0;
+
+    .toggle-icon {
+      fill: #ffffff;
+      transition: all 350ms ease-in-out;
+    }
+
+    &:hover .toggle-icon {
+      fill: #00FFFF;
+    }
   }
 
   .left-control {
     left: 0;
-    background-color: #0000FF;
+    background-color: rgba(#000000, 1);
     border-radius: 0 40px 0px 0;
-    box-shadow: 1px -3px 6px 0px rgba(#0000FF, .6);
+    box-shadow: 1px -3px 6px 0px rgba(#000000, .6);
+
+    .play-icon {
+      fill: #ffffff;
+      transition: all 350ms ease-in-out;
+    }
+
+    &:hover .play-icon {
+      fill: #0000FF;
+    }
   }
 
   .toggle-icon {
@@ -268,19 +295,19 @@
     align-items: center;
     justify-content: center;
     margin-right: -6px;
-    padding: 24px 0 0 2px;
+    padding: 24px 8px 12px 12px;
   }
 
   .play-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px 12px 12px 8px;
+    padding: 32px 12px 18px 8px;
   }
 
   .locations-selection {
     position: relative;
-    max-width: 300px;
+    max-width: 200px;
     margin: 0 auto 16px;
 
     .locations-selection__block {
@@ -292,18 +319,23 @@
   }
 
   @media screen and (min-width: 960px) {
-    .map-control {
+    .control {
       display: block;
+    }
+
+    .cinemas {
+      max-height: 200px;
+      overflow-y: scroll;
     }
 
     .cinema-screening {
       flex: 1.2;
-      padding: 40px 32px 12px 24px;
+      padding: 4px 32px 12px 24px;
     }
   }
 
   @media screen and (min-width: 1500px) {
-    .map-control {
+    .control {
       display: none;
     }
   }

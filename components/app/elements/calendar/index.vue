@@ -160,7 +160,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .calendar-dates {
     display: flex;
     flex-flow: row nowrap;
@@ -188,9 +188,9 @@
   .dates-container {
     position: relative;
     width: 100%;
-    max-width: 150px;
-    min-width: 150px;
-    height: 30px;
+    max-width: 200px;
+    min-width: 200px;
+    height: 60px;
     overflow: hidden;
   }
 
@@ -211,8 +211,8 @@
   }
 
   .date {
-    width: 30px;
-    min-width: 30px;
+    width: 40px;
+    min-width: 40px;
     background: transparent;
     cursor: pointer;
     display: flex;

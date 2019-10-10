@@ -3,27 +3,21 @@
     <div class="preview-web">
       <preview-trailer />
     </div>
-    <description
-      :is-popup-hidden="isMapShown"
-      :film-description="filmDescription"
-    />
+
   </div>
 </template>
 
 <script>
   import PreviewTrailer from '~/components/app/elements/previewTrailer'
-  import Description from '~/modules/app/components/description'
   import { mapState } from 'vuex'
 
   export default {
     components: {
-      PreviewTrailer,
-      Description
+      PreviewTrailer
     },
     computed: {
       ...mapState({
                     isMapShown: state => state.ui.mapShown,
-                    filmDescription: state => state.film.description.description_full
                   })
     }
   }

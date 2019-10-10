@@ -15,7 +15,6 @@
           view-box="0 0 11.899 11.899"
           icon-name="close"
           class="close-icon"
-          fill="#fff"
           size="18"
         >
           <close />
@@ -84,17 +83,28 @@
 
   .icon-container {
     padding: 16px 0 16px 8px;
-    position: absolute;
-    top: 0;
-    height: 100%;
-    right: -32px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     cursor: pointer;
+    position: absolute;
+    top: -48px;
+    left: 0;
+    fill: #000;
   }
 
   @media screen and (min-width: 960px) {
+    .icon-container {
+      padding: 16px 0 16px 8px;
+      position: absolute;
+      top: 0;
+      left: auto;
+      height: 100%;
+      right: -32px;
+      fill: #fff;
+    }
+
+
     .trailer-popup__container {
       position: fixed;
       height: 100vh;

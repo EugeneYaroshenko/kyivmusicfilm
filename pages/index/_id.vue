@@ -1,30 +1,14 @@
 <template>
   <section class="container">
-    <loader-component/>
-    <div
-      class="main-menu"
-      :class="{'main-menu--shown': isMenuShown}"
-    >
-      <div
-        class="main-menu__navigation"
-        :class="{'main-menu__navigation--collapsed': !isMenuShown}"
-        @click="toggleMainMenu"
-      />
-      <div class="main-menu__content">
-        <div class="logo" />
-        <div class="navigation-links">
-          <h3><a target="_blank" href="https://www.facebook.com/KyivMusicFilm/">Facebook</a></h3>
-          <h3><a target="_blank" href="https://www.instagram.com/kyivmusicfilm/">Instagram</a></h3>
-          <h3><a target="_blank" href="https://www.youtube.com/channel/UCOW9MxduCFNClCOPqbQZTjg">Youtube</a></h3>
-        </div>
-      </div>
-    </div>
+    <loader-component />
+    <navigation-component :map-shown="mapShown" />
     <div
       class="main"
-      v-if="filmFetched"
+      v-if="film"
     >
       <div
-        :class="{'preview-image': true, 'preview-image--expanded': trailerShown}"
+        class="preview-image"
+        :class="{'preview-image--hidden': mapShown, 'preview-image--expanded': trailerShown}"
         :style="{ backgroundImage: 'url(' + filmDescription.image_desktop + ')' }"
       >
         <trailer-component v-if="trailerShown" />
@@ -49,7 +33,7 @@
 </template>
 
 <script>
-  import NavigationComponent from '~/components/app/elements/navigation'
+  import NavigationComponent from '~/modules/app/components/navigation'
   import FilmInfoComponent from '~/components/app/elements/filmInfo'
   import CinemaScreeningComponent from '~/components/app/sections//cinemaScreening'
   import CinemaMapComponent from '~/components/app/sections/cinemaMap'
@@ -59,6 +43,30 @@
   import { mapState } from 'vuex'
 
   export default {
+    async asyncData ({ route, store }) {
+      const url = route.path.replace('/', '')
+
+      try {
+        const film = await store.dispatch('film/getFilmByName', { url })
+        return {
+          film
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    head () {
+      return {
+        meta: [
+          { property: 'og:url', content: `${process.env.baseUrl}/${this.film.description.url}` },
+          { hid: 'og:title', name: 'og:title', content: `${this.film.description.name}` },
+          { property: 'og:description', content: `${this.film.description.description_short}` },
+          { property: 'og:image', content: this.film.description.image_mobile },
+          { property: 'og:image:type', content: 'image/jpeg' },
+          { property: 'og:image:type', content: 'image/png' }
+        ]
+      }
+    },
     components: {
       NavigationComponent,
       FilmInfoComponent,
@@ -68,44 +76,20 @@
       PreviewTrailerInteraction,
       LoaderComponent
     },
-    data () {
-      return {
-        isMenuShown: false
-      }
-    },
     computed: {
       ...mapState({
                     mapShown: state => state.ui.mapShown,
                     trailerShown: state => state.ui.trailerShown,
-                    filmFetched: state => state.film.request.fetched,
                     filmDescription: state => state.film.description
-      })
+                  })
     },
-
     created () {
-      const url = this.$route.path.replace('/showings/', '')
-
       this.$store.dispatch('ui/showLoader')
-
-      return this.$store.dispatch('film/getFilmByName', { url })
     },
-    methods: {
-      toggleMainMenu () {
-        this.isMenuShown = !this.isMenuShown
+    mounted () {
+      if (this.film && this.film.showings) {
+        this.$store.dispatch('map/getGeolocation', this.film.showings.locations, { root: true })
       }
-      // displayLocationInfo (position) {
-      //   const longitude = position.coords.longitude
-      //   const latitude = position.coords.latitude
-      //
-      //   console.log(`longitude: ${longitude} | latitude: ${latitude}`)
-      //
-      //   this.$store.dispatch('map/reverseGeocoding', { latitude, longitude })
-      // },
-      // navigatorErrorCallback (error) {
-      //   console.log(`navigatorError: ${error}`)
-      //   this.$store.dispatch('ui/showLocationMenu', { error: true })
-      //   this.$store.dispatch('ui/hideLoader')
-      // }
     }
   }
 </script>
@@ -116,23 +100,8 @@
     align-items: stretch;
     position: relative;
     background-image: url('../../assets/icons/background-main.svg');
+    background-attachment: fixed;
     background-size: cover;
-  }
-
-  .main-menu {
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: #fff;
-    height: 100%;
-    width: 100%;
-    z-index: 1000;
-    transform: translateY(-100%);
-    transition: all 300ms ease-in-out;
-  }
-
-  .main-menu--shown {
-    transform: translateY(0);
   }
 
   .main {
@@ -146,67 +115,12 @@
     max-width: 100%;
   }
 
-  .main-menu__content {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 40px;
-    height: 100%;
-  }
-
-  .navigation-links {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 600px;
-
-    a {
-      text-decoration: none;
-      color: #000;
-    }
-  }
-
-  .main-menu__navigation {
-    width: 32px;
-    height: 32px;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: .8;
-    cursor: pointer;
-    padding: 8px;
-    position: absolute;
-    right: 12px;
-    top: 24px;
-    background-image: url('../../assets/icons/navigationIcon.svg');
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  .logo {
-    background-size: contain;
-    background-position: center;
-    background-image: url('../../assets/icons/logo.svg');
-    height: 100px;
-    width: 100px;
-    margin-bottom: 40px;
-  }
-
-  .main-menu__navigation--collapsed {
-    top: auto;
-    bottom: -56px;
-    right: 12px;
-  }
-
   .preview-image {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
-    height: 40vh;
+    height: 60vh;
     position: relative;
     border-radius: 24px;
     box-shadow: 0 0 12px 0px rgba(0, 0, 0, .4);
@@ -217,7 +131,6 @@
     flex: 1;
     display: flex;
     flex-flow: row nowrap;
-    background: #fff;
     order: 1;
   }
 
@@ -245,6 +158,7 @@
 
   .main__film-info--condensed {
     max-width: 0px;
+    overflow: hidden;
   }
 
   .film-info__overflow {
@@ -292,10 +206,16 @@
       box-shadow: none;
     }
 
+    .preview-image--hidden {
+      opacity: 0;
+      transform: translate3d(-100%, 0, 0);
+    }
+
     .preview-image--expanded {
       max-width: 100%;
       z-index: 1000;
       background-position: center;
+      opacity: 1;
     }
 
     .main__film-cinema {

@@ -1,27 +1,30 @@
 <template>
-  <div class="map" v-if="location">
-    <GmapMap
-      :center="location.position"
-      :options="mapStyle"
-      style="width: 100%; height: 100%"
-    >
-      <GmapMarker
-        :key="index"
-        v-for="(m, index) in markers"
-        :position="m.position"
-        :clickable="true"
-        :icon.sync="m.icon"
-        @click="showInfoWindow(m)"
-      />
-      <GmapInfoWindow
-        :opened="infoWindowShown"
-        :options="infoWindowOptions"
-        :position="markerPosition"
-        @closeclick="closeInfoWindow"
+  <div class="map-container">
+    <div class="map" v-if="location">
+      <GmapMap
+        :center="location.position"
+        :options="mapStyle"
+        style="width: 100%; height: 100%"
       >
-        <div v-html="infoWindowContent" />
-      </GmapInfoWindow>
-    </GmapMap>
+        <GmapMarker
+          :key="index"
+          v-for="(m, index) in markers"
+          :position="m.position"
+          :clickable="true"
+          :icon.sync="m.icon"
+          @click="showInfoWindow(m)"
+        />
+        <GmapInfoWindow
+          :opened="infoWindowShown"
+          :options="infoWindowOptions"
+          :position="markerPosition"
+          @closeclick="closeInfoWindow"
+        >
+          <div v-html="infoWindowContent" />
+        </GmapInfoWindow>
+      </GmapMap>
+    </div>
+    <div class="map-preview" v-else/>
   </div>
 </template>
 
@@ -101,9 +104,22 @@
     flex: 1;
   }
 
+  .map-container {
+    height: 100%;
+    width: 100%;
+  }
+
   .map {
     width: 100%;
     height: 100%;
+  }
+
+  .map-preview {
+    height: 100%;
+    width: 100%;
+    background-image: url('../../../../assets/images/map.png');
+    background-size: cover;
+    background-position: left center;
   }
 
   .info-content {

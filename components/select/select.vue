@@ -5,24 +5,25 @@
     :class="{
       'vue-select--opened': showOptions
     }"
-    @click="togglePopper"
   >
     <div>
-      <div class="vue-select__block">
+      <div class="vue-select__block" @click="togglePopper">
         <div class="placeholder">
           <span>{{ placeholder }}</span>
         </div>
+        <div class="placeholder-line"/>
         <div class="control-icon close" v-if="showOptions"/>
         <div class="control-icon search" v-else/>
       </div>
     </div>
     <div
       class="list-container"
-      v-if="showOptions"
+      :class="{'list-container--expanded': showOptions}"
     >
       <div
         ref="list"
         class="vue-select__option-list"
+        :class="{'vue-select__option-list--opened': showOptions }"
       >
         <div
           v-if="!data.length"
@@ -58,7 +59,7 @@ export default {
       default: () => []
     },
     value: {
-      type: [String, Number, Array],
+      type: [String, Number, Array, Object],
       default: ''
     },
     placeholder: {
@@ -103,7 +104,6 @@ export default {
 
   created () {
     this.$on('option:select', (e) => {
-      console.log(e.value)
       this.selected = e
       this.$emit('change', e.value)
       this.onClosePopper()
@@ -183,13 +183,43 @@ export default {
   max-width: 400px;
   margin: 0;
   background-color: #fff;
+  border: 1px solid transparent;
+}
+
+.vue-select__block {
+  position: relative;
+  overflow: hidden;
+}
+
+.placeholder-line {
+  position: absolute;
+  bottom: 0;
+  height: 1px;
+  width: 70%;
+  border-bottom: 1px solid #0000FF;
+  transform: translate3d(-100%, 0, 0);
+  transition: all 350ms ease-in-out;
 }
 
 .vue-select--opened {
+  border: 1px solid #0000ff;
+
   .placeholder {
     opacity: 1;
-    border-bottom: 1px solid #000;
   }
+
+  .placeholder-line {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.list-container {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.list-container--expanded {
+  max-height: 1000px;
 }
 
 .vue-select__block {
@@ -221,11 +251,16 @@ export default {
 }
 
 .vue-select__option-list {
-  max-height: 200px;
+  max-height: 0;
   margin-right: 18px;
-  padding: 8px 0 0px 0;
+  transition: all 350ms ease-in-out;
+  overflow: hidden;
+}
+
+.vue-select__option-list--opened {
+  max-height: 200px;
+  padding: 16px 0 0px 0;
   overflow-y: scroll;
-  margin-top: 8px;
 }
 
 .vue-select__option-list--empty {

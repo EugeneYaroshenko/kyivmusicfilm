@@ -1,15 +1,14 @@
 <template>
-    <div :class="{'information': true, 'information--hidden': isPopupHidden }">
+    <div :class="{'information': true, 'information--collapsed': isDescriptionCollapsed }">
+      <div class="description-open" @click="toggleDescription">Опис Фільму</div>
+      <div class="description-close" @click="toggleDescription">Сеанси</div>
       <div class="description">
-        <div class="description-block" @click="toggleDescription">
-          <div class="description__toggle-icon" :class="{'close-icon': !isDescriptionCollapsed}"/>
-          <h4 class="information-heading">
-            Про Фільм
-          </h4>
-        </div>
-        <div class="information-description" :class="{'description--collapsed': isDescriptionCollapsed}">
+        <h3 class="heading">
+          Опис фільму
+        </h3>
+        <div class="information-description" >
           <p class="information-description__text">
-            {{ this.filmDescription }}
+            {{ this.filmInformation.description_full }}
           </p>
         </div>
       </div>
@@ -19,12 +18,8 @@
 <script>
   export default {
     props: {
-      filmDescription: {
-        type: String,
-        required: true
-      },
-      isPopupHidden: {
-        type: Boolean,
+      filmInformation: {
+        type: Object,
         required: true
       }
     },
@@ -45,7 +40,6 @@
   .information {
     width: 70%;
     margin: 0 auto;
-    background-color: yellow;
   }
 
   .information-heading {
@@ -62,74 +56,101 @@
   }
 
   .description {
-    padding: 14px 8px 8px 40px;
-    background-color: #000;
-    position: relative;
+    padding: 24px 18px 24px;
     width: 100%;
-  }
-
-  .description__toggle-icon {
-    height: 40px;
-    width: 40px;
-    position: absolute;
-    top: 8px;
-    right: 8px;
-  }
-
-  .description__toggle-icon {
-    width: 40px;
-    height: 40px;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: .8;
-    cursor: pointer;
-    padding: 8px;
-    background-image: url('../../../../assets/icons/toggleIcon.svg');
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  .close-icon {
-    transform: rotate(180deg);
   }
 
   .description-block {
     cursor: pointer;
   }
 
-  @media screen and (min-width: 960px) {
-    .information-heading--mobile {
-      display: none;
-    }
+  .heading {
+    text-align: center;
+    margin-bottom: 18px;
+  }
 
-    .preview-web {
-      display: block;
+  .information {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    height: 100%;
+  }
+
+  .description-open, .description-close {
+    display: none;
+  }
+
+  @media screen and (min-width: 960px) {
+    .description {
+      padding: 14px 8px 8px 40px;
+      background-color: #fff;
     }
 
     .information {
       position: absolute;
       bottom: 0;
-      right: 0;
-      display: flex;
-      flex-flow: row nowrap;
-      width: 45%;
-      height: auto;
-      min-height: 40px;
-      max-height: 45%;
-      overflow: hidden;
+      top: 0;
+      left: 0;
       margin: auto;
-      z-index: 200;
-      border-radius: 20px 0 0 0;
+      z-index: 100;
+      transform: translate3d(0, 0, 0);
+      transition: all 400ms ease-in-out;
+    }
+
+    .information--collapsed {
+      transform: translate3d(-100%, 0, 0);
     }
 
     .information-description {
       flex: 1;
-      color: #fff;
-      max-height: 300px;
+      color: #000;
       overflow-y: scroll;
       transition: all 350ms ease-in-out;
+      padding: 0 40px;
+    }
+
+    .description-open, .description-close {
+      display: block;
+    }
+
+    .description-open {
+      position: absolute;
+      top: 150px;
+      right: -77px;
+      transform: rotate(90deg);
+      font-weight: 600;
+      font-size: .9em;
+      cursor: pointer;
+      background-color: rgba(#0000ff, .9);
+      color: #fff;
+      padding: 8px 18px 4px 12px;
+      border-radius: 0px 24px 0 0;
+      transition: all 350ms ease;
+
+      &:hover {
+        background-color: rgba(#0000ff, .9);
+        box-shadow: 2px 2px 8px 0 rgba(#0000ff, 1)
+      }
+    }
+
+    .description-close {
+      position: absolute;
+      top: 130px;
+      left: -22px;
+      transform: rotate(90deg);
+      font-weight: 600;
+      font-size: .9em;
+      cursor: pointer;
+      background-color: rgba(#000000, .8);
+      color: #fff;
+      padding: 8px 18px 4px 12px;
+      border-radius: 0px 24px 0 0;
+      transition: all 350ms ease;
+
+      &:hover {
+        background-color: rgba(#000000, 1);
+        box-shadow: 2px 2px 8px 0 rgba(#0000ff, .4)
+      }
     }
 
     .information-description__items {
@@ -149,7 +170,8 @@
     }
 
     .information-description__text {
-      font-size: 14px;
+      font-size: 1.2em;
+      line-height: 1.6em;
       padding: 24px 12px 24px 0;
     }
 

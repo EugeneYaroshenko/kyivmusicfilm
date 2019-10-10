@@ -56,7 +56,7 @@ export default {
     right: 8px;
     margin: auto 0;
     font-size: 12px;
-    background-color: $color-grey-light;
+    color: #0000FF;
     padding: 0 8px 0 12px;
   }
 
@@ -64,8 +64,8 @@ export default {
     position: relative;
     cursor: pointer;
     padding: 12px 16px;
-    font-size: 14px;
-    color: $color-grey;
+    font-size: .8em;
+    color: lighten(#000, 20%);
     &[disabled] {
       cursor: no-drop !important;
       color: lighten(#000, 20%)

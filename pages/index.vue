@@ -1,7 +1,7 @@
 <template>
-  <section class="container">
-    First page
-  </section>
+  <div>
+    <nuxt-child/>
+  </div>
 </template>
 
 <script>

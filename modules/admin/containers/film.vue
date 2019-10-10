@@ -46,7 +46,7 @@
         return this.filmRequestInformation.fetched
       },
       filmURL () {
-        return `/showings/${this.film.description.url}`
+        return `/${this.film.description.url}`
       }
     },
     methods: {

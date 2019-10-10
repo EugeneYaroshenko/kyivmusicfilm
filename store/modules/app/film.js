@@ -34,9 +34,10 @@ const actions = {
       const response = await this.$axios.$get('/api/films/' + payload.url)
 
       commit(types.GET_FILM_SUCCESS, response.data)
-      dispatch('map/getGeolocation', state.showings.locations, { root: true })
+      return response.data
     } catch (error) {
       commit(types.GET_FILM_ERROR, error)
+      return error
     }
   },
 }

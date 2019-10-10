@@ -15,6 +15,9 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
     ]
   },
+  env: {
+    baseUrl: process.env.NODE_ENV === 'production' ? 'https://kyivmusicfilm.com' : 'localhost:3000'
+  },
   /*
   ** Customize the progress-bar color
   */
@@ -41,7 +44,7 @@ module.exports = {
     watchLoggedIn: false
   },
   axios: {
-    baseURL: 'https://kyivmusicfilm.com'
+    baseURL: process.env.NODE_ENV === 'production' ? 'https://kyivmusicfilm.com' : 'localhost:3000'
   },
   /*
   ** Build configuration

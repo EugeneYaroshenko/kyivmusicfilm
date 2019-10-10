@@ -104,7 +104,6 @@
     width: 100%;
     align-items: flex-end;
     z-index: 500;
-    background-color: #fff;
     transition: all .4s ease-in-out;
   }
 
@@ -212,12 +211,7 @@
   }
 
   @media screen and (min-width: 960px) {
-    .location-container {
-      background-color: #fff;
-    }
-
     .location-container--is-expanded {
-      background-color: #FFF;
       position: absolute;
     }
   }

@@ -9,11 +9,6 @@
     :stroke="strokeColor"
     :fill="fillColor"
   >
-    <title
-      :id="iconName"
-    >
-      {{ iconName }}
-    </title>
     <g>
       <slot />
     </g>

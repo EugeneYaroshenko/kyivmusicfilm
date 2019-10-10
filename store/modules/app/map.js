@@ -187,15 +187,6 @@ const state = () => ({
             lightness: 17
           }
         ]
-      },
-      {
-        featureType: 'water',
-        elementType: 'geometry.fill',
-        stylers: [
-          {
-            color: '#457cb8'
-          }
-        ]
       }
     ]
   }
