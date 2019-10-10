@@ -55,6 +55,7 @@ const getters = {}
 const mutations = {
   [types.EDIT_FILM] (state, payload) {
     state.film = payload
+    state.request = initialFilmState.request
   },
   [types.CREATE_FILM] (state) {
     state.film = initialFilmState.film
