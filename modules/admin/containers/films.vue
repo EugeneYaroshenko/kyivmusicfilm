@@ -88,7 +88,7 @@
     },
     methods: {
       generateFilmLink (url) {
-        return `/showings/${url}`
+        return `/${url}`
       },
       editFilm (film) {
         this.$store.dispatch('editFilm/edit', film)
