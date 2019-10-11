@@ -156,6 +156,7 @@
     position: relative;
     transition: all 500ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
     order: 2;
+    display: none;
   }
 
   .main__film-info--condensed {
@@ -180,6 +181,9 @@
   }
 
   @media screen and (min-width: 960px) {
+    .main__film-info {
+      display: block;
+    }
     .main__film-map {
       flex: 1;
       display: flex;
