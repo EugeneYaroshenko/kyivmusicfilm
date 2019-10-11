@@ -30,19 +30,26 @@ const mutations = {
   },
   [types.GET_DATA_ERROR] (state, payload) {
     state.request = { ...state.request, fetched: false, loading: false, error: payload.error }
-  },
+  }
 }
 
 const actions = {
   async getData ({ commit }) {
     commit(types.GET_DATA_REQUEST)
 
-    try {
-      const data = await this.$axios.$get('/api/data')
+    const dataFromLocalStorage = process.browser ? localStorage.getItem('commonData') : null
 
-      commit(types.GET_DATA_SUCCESS, data)
-    } catch (error) {
-      commit(types.GET_DATA_ERROR, error)
+    if (dataFromLocalStorage) {
+      commit(types.GET_DATA_SUCCESS, JSON.parse(dataFromLocalStorage))
+    } else {
+      try {
+        const data = await this.$axios.$get('/api/data')
+
+        commit(types.GET_DATA_SUCCESS, data)
+        localStorage.setItem('commonData', JSON.stringify(data))
+      } catch (error) {
+        commit(types.GET_DATA_ERROR, error)
+      }
     }
   }
 }

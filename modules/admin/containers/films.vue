@@ -1,6 +1,6 @@
 <template>
   <section class="films-container">
-    <div v-if="filmsFetched">
+    <div v-if="filmsFetched && dataFetched">
       <delete-popup
         v-if="popupShown"
         :cancel="hideDeletePopup"
@@ -80,7 +80,8 @@
     computed: {
       ...mapState({
                     films: state => state.films.data,
-                    filmsFetched: state => state.films.request.fetched
+                    filmsFetched: state => state.films.request.fetched,
+                    dataFetched: state => state.data.request.fetched
                   })
     },
     components: {
@@ -109,7 +110,7 @@
       hideDeletePopup () {
         this.popupShown = false
         this.filmToDelete = null
-      },
+      }
     }
   }
 </script>

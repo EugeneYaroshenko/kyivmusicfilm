@@ -1,26 +1,13 @@
 <template>
   <section class="admin-container">
-    <div v-if="dataFetched">
-      <nuxt-child />
-    </div>
-    <div
-      class="loader"
-      v-else
-    />
+    <nuxt-child />
   </section>
 </template>
 
 <script>
-  import { mapState } from 'vuex'
-
   export default {
     created () {
       this.$store.dispatch('data/getData')
-    },
-    computed: {
-      ...mapState({
-                    dataFetched: state => state.data.request.fetched
-                  })
     }
   }
 </script>
@@ -34,13 +21,14 @@
     border-top-color: transparent;
     border-bottom-color: transparent;
     animation: loading 1s linear infinite;
-    position: absolute;
+    position: fixed;
     right: 0;
     left: 0;
     top: 0;
     bottom: 0;
     margin: auto;
   }
+
   @keyframes loading {
     from {
       transform: rotate(0deg)
