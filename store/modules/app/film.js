@@ -24,6 +24,11 @@ const mutations = {
   [types.GET_FILM_ERROR] (state, payload) {
     state.request = { ...state.request, fetched: false, loading: false, error: payload.error }
   },
+  [types.SELECT_FILM] (state, payload) {
+    state.showings = payload.showings
+    state.description = payload.description
+    state.request = { ...state.request, fetched: true, loading: false }
+  }
 }
 
 const actions = {
@@ -37,9 +42,12 @@ const actions = {
       return response.data
     } catch (error) {
       commit(types.GET_FILM_ERROR, error)
-      return error
+      return null
     }
   },
+  selectFilm ({ commit }, film) {
+    commit(types.SELECT_FILM, film)
+  }
 }
 
 export default {

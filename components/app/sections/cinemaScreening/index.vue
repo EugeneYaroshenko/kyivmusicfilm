@@ -69,8 +69,8 @@
           @click="toggleMap"
         >
           <icon
-            view-box="0 0 216 238.3"
-            size="48"
+            view-box="0 0 34.93 44.33"
+            size="54"
             icon-name="play"
           >
             <play-button />
@@ -141,7 +141,6 @@
     computed: {
       ...mapState({
                     mapShown: state => state.ui.mapShown,
-                    loaderShown: state => state.ui.loading,
                     location: state => state.map.location,
                     allLocations: state => state.film.showings.locations,
                     filmInformation: state => state.film.description,
@@ -262,7 +261,7 @@
     right: 0;
     background-color: rgba(#000000, 1);
     box-shadow: 0 3px 6px 0px rgba(#000, 1);
-    border-radius: 24px 0 0px 0;
+    border-radius: 0px 0 0px 0;
 
     .toggle-icon {
       fill: #ffffff;
@@ -270,23 +269,25 @@
     }
 
     &:hover .toggle-icon {
-      fill: #00FFFF;
+      fill: #03B2FF;
     }
   }
 
   .left-control {
     left: 0;
     background-color: rgba(#000000, 1);
-    border-radius: 0 40px 0px 0;
+    border-radius: 0 0px 0px 0;
     box-shadow: 1px -3px 6px 0px rgba(#000000, .6);
 
     .play-icon {
-      fill: #ffffff;
-      transition: all 350ms ease-in-out;
+      svg {
+        stroke: #ffffff;
+        transition: all 350ms ease-in-out;
+      }
     }
 
-    &:hover .play-icon {
-      fill: #0000FF;
+    &:hover .play-icon svg {
+      stroke: #03B2FF;
     }
   }
 
@@ -302,7 +303,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px 12px 18px 8px;
+    padding: 24px 12px 18px 8px;
   }
 
   .locations-selection {

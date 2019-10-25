@@ -5,7 +5,7 @@
   >
     <div class="play-icon" @click="showTrailer">
       <icon
-        view-box="0 0 216 238.3"
+        view-box="0 0 34.93 44.33"
         size="120px"
       >
         <play-button />
@@ -52,15 +52,17 @@
   }
 
   .play-icon {
-    background-color: rgba(blue, .6);
-    padding: 40px 24px;
+    background-color: rgba(#000, .8);
+    padding: 42px 12px;
     cursor: pointer;
-    fill: #FFF;
-    border-radius: 32px;
     transition: all 350ms ease-in-out;
 
+    svg {
+      stroke: #FFF;
+    }
+
     &:hover {
-      background-color: rgba(blue, 1);
+      background-color: rgba(#000, 1);
     }
   }
 </style>

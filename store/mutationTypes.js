@@ -38,7 +38,7 @@ export const SAVE_FILM_CINEMAS = 'SAVE_FILM_CINEMAS'
 export const GET_FILM_REQUEST = 'GET_FILM_REQUEST'
 export const GET_FILM_SUCCESS = 'GET_FILM_SUCCESS'
 export const GET_FILM_ERROR = 'GET_FILM_ERROR'
-
+export const SELECT_FILM = 'SELECT_FILM'
 // UI
 
 // main

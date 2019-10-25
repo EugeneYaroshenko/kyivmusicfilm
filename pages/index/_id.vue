@@ -21,7 +21,7 @@
         <div :class="{'film-info__overflow': true, 'film-info__overflow--hidden': !mapShown}" />
       </div>
       <div class="main__film-cinema">
-        <cinema-screening-component />
+        <cinemas />
       </div>
       <div
         :class="{'main__film-map': true, 'main__film-map--condensed': !mapShown}"
@@ -35,7 +35,7 @@
 <script>
   import NavigationComponent from '~/modules/app/components/navigation'
   import FilmInfoComponent from '~/components/app/elements/filmInfo'
-  import CinemaScreeningComponent from '~/components/app/sections//cinemaScreening'
+  import Cinemas from '~/modules/app/containers/cinemas'
   import CinemaMapComponent from '~/components/app/sections/cinemaMap'
   import TrailerComponent from '~/components/app/sections/trailer'
   import PreviewTrailerInteraction from '~/components/app/elements/previewTrailer'
@@ -43,36 +43,10 @@
   import { mapState } from 'vuex'
 
   export default {
-    async asyncData ({ route, store }) {
-      const url = route.path.replace('/', '')
-
-      try {
-        const film = url.length ? await store.dispatch('film/getFilmByName', { url }) : null
-        return {
-          film
-        }
-      } catch (e) {
-        console.log(e)
-      }
-    },
-    head () {
-      if (this.film) {
-        return {
-          meta: [
-            { property: 'og:url', content: `${process.env.baseUrl}/${this.film.description.url}` },
-            { hid: 'og:title', name: 'og:title', content: `${this.film.description.name}` },
-            { property: 'og:description', content: `${this.film.description.description_short}` },
-            { property: 'og:image', content: this.film.description.image_mobile },
-            { property: 'og:image:type', content: 'image/jpeg' },
-            { property: 'og:image:type', content: 'image/png' }
-          ]
-        }
-      }
-    },
     components: {
       NavigationComponent,
       FilmInfoComponent,
-      CinemaScreeningComponent,
+      Cinemas,
       CinemaMapComponent,
       TrailerComponent,
       PreviewTrailerInteraction,
@@ -82,12 +56,13 @@
       ...mapState({
                     mapShown: state => state.ui.mapShown,
                     trailerShown: state => state.ui.trailerShown,
-                    filmDescription: state => state.film.description
+                    filmDescription: state => state.film.description,
+                    film: state => state.film
                   })
     },
-    created () {
-      this.$store.dispatch('ui/showLoader')
-    },
+    // created () {
+    //   this.$store.dispatch('ui/showLoader')
+    // },
     mounted () {
       if (this.film && this.film.showings) {
         this.$store.dispatch('map/getGeolocation', this.film.showings.locations, { root: true })
@@ -226,6 +201,7 @@
 
     .main__film-cinema {
       z-index: 100;
+      max-width: 50%;
     }
 
     .container {

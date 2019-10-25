@@ -28,35 +28,15 @@
 </template>
 
 <script>
-  import Icon from '~/components/app/elements/icon'
-  import Close from '~/assets/icons/vueIcons/close'
   import { mapState } from 'vuex'
 
   export default {
     computed: {
       ...mapState({
-        allLocations: state => state.film.showings.locations,
-        selectedLocation: state => state.map.location,
-        locationMenuType: state => state.ui.locationMenuType
-      }),
-      locationText () {
-        switch (this.locationMenuType) {
-          case 'ERROR_TYPE':
-            return 'Обери одне з міст, де ти хочеш переглянути фільм:'
-          case 'DIFFERENT_LOCATION_TYPE':
-            return 'Обери місто, де ти бажаєш переглянути фільм:'
-          default:
-            return 'Сеанси в іншому місті:'
-        }
-      }
+        allLocations: state => state.film.showings.locations
+      })
     },
     methods: {
-      expandLocation () {
-        this.$store.dispatch('ui/showLocationMenu')
-      },
-      minimizeLocation () {
-        this.$store.dispatch('ui/hideLocationMenu')
-      },
       selectLocation (location) {
         this.$store.dispatch('map/selectLocation', location)
         this.$store.dispatch('ui/hideLocationMenu')
@@ -64,10 +44,6 @@
       capitalize (text) {
         return text.charAt(0).toUpperCase() + text.slice(1)
       }
-    },
-    components: {
-      Icon,
-      Close
     }
   }
 </script>
