@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nuxt-child v-if="selectedFilm" />
+    <nuxt-child />
   </div>
 </template>
 

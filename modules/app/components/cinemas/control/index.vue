@@ -3,45 +3,21 @@
     <div
       class="control left-control"
       :class="{'hidden-control': !mapShown }"
+      @click="onAction"
     >
-      <div
-        class="play-icon"
-        @click="onAction"
-      >
-        <icon
-          view-box="0 0 34.93 44.33"
-          size="54"
-          icon-name="play"
-        >
-          <play-button />
-        </icon>
-      </div>
+      <div class="icon icon-play" />
     </div>
     <div
       class="control right-control"
       :class="{'hidden-control': mapShown}"
+      @click="onAction"
     >
-      <div
-        class="toggle-icon"
-        @click="onAction"
-      >
-        <icon
-          view-box="0 0 196.5 279.2"
-          size="54"
-          icon-name="map"
-        >
-          <map-icon />
-        </icon>
-      </div>
+      <div class="icon icon-map" />
     </div>
   </div>
 </template>
 
 <script>
-  import Icon from '~/components/app/elements/icon'
-  import MapIcon from '~/assets/icons/vueIcons/map'
-  import PlayButton from '~/assets/icons/vueIcons/playButton'
-
   export default {
     props: {
       mapShown: {
@@ -54,62 +30,63 @@
         required: true,
         default: null
       }
-    },
-    components: {
-      Icon,
-      MapIcon,
-      PlayButton
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  @import '../../../../../styles/partials/variables';
+
   .control {
     position: absolute;
     bottom: 0;
-    max-height: 200px;
+    height: 100px;
+    transform: translateY(0);
+    width: 80px;
     cursor: pointer;
-    display: none;
     overflow: hidden;
-    transition: all 350ms ease-in-out;
+    transition: transform 320ms ease-out .35s, background-color 350ms ease-out;
     z-index: 200;
+    background-color: rgba(#000000, 1);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+
+    &:hover {
+      background-color: $blue;
+    }
+  }
+
+  .icon {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 70%;
+    width: 70%;
+    margin-bottom: 8px;
   }
 
   .hidden-control {
-    max-height: 0;
+    transform: translateY(120%);
   }
 
   .right-control {
     right: 0;
-    background-color: rgba(#000000, 1);
     box-shadow: 0 3px 6px 0px rgba(#000, 1);
-    border-radius: 0px 0 0px 0;
+    border-radius: 24px 0 0 0;
 
-    .toggle-icon {
-      fill: #ffffff;
-      transition: all 350ms ease-in-out;
-    }
-
-    &:hover .toggle-icon {
-      fill: #03B2FF;
+    .icon-map {
+      background-image: url('../../../../../assets/icons/mapIcon.svg');
     }
   }
 
   .left-control {
     left: 0;
-    background-color: rgba(#000000, 1);
-    border-radius: 0 0px 0px 0;
+    border-radius: 0 24px 0 0;
     box-shadow: 1px -3px 6px 0px rgba(#000000, .6);
 
-    .play-icon {
-      svg {
-        stroke: #ffffff;
-        transition: all 350ms ease-in-out;
-      }
-    }
-
-    &:hover .play-icon svg {
-      stroke: #03B2FF;
+    .icon-play {
+      background-image: url('../../../../../assets/icons/playIcon.svg');
     }
   }
 
@@ -130,7 +107,7 @@
 
   @media screen and (min-width: 960px) {
     .control {
-      display: block;
+      display: flex;
     }
   }
 

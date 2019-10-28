@@ -1,17 +1,12 @@
 <template>
-  <section class="home-container" :class="{'home-container--loading': !filmsFetched}">
+  <section
+    class="home-container"
+    :class="{'home-container--loading': !filmsFetched}"
+  >
     <loader
+      v-if="loaderShown"
       :fetched="filmsFetched"
-      :loading="filmsLoading"
     />
-    <!--<div class="loader-big">-->
-    <!--</div>-->
-    <!--<div class="loader-small">-->
-    <!--<loader-mobile-->
-    <!--:fetched="filmsFetched"-->
-    <!--:loading="filmsLoading"-->
-    <!--/>-->
-    <!--</div>-->
     <div class="nav-top">
       <social-icons />
     </div>
@@ -38,85 +33,99 @@
         <div
           class="films"
           id="showings"
+          v-if="films"
         >
           <h2 class="main-title">
             Сеанси
           </h2>
-          <div class="films-navigation">
-            <div
-              class="nav-item"
-              :class="{'selected': actualShowingsDisplayed}"
-              @click="showActualShowings"
-            >
-              У прокаті
+          <div class="films-block">
+            <div class="films-navigation">
+              <div
+                class="nav-item"
+                :class="{'selected': actualShowingsDisplayed}"
+                @click="showActualShowings"
+              >
+                У прокаті
+              </div>
+              <div
+                class="nav-item"
+                :class="{'selected': !actualShowingsDisplayed}"
+                @click="showFutureShowings"
+              >
+                Скоро у кіно
+              </div>
             </div>
-            <div
-              class="nav-item"
-              :class="{'selected': !actualShowingsDisplayed}"
-              @click="showFutureShowings"
+            <transition
+              name="fade"
+              mode="out-in"
             >
-              Скоро у кіно
-            </div>
+              <div
+                v-if="actualShowingsDisplayed"
+                key="actual-showings"
+              >
+                <ul
+                  class="films-list"
+                  v-if="actualFilms && actualFilms.length"
+                >
+                  <li
+                    class="film"
+                    v-for="(film, index) in actualFilms"
+                    :key="index"
+                    @click="redirectTo(film.description.url)"
+                  >
+                    <div class="film-name">
+                      {{ film.description.name }}
+                      <div class="name-underline" />
+                    </div>
+                    <div class="film-showings">
+                      <div class="film-link">
+                        Сеанси
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <div
+                  class="films-list"
+                  v-else
+                >
+                  Немає фільмів у прокаті
+                </div>
+              </div>
+              <div
+                v-else
+                key="future-showings"
+              >
+                <ul
+                  class="films-list"
+                  v-if="upcomingFilms && upcomingFilms.length"
+                >
+                  <li
+                    class="film"
+                    v-for="(film, index) in upcomingFilms"
+                    :key="index"
+                    @click="redirectTo(film.description.url)"
+                  >
+                    <div class="film-name">
+                      {{ film.description.name }}
+                      <div class="name-underline" />
+                    </div>
+                    <div class="film-showings">
+                      <div class="film-link">
+                        Сеанси
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <div
+                  class="films-list"
+                  v-else
+                >
+                  Немає запланованих кінопоказів
+                </div>
+              </div>
+            </transition>
           </div>
-          <!--<transition-->
-          <!--name="fade"-->
-          <!--mode="out-in"-->
-          <!--&gt;-->
-          <!--<div-->
-          <!--v-if="actualShowingsDisplayed"-->
-          <!--key="actual-showings"-->
-          <!--&gt;-->
-          <!--<ul-->
-          <!--class="films-list"-->
-          <!--v-if="actualFilms && actualFilms.length"-->
-          <!--&gt;-->
-          <!--<li-->
-          <!--class="film"-->
-          <!--v-for="(film, index) in actualFilms"-->
-          <!--:key="index"-->
-          <!--@click="redirectTo(film.description.url)"-->
-          <!--&gt;-->
-          <!--<div class="film-name">-->
-          <!--{{ film.description.name }}-->
-          <!--<div class="name-underline" />-->
-          <!--</div>-->
-          <!--<div class="film-showings">-->
-          <!--<div class="film-link">Сеанси</div>-->
-          <!--</div>-->
-          <!--</li>-->
-          <!--</ul>-->
-          <!--<div class="films-list" v-else>-->
-          <!--Немає фільмів у прокаті-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<div-->
-          <!--v-else-->
-          <!--key="future-showings"-->
-          <!--&gt;-->
-          <!--<ul-->
-          <!--class="films-list"-->
-          <!--v-if="upcomingFilms && upcomingFilms.length"-->
-          <!--&gt;-->
-          <!--<li-->
-          <!--class="film"-->
-          <!--v-for="(film, index) in upcomingFilms"-->
-          <!--:key="index"-->
-          <!--@click="redirectTo(film.description.url)"-->
-          <!--&gt;-->
-          <!--<div class="film-name">-->
-          <!--{{film.description.name }}-->
-          <!--<div class="name-underline" />-->
-          <!--</div>-->
-          <!--<div class="film-showings">-->
-          <!--<div class="film-link">Сеанси</div>-->
-          <!--</div>-->
-          <!--</li>-->
-          <!--</ul>-->
-          <!--<div class="films-list" v-else>-->
-          <!--Немає запланованих кінопоказів-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</transition>-->
+
         </div>
         <div
           class="description"
@@ -165,25 +174,22 @@
 
 <script>
   import Loader from '~/modules/common/components/loader'
-  import LoaderMobile from '~/modules/common/components/loader/loaderMobile'
   import SocialIcons from '~/modules/app/components/socialIcons'
-  import Navigation from '~/modules/app/components/navigation'
   import uniq from 'lodash/uniq'
   import { mapState } from 'vuex'
 
   export default {
     data () {
       return {
-        actualShowingsDisplayed: true
+        actualShowingsDisplayed: true,
+        loaderShown: false
       }
     },
-    // mounted () {
-    //   if (!this.filmsFetched) {
-    //     this.$store.dispatch('films/getAll')
-    //   }
-    // },
-    mounted () {
-      console.log(this.filmsFetched)
+    created () {
+      if (!this.filmsFetched) {
+        this.loaderShown = true
+        this.$store.dispatch('films/getAll')
+      }
     },
     computed: {
       ...mapState({
@@ -222,9 +228,7 @@
     },
     components: {
       Loader,
-      LoaderMobile,
-      SocialIcons,
-      Navigation
+      SocialIcons
     },
     methods: {
       showActualShowings () {
@@ -335,9 +339,9 @@
   }
 
   .films {
-    padding: 40px 54px;
+    padding: 20px 12px;
     width: 100%;
-    min-height: 600px;
+    min-height: 400px;
     max-width: 1200px;
     margin: 0 auto;
 
@@ -377,6 +381,7 @@
 
   .films-list {
     list-style: none;
+    margin-top: 12px;
     padding: 0;
     flex: 1;
     display: flex;
@@ -387,12 +392,15 @@
     .film {
       flex: 1;
       width: 100%;
-      min-width: 300px;
-      max-width: 350px;
       padding: 0px 12px 18px;
       cursor: pointer;
 
       &:hover {
+
+        .film-link {
+          color: $blue;
+        }
+
         .name-underline {
           transform: translate3d(0, 0, 0);
         }
@@ -449,7 +457,7 @@
   }
 
   .description {
-    padding: 40px 40px;
+    padding: 32px 16px;
     max-width: 1200px;
     margin: 0 auto;
 
@@ -497,16 +505,6 @@
     display: none;
   }
 
-  @media screen and (min-width: 1200px) {
-    .loader-big {
-      display: block;
-    }
-
-    .loader-small {
-      display: none;
-    }
-  }
-
   @keyframes fadeOutDown {
     from {
       opacity: 1;
@@ -530,7 +528,7 @@
     }
   }
 
-  @media screen and (min-width: 1200px) {
+  @media screen and (min-width: 1000px) {
     .main {
       margin: 0px auto 0;
       padding-top: 80px;
@@ -542,6 +540,10 @@
         max-width: 1500px;
         background-position: center;
       }
+    }
+
+    .description {
+      padding: 40px;
     }
 
     .films {
@@ -573,7 +575,11 @@
         max-width: 350px;
         padding: 0px 64px 24px 12px;
       }
+    }
 
+
+    .films-block {
+      display: flex;
     }
   }
 </style>

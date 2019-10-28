@@ -4,6 +4,7 @@
       <a
         target="_blank"
         href="https://www.facebook.com/KyivMusicFilm/"
+        class="icon-container"
       >
         <icon
           class="icon"
@@ -18,6 +19,7 @@
       <a
         target="_blank"
         href="https://www.youtube.com/channel/UCOW9MxduCFNClCOPqbQZTjg"
+        class="icon-container"
       >
         <icon
           class="icon"
@@ -32,6 +34,7 @@
       <a
         target="_blank"
         href="https://www.instagram.com/kyivmusicfilm/"
+        class="icon-container"
       >
         <icon
           class="icon"
@@ -82,15 +85,18 @@
     flex-flow: row nowrap;
     justify-content: center;
   }
+
+  .icon-container:hover {
+    .icon {
+      fill: $blue;
+    }
+  }
+
   .icon {
     margin: 12px;
     cursor: pointer;
     transition: all 350ms ease-in-out;
     fill: $white;
-
-    &:hover {
-      fill: $blue;
-    }
   }
 
   .icon-dark {

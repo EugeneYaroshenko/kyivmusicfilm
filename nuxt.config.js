@@ -46,10 +46,16 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    'nuxt-facebook-pixel-module'
   ],
   auth: {
     watchLoggedIn: false
+  },
+  facebook: {
+    track: 'PageView',
+    pixelId: 'FACEBOOK_PIXEL_ID',
+    disabled: true
   },
   axios: {
     baseURL: process.env.NODE_ENV === 'production' ? 'https://kyivmusicfilm.com' : 'http://localhost:3000'
@@ -72,6 +78,7 @@ module.exports = {
     { src: '~/plugins/vue2-google-maps', ssr: false },
     { src: '~/plugins/vue-moment', ssr: false },
     { src: '~/plugins/vue-fullcalendar', ssr: false },
+    { src: '~/plugins/vue-youtube', ssr: false },
     { src: '~plugins/vue-scroll', ssr: false }
   ]
 

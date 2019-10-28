@@ -10,7 +10,13 @@ const initialFilmState = {
       description_short: null,
       trailer: null,
       image_desktop: null,
-      image_mobile: null
+      image_mobile: null,
+      originalName: null,
+      director: null,
+      country: null,
+      date: null,
+      duration: null,
+      genre: null
     },
     showings: {
       dates: null,
@@ -31,6 +37,12 @@ const state = () => ({
     description: {
       name: null,
       url: null,
+      originalName: null,
+      director: null,
+      country: null,
+      date: null,
+      duration: null,
+      genre: null,
       description_full: null,
       description_short: null,
       trailer: null,

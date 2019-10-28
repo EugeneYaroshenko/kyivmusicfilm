@@ -3,12 +3,26 @@
       <div class="description-open" @click="toggleDescription">Опис Фільму</div>
       <div class="description-close" @click="toggleDescription">Сеанси</div>
       <div class="description">
-        <h3 class="heading">
-          Опис фільму
+        <h3 class="heading heading-desktop">
+          {{ this.filmInformation.name }}
         </h3>
+        <h3 class="heading-mobile">
+          Про Фільм
+        </h3>
+        <div class="description-items">
+          <div class="item" v-if=" this.filmInformation.originalName">{{ this.filmInformation.originalName }}</div>
+          <div class="item" v-if=" this.filmInformation.genre">{{ this.filmInformation.genre }}</div>
+          <div class="item" v-if=" this.filmInformation.director">{{ this.filmInformation.director }}</div>
+          <div class="item">
+            <span v-if="this.filmInformation.date">{{ this.filmInformation.date }}, </span>
+            <span v-if="this.filmInformation.country"> {{ this.filmInformation.country }}</span>
+            <span v-if="this.filmInformation.duration">{{ this.filmInformation.duration }}</span>
+
+          </div>
+        </div>
         <div class="information-description" >
           <p class="information-description__text">
-            {{ this.filmInformation.description_full }}
+            {{ this.filmInformation.description_full.trim() }}
           </p>
         </div>
       </div>
@@ -37,10 +51,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .information {
-    width: 70%;
-    margin: 0 auto;
-  }
+  @import '../../../../../styles/partials/variables';
 
   .information-heading {
     font-weight: 600;
@@ -58,6 +69,7 @@
   .description {
     padding: 24px 18px 24px;
     width: 100%;
+    max-width: 700px;
   }
 
   .description-block {
@@ -65,8 +77,8 @@
   }
 
   .heading {
-    text-align: center;
     margin-bottom: 18px;
+    text-align: center;
   }
 
   .information {
@@ -80,10 +92,52 @@
     display: none;
   }
 
+  .description-items {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: column nowrap;
+    font-weight: 500;
+    font-size: .9em;
+    letter-spacing: 0.02em;
+    line-height: 15px;
+    text-align: left;
+    color: #969696;
+    margin-top: 12px;
+
+    .item {
+      margin-bottom: 8px;
+    }
+  }
+
+  .information-description__text {
+    font-size: 1em;
+    line-height: 1.6em;
+    padding: 0px 12px 0px 0;
+    white-space: pre-line;
+  }
+
+  .heading-desktop {
+    display: none;
+  }
+
   @media screen and (min-width: 960px) {
+    .description-items {
+      flex-flow: row nowrap;
+
+      .item {
+        max-width: 100px;
+      }
+    }
+
+    .heading-desktop {
+      display: block;
+    }
+
+    .heading-mobile {
+      display: none;
+    }
     .description {
-      padding: 14px 8px 8px 40px;
-      background-color: #fff;
+      padding: 40px 16px 40px 54px;
     }
 
     .information {
@@ -95,6 +149,7 @@
       z-index: 100;
       transform: translate3d(0, 0, 0);
       transition: all 400ms ease-in-out;
+      background-color: #fff;
     }
 
     .information--collapsed {
@@ -106,7 +161,6 @@
       color: #000;
       overflow-y: scroll;
       transition: all 350ms ease-in-out;
-      padding: 0 40px;
     }
 
     .description-open, .description-close {
@@ -121,15 +175,14 @@
       font-weight: 600;
       font-size: .9em;
       cursor: pointer;
-      background-color: rgba(#0000ff, .9);
+      background-color: rgba($blue, .9);
       color: #fff;
       padding: 8px 18px 4px 12px;
-      border-radius: 0px 24px 0 0;
+      border-radius: 0;
       transition: all 350ms ease;
 
       &:hover {
-        background-color: rgba(#0000ff, .9);
-        box-shadow: 2px 2px 8px 0 rgba(#0000ff, 1)
+        background-color: rgba(blue, 1);
       }
     }
 
@@ -144,12 +197,11 @@
       background-color: rgba(#000000, .8);
       color: #fff;
       padding: 8px 18px 4px 12px;
-      border-radius: 0px 24px 0 0;
+      border-radius: 0;
       transition: all 350ms ease;
 
       &:hover {
         background-color: rgba(#000000, 1);
-        box-shadow: 2px 2px 8px 0 rgba(#0000ff, .4)
       }
     }
 
@@ -172,7 +224,8 @@
     .information-description__text {
       font-size: 1.2em;
       line-height: 1.6em;
-      padding: 24px 12px 24px 0;
+      padding: 0px 12px 24px 0;
+      white-space: pre-line;
     }
 
     .information--collapsed {

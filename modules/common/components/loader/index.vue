@@ -84,9 +84,7 @@
       }
     },
     mounted () {
-      console.log(this.$refs.loaderBackground)
       this.startLoadingAnimation()
-      // this.slideUp()
 
       setTimeout(() => {
         this.stopLoading()

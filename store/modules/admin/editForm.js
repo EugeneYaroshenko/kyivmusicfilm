@@ -8,7 +8,13 @@ const initialFilmState = {
   description_short: null,
   trailer: null,
   image_desktop: null,
-  image_mobile: null
+  image_mobile: null,
+  originalName: null,
+  director: null,
+  country: null,
+  date: null,
+  duration: null,
+  genre: null
 }
 
 const state = () => ({
@@ -18,7 +24,13 @@ const state = () => ({
   description_short: null,
   trailer: null,
   image_desktop: null,
-  image_mobile: null
+  image_mobile: null,
+  originalName: null,
+  director: null,
+  country: null,
+  date: null,
+  duration: null,
+  genre: null
 })
 
 const getters = {}
@@ -32,9 +44,33 @@ const mutations = {
     state.trailer = description.trailer
     state.image_desktop = description.image_desktop
     state.image_mobile = description.image_mobile
+    state.director = description.director
+    state.country = description.country
+    state.date = description.date
+    state.duration = description.duration
+    state.genre = description.genre
+    state.originalName = description.originalName
   },
   [types.UPDATE_FILM_NAME] (state, payload) {
     state.name = payload
+  },
+  [types.UPDATE_FILM_DIRECTOR] (state, payload) {
+    state.director = payload
+  },
+  [types.UPDATE_FILM_COUNTRY] (state, payload) {
+    state.country = payload
+  },
+  [types.UPDATE_FILM_DATE] (state, payload) {
+    state.date = payload
+  },
+  [types.UPDATE_FILM_DURATION] (state, payload) {
+    state.duration = payload
+  },
+  [types.UPDATE_FILM_GENRE] (state, payload) {
+    state.genre = payload
+  },
+  [types.UPDATE_FILM_ORIGINAL_NAME] (state, payload) {
+    state.originalName = payload
   },
   [types.UPDATE_FILM_URL] (state, payload) {
     state.url = transliterate(payload).toLowerCase()
@@ -65,6 +101,24 @@ const actions = {
   },
   updateFilmName ({ commit }, updatedFilmName) {
     commit(types.UPDATE_FILM_NAME, updatedFilmName)
+  },
+  updateFilmOriginalName ({ commit }, payload) {
+    commit(types.UPDATE_FILM_ORIGINAL_NAME, payload)
+  },
+  updateFilmGenre ({ commit }, payload) {
+    commit(types.UPDATE_FILM_GENRE, payload)
+  },
+  updateFilmDuration ({ commit }, payload) {
+    commit(types.UPDATE_FILM_DURATION, payload)
+  },
+  updateFilmDirector ({ commit }, payload) {
+    commit(types.UPDATE_FILM_DIRECTOR, payload)
+  },
+  updateFilmDate ({ commit }, payload) {
+    commit(types.UPDATE_FILM_DATE, payload)
+  },
+  updateFilmCountry ({ commit }, payload) {
+    commit(types.UPDATE_FILM_COUNTRY, payload)
   },
   updateFilmURL ({ commit }, updatedFilmURL) {
     commit(types.UPDATE_FILM_URL, updatedFilmURL)

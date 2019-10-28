@@ -97,4 +97,16 @@
       overflow-y: scroll;
     }
   }
+
+  @media screen and (min-width: 1300px) {
+    .cinemas {
+      flex-flow: column nowrap;
+      max-height: 250px;
+      font-size: 1.1em;
+
+      .cinema {
+        margin: 0 0 12px;
+      }
+    }
+  }
 </style>

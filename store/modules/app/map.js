@@ -189,14 +189,27 @@ const state = () => ({
         ]
       }
     ]
+  },
+  request: {
+    loading: false,
+    fetched: false,
+    error: null
   }
 })
 
 const getters = {}
 
 const mutations = {
+  [types.SELECT_LOCATION_REQUEST] (state) {
+    state.location = null
+    state.request = { ...state.request, fetched: false, loading: true }
+  },
+  [types.SELECT_LOCATION_ERROR] (state, error) {
+    state.request = { ...state.request, fetched: false, error: error }
+  },
   [types.SELECT_LOCATION] (state, location) {
     state.location = location
+    state.request = { ...state.request, fetched: true, loading: false }
   }
 }
 
@@ -208,6 +221,7 @@ const actions = {
   },
 
   async getGeolocation ({ commit, rootState, dispatch }, filmLocations) {
+    commit(types.SELECT_LOCATION_REQUEST)
     try {
       this.$axios.setHeader('Authorization', null)
 
@@ -226,11 +240,9 @@ const actions = {
         commit(types.SELECT_LOCATION, userLocation)
         dispatch('filmShowings/saveShowingsForLocation', userLocation.name, { root: true })
       }
-
-      dispatch('ui/hideLoader', {}, { root: true })
     } catch (error) {
+      commit(types.SELECT_LOCATION_ERROR)
       console.log(error, error)
-      dispatch('ui/hideLoader', {}, { root: true })
     }
   }
 }

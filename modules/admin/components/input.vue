@@ -166,6 +166,7 @@
     min-height: 100px;
     line-height: 1.5;
     resize: vertical;
+    white-space: pre-wrap;
   }
 
   .input-textarea, .input-textarea:focus {

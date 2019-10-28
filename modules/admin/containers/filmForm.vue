@@ -40,6 +40,60 @@
       />
       <input-component
         input-type="text"
+        input-name="originalName"
+        label="Оригінальна назва"
+        :validation="validations.originalName"
+        :input-value="description.originalName"
+        :on-input="updateFilmOriginalName"
+        :validate="validateInputField"
+      />
+      <input-component
+        input-type="text"
+        input-name="director"
+        label="Режисер"
+        :validation="validations.director"
+        :input-value="description.director"
+        :on-input="updateFilmDirector"
+        :validate="validateInputField"
+      />
+      <input-component
+        input-type="text"
+        input-name="country"
+        label="Країна"
+        :validation="validations.country"
+        :input-value="description.country"
+        :on-input="updateFilmCountry"
+        :validate="validateInputField"
+      />
+      <input-component
+        input-type="text"
+        input-name="date"
+        label="Рік"
+        :validation="validations.date"
+        :input-value="description.date"
+        :on-input="updateFilmDate"
+        :validate="validateInputField"
+      />
+      <input-component
+        input-type="text"
+        input-name="duration"
+        label="Тривалість"
+        :validation="validations.duration"
+        :input-value="description.duration"
+        :on-input="updateFilmDuration"
+        :validate="validateInputField"
+      />
+      <input-component
+        input-type="text"
+        input-name="genre"
+        label="Жанр"
+        :validation="validations.genre"
+        :input-value="description.genre"
+        :on-input="updateFilmGenre"
+        :validate="validateInputField"
+      />
+      <input-component
+        input-type="text"
         input-name="trailer"
         label="Посилання на трейлер"
         :validation="validations.trailer"
@@ -167,6 +221,36 @@
             validation_message: 'У кожного фільму також має бути посилання',
             validated: false
           },
+          director: {
+            validation_error: false,
+            validation_message: '',
+            validated: false
+          },
+          genre: {
+            validation_error: false,
+            validation_message: '',
+            validated: false
+          },
+          originalName: {
+            validation_error: false,
+            validation_message: '',
+            validated: false
+          },
+          date: {
+            validation_error: false,
+            validation_message: '',
+            validated: false
+          },
+          duration: {
+            validation_error: false,
+            validation_message: '',
+            validated: false
+          },
+          country: {
+            validation_error: false,
+            validation_message: '',
+            validated: false
+          },
           trailer: {
             regex: /\b((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))/,
             validation_error: false,
@@ -239,6 +323,24 @@
       },
       updateFilmURL (e) {
         this.$store.dispatch('editForm/updateFilmURL', e.target.value)
+      },
+      updateFilmDirector (e) {
+        this.$store.dispatch('editForm/updateFilmDirector', e.target.value)
+      },
+      updateFilmCountry (e) {
+        this.$store.dispatch('editForm/updateFilmCountry', e.target.value)
+      },
+      updateFilmDate (e) {
+        this.$store.dispatch('editForm/updateFilmDate', e.target.value)
+      },
+      updateFilmDuration (e) {
+        this.$store.dispatch('editForm/updateFilmDuration', e.target.value)
+      },
+      updateFilmGenre (e) {
+        this.$store.dispatch('editForm/updateFilmGenre', e.target.value)
+      },
+      updateFilmOriginalName (e) {
+        this.$store.dispatch('editForm/updateFilmOriginalName', e.target.value)
       },
       updateFilmTrailer (e) {
         this.$store.dispatch('editForm/updateFilmTrailer', e.target.value)

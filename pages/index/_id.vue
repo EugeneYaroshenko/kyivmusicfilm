@@ -1,31 +1,42 @@
 <template>
-  <section class="container">
-    <loader-component />
-    <navigation-component :map-shown="mapShown" />
+  <section
+    class="container"
+  >
     <div
       class="main"
-      v-if="filmDescription"
+      ref="main"
     >
+      <!--<trailer-component v-if="trailerShown" />-->
+      <!--<div class="preview-mobile">-->
+      <!--<preview-trailer-interaction />-->
+      <!--</div>-->
       <div
-        class="preview-image"
-        :class="{'preview-image--hidden': mapShown, 'preview-image--expanded': trailerShown}"
-        :style="{ backgroundImage: 'url(' + filmDescription.image_desktop + ')' }"
+        class="main__film-info"
+        ref="filmInfo"
       >
-        <trailer-component v-if="trailerShown" />
-        <div class="preview-mobile">
-          <preview-trailer-interaction />
+        <div
+          class="film-image"
+          :style="{ backgroundImage: 'url(' + filmDescription.image_desktop + ')' }"
+        />
+        <div
+          class="trailer-container"
+          ref="trailerContainer"
+        >
+          <trailer
+            :show-trailer="showTrailer"
+            :hide-trailer="hideTrailer"
+            :trailer="film.description.trailer"
+          />
         </div>
-      </div>
-      <div :class="{'main__film-info': true, 'main__film-info--condensed': mapShown}">
-        <film-info-component />
-        <div :class="{'film-info__overflow': true, 'film-info__overflow--hidden': !mapShown}" />
       </div>
       <div class="main__film-cinema">
         <cinemas />
       </div>
-      <div
-        :class="{'main__film-map': true, 'main__film-map--condensed': !mapShown}"
-      >
+      <trailer-mobile
+        class="trailer-mobile"
+        :trailer="film.description.trailer"
+      />
+      <div class="main__film-map">
         <cinema-map-component />
       </div>
     </div>
@@ -33,24 +44,29 @@
 </template>
 
 <script>
-  import NavigationComponent from '~/modules/app/components/navigation'
-  import FilmInfoComponent from '~/components/app/elements/filmInfo'
   import Cinemas from '~/modules/app/containers/cinemas'
   import CinemaMapComponent from '~/components/app/sections/cinemaMap'
-  import TrailerComponent from '~/components/app/sections/trailer'
-  import PreviewTrailerInteraction from '~/components/app/elements/previewTrailer'
-  import LoaderComponent from '~/components/app/elements/loader'
+  import Trailer from '~/modules/app/components/trailer'
+  import TrailerMobile from '~/modules/app/components/trailer/trailerMobile'
   import { mapState } from 'vuex'
+  import TimelineMax from 'gsap/umd/TimelineMax'
+  import TimelineLite from 'gsap/umd/TimelineLite'
+  import EasePack from 'gsap/umd/EasePack'
 
   export default {
+    scrollToTop: true,
     components: {
-      NavigationComponent,
-      FilmInfoComponent,
       Cinemas,
       CinemaMapComponent,
-      TrailerComponent,
-      PreviewTrailerInteraction,
-      LoaderComponent
+      Trailer,
+      TrailerMobile
+    },
+    watch: {
+      mapShown: function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          return newValue ? this.showMap() : this.hideMap()
+        }
+      }
     },
     computed: {
       ...mapState({
@@ -67,6 +83,101 @@
       if (this.film && this.film.showings) {
         this.$store.dispatch('map/getGeolocation', this.film.showings.locations, { root: true })
       }
+    },
+    methods: {
+      showTrailer () {
+        const t = new TimelineMax()
+
+        t.set(this.$refs.filmInfo, { overflow: 'visible' })
+
+        t.to(
+          this.$refs.trailerContainer,
+          0.6,
+          {
+            maxHeight: '100vh',
+            maxWidth: '100vw',
+            ease: EasePack.Sine.easeOut
+          }
+        )
+      },
+
+      hideTrailer () {
+        const t = new TimelineMax()
+
+        t.to(
+          this.$refs.trailerContainer,
+          0.6,
+          {
+            maxWidth: '40vw',
+            ease: EasePack.Sine.easeIn
+          }
+        ).delay(0.2)
+
+        t.set(this.$refs.filmInfo, { overflow: 'hidden' })
+      },
+      showMap () {
+        const t = new TimelineLite()
+
+        t.fromTo(
+          this.$refs.trailerContainer,
+          0.2,
+          {
+            transform: 'translate3d(0, 0, 0)'
+          },
+          {
+            transform: 'translate3d(0, -8%, 0)',
+            ease: EasePack.Sine.easeOut
+          }
+        )
+
+        t.set(this.$refs.main, { overflow: 'visible' })
+
+        t.to(
+          this.$refs.trailerContainer,
+          1,
+          {
+            transform: 'translate3d(0, 100%, 0)',
+            opacity: 0,
+            ease: EasePack.Sine.easeOut
+          },
+          'animation-transition'
+        )
+
+        t.to(
+          this.$refs.main,
+          0.3,
+          {
+            transform: 'translate3d(-40%, 0, 0)',
+            ease: EasePack.Sine.easeOut
+          },
+          'animation-transition'
+        )
+      },
+      hideMap () {
+        const t = new TimelineMax()
+
+        t.to(
+          this.$refs.main,
+          0.35,
+          {
+            transform: 'translate3d(0, 0, 0)',
+            ease: EasePack.Sine.easeIn
+          }
+        )
+
+        t.to(
+          this.$refs.trailerContainer,
+          0.5,
+          {
+            transform: 'translate3d(0, 0, 0)',
+            opacity: 1,
+            ease: EasePack.Sine.easeOut
+          },
+          'animation-transition'
+        )
+
+        t.set(this.$refs.main, { overflow: 'hidden' })
+      }
     }
   }
 </script>
@@ -79,6 +190,7 @@
     background-image: url('../../assets/icons/background-main.svg');
     background-attachment: fixed;
     background-size: cover;
+    width: 100%;
   }
 
   .main {
@@ -87,145 +199,135 @@
     bottom: 0;
     display: flex;
     flex-flow: column nowrap;
-    padding: 100px 16px;
+    padding: 54px 0 32px;
     flex: 1;
-    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+    transition: all 350ms ease-out;
   }
 
-  .preview-image {
+  .film-image {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
-    height: 60vh;
+    height: 100%;
     position: relative;
-    border-radius: 24px;
-    box-shadow: 0 0 12px 0px rgba(0, 0, 0, .4);
-    order: 1;
   }
 
   .main__film-cinema {
     flex: 1;
     display: flex;
     flex-flow: row nowrap;
-    order: 1;
   }
 
   .main__film-map {
     display: none;
-    transition: all 500ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
     max-width: 100%;
     opacity: 1;
-    order: 1;
     z-index: 200;
   }
 
-  .main__film-map--condensed {
-    max-width: 0;
-    opacity: 0;
+  .trailer-container {
+    display: none;
   }
 
   .main__film-info {
     flex: 1;
-    max-width: 50%;
+    max-width: 100%;
+    height: 300px;
     position: relative;
-    transition: all 500ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
-    order: 2;
-    display: none;
-  }
-
-  .main__film-info--condensed {
-    max-width: 0px;
+    z-index: 1000;
     overflow: hidden;
   }
 
-  .film-info__overflow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: rgba(#FFF9F6, 1);
-    transition: all .4s ease-out;
-    opacity: 1;
-  }
-
-  .film-info__overflow--hidden {
-    opacity: 0;
-    visibility: hidden;
+  .trailer-mobile {
+    display: block;
   }
 
   @media screen and (min-width: 960px) {
+    .trailer-container {
+      display: block;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      height: 100vh;
+      width: 100vw;
+      max-width: 40vw;
+      margin: auto 0;
+      left: 0;
+    }
+
     .main__film-info {
       display: block;
+      max-width: 40%;
+      height: 100%;
     }
     .main__film-map {
-      flex: 1;
+      min-width: 40%;
+      width: 40%;
       display: flex;
       flex-flow: row nowrap;
     }
 
-    .preview-mobile {
+    .trailer-mobile {
       display: none;
     }
 
     .main {
-      flex-flow: row nowrap;
       padding: 0;
+      flex-flow: row nowrap;
     }
 
-    .preview-image {
+    .film-image {
       background-position: center;
-      position: fixed;
       width: 100%;
-      max-width: 50%;
-      left: 0;
-      top: 0;
       height: 100%;
-      transition: all .5s ease-in-out;
       border-radius: 0;
       box-shadow: none;
     }
 
-    .preview-image--hidden {
-      opacity: 0;
-      transform: translate3d(-100%, 0, 0);
-    }
-
-    .preview-image--expanded {
-      max-width: 100%;
-      z-index: 1000;
-      background-position: center;
-      opacity: 1;
-    }
-
     .main__film-cinema {
       z-index: 100;
-      max-width: 50%;
+      min-width: 60%;
+      width: 60%;
     }
 
     .container {
       height: 100vh;
-      max-height: 1300px;
     }
 
     .main__film-info {
-      order: 1;
+      width: 40%;
+      min-width: 40%;
     }
   }
 
   @media screen and (min-width: 1500px) {
-    .main__film-map--condensed {
-      max-width: 50%;
-      opacity: 1;
+    .trailer-container {
+      max-width: 35vw;
     }
 
-    .preview-image {
-      max-width: 33.5%;
+    .main__film-info {
+      width: 35%;
+      min-width: 35%;
+      max-width: 35%;
     }
 
-    .main__film-info--condensed {
-      max-width: 1000px;
+    .film-image {
+      background-position: right center;
     }
+
+    .main__film-cinema {
+      z-index: 100;
+      min-width: 40%;
+      width: 40%;
+    }
+
+    .main__film-map {
+      min-width: 25%;
+      width: 25%;
+    }
+
   }
 </style>

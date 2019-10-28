@@ -231,8 +231,8 @@ export default {
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     position: absolute;
     left: 8px;
     top: 0;
