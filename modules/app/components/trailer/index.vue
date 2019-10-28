@@ -38,6 +38,7 @@
   import PlayButton from '~/assets/icons/vueIcons/playButton'
   import TimelineMax from 'gsap/umd/TimelineMax'
   import EasePack from 'gsap/umd/EasePack'
+  import TweenMax from 'gsap/umd/TweenMax'
   import { getIdFromUrl } from 'vue-youtube'
 
   export default {
@@ -82,9 +83,9 @@
 
           const t = new TimelineMax()
 
-          t.set(this.$refs.playIcon, { opacity: 0 })
+          t.add(TweenMax.set(this.$refs.playIcon, { opacity: 0 }))
 
-          t.to(
+          t.add(TweenMax.to(
             this.$refs.iconContainer,
             0.6,
             {
@@ -93,14 +94,14 @@
               borderRadius: '0',
               ease: EasePack.Sine.easeIn
             }
-          )
+          ))
 
-          t.set(
+          t.add(TweenMax.to(
             this.$refs.trailerBlock,
             { display: 'block' }
-          )
+          ))
 
-          t.to(
+          t.add(TweenMax.to(
             this.$refs.trailerBlock,
             0.8,
             {
@@ -109,16 +110,16 @@
               transform: 'translate3d(0, 0, 0)',
               ease: EasePack.Sine.easeOut
             }
-          )
+          ))
 
-          t.to(
+          t.add(TweenMax.to(
             this.$refs.trailerClose,
             0.4,
             {
               transform: 'translate3d(0, 0, 0)',
               ease: EasePack.Sine.easeOut
             }
-          )
+          ))
 
           this.trailerShown = true
           this.player.playVideo()
@@ -129,16 +130,16 @@
         $e.stopPropagation()
         const t = new TimelineMax()
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.trailerClose,
           0.4,
           {
             transform: 'translate3d(-100%, 0, 0)',
             ease: EasePack.Sine.easeIn
           }
-        )
+        ))
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.trailerBlock,
           0.8,
           {
@@ -147,9 +148,9 @@
             transform: 'translate3d(0, -10%, 0)',
             ease: EasePack.Sine.easeOut
           }
-        )
+        ))
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.iconContainer,
           0.6,
           {
@@ -158,7 +159,7 @@
             borderRadius: '40px 0 0 40px',
             ease: EasePack.Sine.easeIn
           }
-        )
+        ))
 
         this.hideTrailer()
         this.player.stopVideo()

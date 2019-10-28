@@ -70,6 +70,7 @@ module.exports = {
     vendor: [
       'vue2-google-maps',
       'gsap/umd/TweenMax',
+      'gsap/umd/TimelineMax',
       'gsap/umd/TimelineLite',
       'gsap/umd/EasePack'
     ]

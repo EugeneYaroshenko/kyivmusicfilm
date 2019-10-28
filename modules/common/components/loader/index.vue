@@ -117,69 +117,65 @@
         )
       },
       startLoadingAnimation () {
-        const t = new TimelineMax({ repeat: -1 })
+        if (process.browser) {
+          const t = new TimelineMax({ repeat: -1 })
 
-        t.to(
-          this.$refs.kyiv,
-          0.8,
-          {
-            fill: '#ffffff',
-            ease: EasePack.Sine.easeOut
-          },
-          'kyiv'
-        )
+          t.add(TweenMax.to(
+            this.$refs.kyiv,
+            0.8,
+            {
+              fill: '#ffffff',
+              ease: EasePack.Sine.easeOut
+            },
+          ), 'kyiv')
 
-        t.to(
-          this.$refs.kyiv,
-          0.1,
-          {
-            fill: 'transparent',
-            ease: EasePack.Sine.linear
-          },
-          'music'
-        )
+          t.add(TweenMax.to(
+            this.$refs.kyiv,
+            0.1,
+            {
+              fill: 'transparent',
+              ease: EasePack.Sine.linear
+            },
+          ), 'music')
 
-        t.to(
-          this.$refs.music,
-          0.8,
-          {
-            fill: '#ffffff',
-            ease: EasePack.Sine.easeOut
-          },
-          'music'
-        )
+          t.add(TweenMax.to(
+            this.$refs.music,
+            0.8,
+            {
+              fill: '#ffffff',
+              ease: EasePack.Sine.easeOut
+            },
+          ), 'music')
 
-        t.to(
-          this.$refs.music,
-          0.1,
-          {
-            fill: 'transparent',
-            ease: EasePack.Sine.linear
-          },
-          'film'
-        )
+          t.add(TweenMax.to(
+            this.$refs.music,
+            0.1,
+            {
+              fill: 'transparent',
+              ease: EasePack.Sine.linear
+            },
+          ), 'film')
 
-        t.to(
-          this.$refs.film,
-          0.8,
-          {
-            fill: '#ffffff',
-            ease: EasePack.Sine.easeOut
-          },
-          'film'
-        )
+          t.add(TweenMax.to(
+            this.$refs.film,
+            0.8,
+            {
+              fill: '#ffffff',
+              ease: EasePack.Sine.easeOut
+            },
+          ), 'film')
 
-        t.to(
-          this.$refs.film,
-          0.1,
-          {
-            fill: 'transparent',
-            ease: EasePack.Sine.linear
-          },
-          'kyiv'
-        )
+          t.add(TweenMax.to(
+            this.$refs.film,
+            0.1,
+            {
+              fill: 'transparent',
+              ease: EasePack.Sine.linear
+            },
+          ), 'kyiv')
 
-        this.loadingAnimation = t
+          this.loadingAnimation = t
+        }
       }
       // slideUp () {
       //   const t = new TimelineMax()

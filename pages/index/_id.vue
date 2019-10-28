@@ -52,6 +52,7 @@
   import TimelineMax from 'gsap/umd/TimelineMax'
   import TimelineLite from 'gsap/umd/TimelineLite'
   import EasePack from 'gsap/umd/EasePack'
+  import TweenMax from 'gsap/umd/TweenMax'
 
   export default {
     scrollToTop: true,
@@ -88,9 +89,9 @@
       showTrailer () {
         const t = new TimelineMax()
 
-        t.set(this.$refs.filmInfo, { overflow: 'visible' })
+        t.add(TweenMax.set(this.$refs.filmInfo, { overflow: 'visible' }))
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.trailerContainer,
           0.6,
           {
@@ -98,74 +99,70 @@
             maxWidth: '100vw',
             ease: EasePack.Sine.easeOut
           }
-        )
+        ))
       },
 
       hideTrailer () {
         const t = new TimelineMax()
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.trailerContainer,
           0.6,
           {
             maxWidth: '40vw',
             ease: EasePack.Sine.easeIn
           }
-        ).delay(0.2)
+        ).delay(0.2))
 
-        t.set(this.$refs.filmInfo, { overflow: 'hidden' })
+        t.add(TweenMax.set(this.$refs.filmInfo, { overflow: 'hidden' }))
       },
       showMap () {
-        const t = new TimelineLite()
+        const t = new TimelineMax()
 
-        t.fromTo(
+        t.add(TweenMax.to(
           this.$refs.trailerContainer,
           0.2,
           {
-            transform: 'translate3d(0, 0, 0)'
-          },
-          {
             transform: 'translate3d(0, -8%, 0)',
             ease: EasePack.Sine.easeOut
-          }
-        )
+          },
+          'first'
+        ))
 
-        t.set(this.$refs.main, { overflow: 'visible' })
+        t.add(TweenMax.set(this.$refs.main, { overflow: 'visible' }))
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.trailerContainer,
           1,
           {
             transform: 'translate3d(0, 100%, 0)',
             opacity: 0,
             ease: EasePack.Sine.easeOut
-          },
-          'animation-transition'
-        )
+          }
+        ), 'animation-transition')
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.main,
           0.3,
           {
             transform: 'translate3d(-40%, 0, 0)',
             ease: EasePack.Sine.easeOut
-          },
-          'animation-transition'
-        )
+          }
+        ), 'animation-transition')
       },
       hideMap () {
         const t = new TimelineMax()
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.main,
           0.35,
           {
             transform: 'translate3d(0, 0, 0)',
             ease: EasePack.Sine.easeIn
           }
-        )
+        ))
 
-        t.to(
+        t.add(TweenMax.to(
           this.$refs.trailerContainer,
           0.5,
           {
@@ -174,9 +171,9 @@
             ease: EasePack.Sine.easeOut
           },
           'animation-transition'
-        )
+        ))
 
-        t.set(this.$refs.main, { overflow: 'hidden' })
+        t.add(TweenMax.set(this.$refs.main, { overflow: 'hidden' }))
       }
     }
   }
