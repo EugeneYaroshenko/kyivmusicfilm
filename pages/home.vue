@@ -160,11 +160,7 @@
             </p>
           </div>
           <div class="description-subscription">
-            <div
-              class="ml-form-embed"
-              data-account="752884:e1j5i5f8m2"
-              data-form="1556234:d0l4b6"
-            />
+            <mailer-lite />
           </div>
         </div>
       </div>
@@ -175,6 +171,7 @@
 <script>
   import Loader from '~/modules/common/components/loader'
   import SocialIcons from '~/modules/app/components/socialIcons'
+  import MailerLite from '~/modules/app/components/mailerLite'
   import uniq from 'lodash/uniq'
   import { mapState } from 'vuex'
 
@@ -228,7 +225,8 @@
     },
     components: {
       Loader,
-      SocialIcons
+      SocialIcons,
+      MailerLite
     },
     methods: {
       showActualShowings () {

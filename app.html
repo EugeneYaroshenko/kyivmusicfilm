@@ -2,18 +2,17 @@
 <html {{ HTML_ATTRS }}>
 <head {{ HEAD_ATTRS }}>
   {{ HEAD }}
-  <script>
-    (function(m,a,i,l,e,r){ m['MailerLiteObject']=e;function f(){
-      var c={ a:arguments,q:[]};var r=this.push(c);return "number"!=typeof r?r:f.bind(c.q);}
-      f.q=f.q||[];m[e]=m[e]||f.bind(f.q);m[e].q=m[e].q||f.q;r=a.createElement(i);
-      var _=a.getElementsByTagName(i)[0];r.async=1;r.src=l+'?v'+(~~(new Date().getTime()/1000000));
-      _.parentNode.insertBefore(r,_);})(window, document, 'script', 'https://static.mailerlite.com/js/universal.js', 'ml');
-
-    var ml_account = ml('accounts', '752884', 'e1j5i5f8m2', 'load');
-  </script>
 </head>
 <body {{ BODY_ATTRS }}>
 {{ APP }}
+<script>
+  function ml_webform_success_1556234() {
+    var $ = ml_jQuery || jQuery;
+    $('.ml-subscribe-form-1556234 .row-success').show();
+    $('.ml-subscribe-form-1556234 .row-form').hide();
+  }
+</script>
+<script src="https://static.mailerlite.com/js/w/webforms.min.js?v253251d9ecd93b8e74c12a37f72e896f" type="text/javascript"></script>
 </body>
 </html>
 
