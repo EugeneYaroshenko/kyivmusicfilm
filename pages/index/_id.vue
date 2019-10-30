@@ -216,6 +216,7 @@
     flex: 1;
     display: flex;
     flex-flow: row nowrap;
+    order: 1;
   }
 
   .main__film-map {
@@ -223,6 +224,7 @@
     max-width: 100%;
     opacity: 1;
     z-index: 200;
+    order: 3;
   }
 
   .trailer-container {
@@ -236,10 +238,14 @@
     position: relative;
     z-index: 1000;
     overflow: hidden;
+    order: 3;
   }
 
   .trailer-mobile {
+    margin: 0px 0 24px;
+    min-height: 300px;
     display: block;
+    order: 2;
   }
 
   @media screen and (min-width: 960px) {
@@ -259,12 +265,14 @@
       display: block;
       max-width: 40%;
       height: 100%;
+      order: 1;
     }
     .main__film-map {
       min-width: 40%;
       width: 40%;
       display: flex;
       flex-flow: row nowrap;
+      order: 3;
     }
 
     .trailer-mobile {
@@ -288,6 +296,7 @@
       z-index: 100;
       min-width: 60%;
       width: 60%;
+      order: 2;
     }
 
     .container {

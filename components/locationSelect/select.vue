@@ -170,18 +170,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import '../../styles/partials/variables';
+
 .vue-select {
   display: block;
   cursor: pointer;
   position: relative;
   width: 100%;
-  padding: 8px 12px 0px 0;
+  padding: 8px 12px 8px 0;
   transition: all 200ms ease-in-out;
-  border-radius: 18px 18px 24px 24px;
+  border-radius: 24px;
   max-width: 400px;
   max-height: 1000px;
   margin: 0;
   border: 1px solid transparent;
+
+  &:hover {
+    border: 1px solid $blue;
+  }
 }
 
 .vue-select__block {
@@ -190,7 +196,7 @@ export default {
 }
 
 .vue-select--opened {
-  border: 1px solid #0000ff;
+  border: 1px solid $blue;
   background-color: #fff;
 
   .placeholder {

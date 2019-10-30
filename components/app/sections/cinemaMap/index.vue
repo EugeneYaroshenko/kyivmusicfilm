@@ -2,7 +2,8 @@
   <div class="map-container">
     <div class="map" v-if="location">
       <GmapMap
-        :center="location.position"
+        :center="mapCenter"
+        ref="mapRef"
         :options="mapStyle"
         style="width: 100%; height: 100%"
       >
@@ -15,7 +16,7 @@
           @click="showInfoWindow(m)"
         />
         <GmapInfoWindow
-          :opened="infoWindowShown"
+          :opened="infoWindowShown || infoWindowToggled"
           :options="infoWindowOptions"
           :position="markerPosition"
           @closeclick="closeInfoWindow"
@@ -35,6 +36,7 @@
     data () {
       return {
         infoWindowShown: false,
+        infoWindowToggled: false,
         markerPosition: null,
         infoWindowOptions: {
           pixelOffset: {
@@ -64,6 +66,13 @@
         // GETTER FOR CURRENT CITY
         cinemas: state => state.filmShowings.selectedShowingCinemas
       }),
+      mapCenter () {
+        if (this.markers && this.markers.length) {
+          return this.markers[0].position
+        } else {
+          return this.location.position
+        }
+      },
     },
     methods: {
       setMarkers () {
@@ -84,6 +93,10 @@
       showInfoWindow (data) {
         this.markerPosition = data.position
         this.setInfoWindowContent(JSON.parse(data.title))
+        this.$refs.mapRef.$mapPromise.then((map) => {
+          map.panTo({ lat: data.position.lat, lng: data.position.lng })
+          map.setZoom(13)
+        })
         this.infoWindowShown = true
       },
       closeInfoWindow () {

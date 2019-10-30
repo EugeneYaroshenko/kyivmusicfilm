@@ -156,7 +156,7 @@
           {
             maxHeight: '160px',
             maxWidth: '144px',
-            borderRadius: '40px 0 0 40px',
+            borderRadius: '40px',
             ease: EasePack.Sine.easeIn
           }
         ))
@@ -195,11 +195,12 @@
     cursor: pointer;
     top: 0;
     bottom: 0;
-    margin: auto 0;
-    position: absolute;
+    left: 0;
     right: 0;
-    border-radius: 40px 0 0 40px;
-    background-image: url('../../../../assets/images/trailerBackground.svg');
+    margin: auto;
+    position: absolute;
+    border-radius: 40px;
+    background-color: rgba(0, 0, 0, 1);
     background-size: cover;
     background-position: right center;
     background-attachment: fixed;

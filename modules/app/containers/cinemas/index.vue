@@ -37,7 +37,7 @@
           v-if="cinemas"
         >
           <h3 class="screening-block__title">
-            Обрати кінотеатр
+            Придбати квиток
           </h3>
           <cinemas
             :cinemas="cinemas"
@@ -60,7 +60,7 @@
     </div>
     <div
       class="loader-container"
-      v-else
+      v-if="locationLoading"
     >
       <div class="loader" />
     </div>
@@ -108,6 +108,7 @@
                     mapShown: state => state.ui.mapShown,
                     location: state => state.map.location,
                     locationFetched: state => state.map.request.fetched,
+                    locationLoading: state => state.map.request.loading,
                     allLocations: state => state.film.showings.locations,
                     filmInformation: state => state.film.description,
                     cinemas: state => state.filmShowings.selectedShowingCinemas,
@@ -132,6 +133,7 @@
     flex: 1;
     position: relative;
     overflow: hidden;
+    min-height: 100vh;
   }
 
   nav {
@@ -179,13 +181,12 @@
   }
 
   .loader-container {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     z-index: 100;
-    background-color: rgba(#fff, .9);
     display: flex;
     align-items: center;
     justify-content: center;

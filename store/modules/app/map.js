@@ -20,7 +20,7 @@ const state = () => ({
     disableDefaultUI: true,
     scaleControl: true,
     zoomControl: true,
-    zoom: 12,
+    zoom: 11,
     // config styles
     styles: [
       {
@@ -205,7 +205,7 @@ const mutations = {
     state.request = { ...state.request, fetched: false, loading: true }
   },
   [types.SELECT_LOCATION_ERROR] (state, error) {
-    state.request = { ...state.request, fetched: false, error: error }
+    state.request = { ...state.request, fetched: false, loading: false, error: error }
   },
   [types.SELECT_LOCATION] (state, location) {
     state.location = location
@@ -239,6 +239,8 @@ const actions = {
       if (userLocation) {
         commit(types.SELECT_LOCATION, userLocation)
         dispatch('filmShowings/saveShowingsForLocation', userLocation.name, { root: true })
+      } else {
+        commit(types.SELECT_LOCATION)
       }
     } catch (error) {
       commit(types.SELECT_LOCATION_ERROR)

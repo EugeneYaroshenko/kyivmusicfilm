@@ -1,23 +1,22 @@
 <template>
     <div :class="{'information': true, 'information--collapsed': isDescriptionCollapsed }">
-      <div class="description-open" @click="toggleDescription">Опис Фільму</div>
+      <div class="description-open" @click="toggleDescription">Опис фільму</div>
       <div class="description-close" @click="toggleDescription">Сеанси</div>
       <div class="description">
         <h3 class="heading heading-desktop">
           {{ this.filmInformation.name }}
         </h3>
         <h3 class="heading-mobile">
-          Про Фільм
+          Про фільм
         </h3>
         <div class="description-items">
-          <div class="item" v-if=" this.filmInformation.originalName">{{ this.filmInformation.originalName }}</div>
-          <div class="item" v-if=" this.filmInformation.genre">{{ this.filmInformation.genre }}</div>
-          <div class="item" v-if=" this.filmInformation.director">{{ this.filmInformation.director }}</div>
+          <div class="item" v-if="filmInformation.originalName">{{ this.filmInformation.originalName }}</div>
+          <div class="item" v-if="filmInformation.genre">{{ this.filmInformation.genre }}</div>
+          <div class="item" v-if="filmInformation.director">{{ this.filmInformation.director }}</div>
           <div class="item">
-            <span v-if="this.filmInformation.date">{{ this.filmInformation.date }}, </span>
-            <span v-if="this.filmInformation.country"> {{ this.filmInformation.country }}</span>
-            <span v-if="this.filmInformation.duration">{{ this.filmInformation.duration }}</span>
-
+            <span v-if="filmInformation.date">{{ this.filmInformation.date }}, </span>
+            <span v-if="filmInformation.country"> {{ this.filmInformation.country }}</span>
+            <span v-if="filmInformation.duration">{{ this.filmInformation.duration }}</span>
           </div>
         </div>
         <div class="information-description" >
@@ -25,6 +24,7 @@
             {{ this.filmInformation.description_full.trim() }}
           </p>
         </div>
+        <div class="voice" v-if="filmInformation.voice">{{ this.filmInformation.voice }}</div>
       </div>
     </div>
 </template>
@@ -94,10 +94,10 @@
 
   .description-items {
     display: flex;
-    justify-content: space-between;
     flex-flow: column nowrap;
+    justify-content: center;
     font-weight: 500;
-    font-size: .9em;
+    font-size: .8em;
     letter-spacing: 0.02em;
     line-height: 15px;
     text-align: left;
@@ -106,6 +106,7 @@
 
     .item {
       margin-bottom: 8px;
+      margin-right: 16px;
     }
   }
 
@@ -120,12 +121,21 @@
     display: none;
   }
 
+  .heading-mobile {
+    text-align: center;
+  }
+
+  .voice {
+    color: #6f6f6f;
+    font-weight: 500;
+  }
+
   @media screen and (min-width: 960px) {
     .description-items {
-      flex-flow: row nowrap;
+      flex-flow: row wrap;
 
       .item {
-        max-width: 100px;
+        max-width: 200px;
       }
     }
 

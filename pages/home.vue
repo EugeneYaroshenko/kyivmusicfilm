@@ -8,14 +8,14 @@
       :fetched="filmsFetched"
     />
     <div class="nav-top">
-      <social-icons />
+      <social-icons color="dark" />
     </div>
     <div class="nav-bottom">
       <social-icons color="dark" />
     </div>
     <div class="navigation-list">
       <div
-        class="navigation-item"
+        class="navigation-item selected-item"
         v-scroll-to="'#showings'"
       >
         Сеанси
@@ -28,102 +28,39 @@
       </div>
     </div>
     <div class="main">
-      <div class="main-image" />
       <div class="main-content">
         <div
           class="films"
           id="showings"
           v-if="films"
         >
-          <h2 class="main-title">
-            Сеанси
-          </h2>
           <div class="films-block">
-            <div class="films-navigation">
-              <div
-                class="nav-item"
-                :class="{'selected': actualShowingsDisplayed}"
-                @click="showActualShowings"
+              <ul
+                class="films-list"
+                v-if="actualFilms && actualFilms.length"
               >
-                У прокаті
-              </div>
-              <div
-                class="nav-item"
-                :class="{'selected': !actualShowingsDisplayed}"
-                @click="showFutureShowings"
-              >
-                Скоро у кіно
-              </div>
-            </div>
-            <transition
-              name="fade"
-              mode="out-in"
-            >
-              <div
-                v-if="actualShowingsDisplayed"
-                key="actual-showings"
-              >
-                <ul
-                  class="films-list"
-                  v-if="actualFilms && actualFilms.length"
+                <li
+                  class="film"
+                  v-for="(film, index) in actualFilms"
+                  :key="index"
+                  @click="redirectTo(film.description.url)"
                 >
-                  <li
-                    class="film"
-                    v-for="(film, index) in actualFilms"
-                    :key="index"
-                    @click="redirectTo(film.description.url)"
-                  >
-                    <div class="film-name">
-                      {{ film.description.name }}
-                      <div class="name-underline" />
+                  <div class="film-name">
+                    {{ film.description.name }}
+                  </div>
+                  <div class="film-showings">
+                    <div class="film-link">
+                      Придбати квиток
                     </div>
-                    <div class="film-showings">
-                      <div class="film-link">
-                        Сеанси
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-                <div
-                  class="films-list"
-                  v-else
-                >
-                  Немає фільмів у прокаті
-                </div>
-              </div>
+                  </div>
+                </li>
+              </ul>
               <div
+                class="films-list"
                 v-else
-                key="future-showings"
               >
-                <ul
-                  class="films-list"
-                  v-if="upcomingFilms && upcomingFilms.length"
-                >
-                  <li
-                    class="film"
-                    v-for="(film, index) in upcomingFilms"
-                    :key="index"
-                    @click="redirectTo(film.description.url)"
-                  >
-                    <div class="film-name">
-                      {{ film.description.name }}
-                      <div class="name-underline" />
-                    </div>
-                    <div class="film-showings">
-                      <div class="film-link">
-                        Сеанси
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-                <div
-                  class="films-list"
-                  v-else
-                >
-                  Немає запланованих кінопоказів
-                </div>
+                Немає фільмів у прокаті
               </div>
-            </transition>
           </div>
 
         </div>
@@ -202,23 +139,10 @@
             allFilmDates = uniq([...allFilmDates, ...cityDates])
           })
 
-          if (allFilmDates.some(date => date <= new Date().setHours(0, 0, 0, 0))) {
+          if (allFilmDates.some(date => date >= new Date().setHours(0, 0, 0, 0))) {
             films = [...films, ...[film]]
           }
         })
-
-        return films
-      },
-      upcomingFilms () {
-        let films = []
-
-        if (this.films) {
-          this.films.forEach(film => {
-            if (!this.actualFilms.filter(actualFilm => actualFilm.description.name === film.description.name).length) {
-              films = [...films, ...[film]]
-            }
-          })
-        }
 
         return films
       }
@@ -249,7 +173,6 @@
     width: 100%;
     min-height: 100vh;
     position: relative;
-    background-color: #000000;
     color: $black;
   }
 
@@ -297,7 +220,7 @@
   }
 
   .navigation-list {
-    color: $white;
+    color: $black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -307,7 +230,7 @@
     right: 0;
     width: 100%;
     font-weight: 600;
-    font-size: 1.2em;
+    font-size: 1.4em;
     letter-spacing: .3px;
     font-family: $headline-font;
 
@@ -321,6 +244,10 @@
         color: $blue;
       }
     }
+
+    .selected-item {
+      color: $blue;
+    }
   }
 
   .main-title {
@@ -332,7 +259,6 @@
     background-size: contain;
     background-repeat: no-repeat;
     width: 100%;
-    background-color: #FFF8E1;
     padding-bottom: 64px;
   }
 
@@ -341,7 +267,7 @@
     width: 100%;
     min-height: 400px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 32px auto 0;
 
     .films-navigation {
       max-width: 100%;
@@ -390,30 +316,19 @@
     .film {
       flex: 1;
       width: 100%;
-      padding: 0px 12px 18px;
+      padding: 0px 12px 24px;
       cursor: pointer;
-
-      &:hover {
-
-        .film-link {
-          color: $blue;
-        }
-
-        .name-underline {
-          transform: translate3d(0, 0, 0);
-        }
-      }
     }
 
     .film-name {
-      font-size: 1.1em;
+      font-size: 1.2em;
       font-weight: 600;
       font-family: $headline-font;
       letter-spacing: .2px;
       line-height: 1.6;
       padding-bottom: 8px;
-      margin-bottom: 12px;
       position: relative;
+      text-align: center;
       overflow: hidden;
     }
 
@@ -440,15 +355,21 @@
     .film-showings {
       padding-top: 8px;
 
-      a {
+      .film-link {
         text-decoration: none;
-        text-transform: uppercase;
         color: $blue;
+        width: 180px;
+        padding: 4px 8px;
+        margin: 0 auto;
+        font-size: 1em;
+        border: 1px solid $blue;
         letter-spacing: .2px;
         transition: all 350ms ease-in-out;
+        text-align: center;
 
         &:hover {
-          color: darken($blue, 20%);
+          color: $white;
+          background-color: $blue;
         }
       }
     }
@@ -545,7 +466,6 @@
     }
 
     .films {
-      margin-top: 64px;
       flex-flow: row nowrap;
 
       .films-navigation {
@@ -563,14 +483,14 @@
     }
 
     .films-list {
-      flex-flow: row wrap;
-      align-items: flex-start;
-      justify-content: flex-start;
+      flex-flow: column wrap;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
 
       .film {
-        width: 33.3%;
-        min-width: 300px;
-        max-width: 350px;
+        width: 100%;
+        text-align: center;
         padding: 0px 64px 24px 12px;
       }
     }

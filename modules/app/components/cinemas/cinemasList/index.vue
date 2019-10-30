@@ -20,7 +20,8 @@
         class="cinema-name"
         v-else
       >
-        {{ cinema.name }}
+        <span class="name">{{ cinema.name }}</span>
+        <span class="soon">Скоро</span>
       </div>
     </div>
   </div>
@@ -49,6 +50,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '../../../../../styles/partials/variables';
+
   .cinemas {
     margin-top: 12px;
     height: auto;
@@ -71,23 +74,41 @@
   .cinema-name {
     font-weight: 400;
     letter-spacing: .2px;
-    opacity: .6;
     pointer-events: none;
-    color: #0001BF;
+    align-items: center;
+    background-color: $white;
+    padding: 4px 0px;
 
-    &:hover {
-      color: rgb(0, 1, 255);
+    .name {
+      opacity: .6;
+      color: #0001BF;
+    }
+
+    .soon {
+      opacity: 1;
+      font-size: .8em;
+      font-weight: 600;
     }
   }
 
   .active-link {
-    opacity: 1;
     pointer-events: auto;
     cursor: pointer;
+    color: $blue;
+    border-radius: 18px;
 
     a {
       color: inherit;
       text-decoration: none;
+      border: 1px solid $blue;
+      border-radius: 18px;
+      padding: 4px 12px;
+      transition: all 350ms ease-out;
+
+      &:hover {
+        background-color: $blue;
+        color: $white;
+      }
     }
   }
 

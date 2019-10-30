@@ -54,8 +54,8 @@ module.exports = {
   },
   facebook: {
     track: 'PageView',
-    pixelId: 'FACEBOOK_PIXEL_ID',
-    disabled: true
+    pixelId: '1375285412646391',
+    disabled: process.env.NODE_ENV !== 'production'
   },
   axios: {
     baseURL: process.env.NODE_ENV === 'production' ? 'https://kyivmusicfilm.com' : 'http://localhost:3000'

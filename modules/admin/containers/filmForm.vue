@@ -94,6 +94,15 @@
       />
       <input-component
         input-type="text"
+        input-name="voice"
+        label="Озвучка"
+        :validation="validations.voice"
+        :input-value="description.voice"
+        :on-input="updateFilmVoice"
+        :validate="validateInputField"
+      />
+      <input-component
+        input-type="text"
         input-name="trailer"
         label="Посилання на трейлер"
         :validation="validations.trailer"
@@ -231,6 +240,11 @@
             validation_message: '',
             validated: false
           },
+          voice: {
+            validation_error: false,
+            validation_message: '',
+            validated: false
+          },
           originalName: {
             validation_error: false,
             validation_message: '',
@@ -265,7 +279,7 @@
           },
           description_full: {
             validation_error: false,
-            maxCount: 268,
+            maxCount: 600,
             validation_message: 'Щось не так з описом',
             validated: false
           }
@@ -338,6 +352,9 @@
       },
       updateFilmGenre (e) {
         this.$store.dispatch('editForm/updateFilmGenre', e.target.value)
+      },
+      updateFilmVoice (e) {
+        this.$store.dispatch('editForm/updateFilmVoice', e.target.value)
       },
       updateFilmOriginalName (e) {
         this.$store.dispatch('editForm/updateFilmOriginalName', e.target.value)

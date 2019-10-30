@@ -16,7 +16,8 @@ const initialFilmState = {
       country: null,
       date: null,
       duration: null,
-      genre: null
+      genre: null,
+      voice: null
     },
     showings: {
       dates: null,
@@ -43,6 +44,7 @@ const state = () => ({
       date: null,
       duration: null,
       genre: null,
+      voice: null,
       description_full: null,
       description_short: null,
       trailer: null,

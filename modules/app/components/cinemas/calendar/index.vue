@@ -179,6 +179,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '../../../../../styles/partials/variables';
+
   .calendar__container {
     margin-top: 12px;
   }
@@ -270,7 +272,7 @@
 
   .selected {
     font-weight: 600;
-    color: #0001BF;
+    color: $blue;
     font-size: 1em;
     opacity: 1;
 

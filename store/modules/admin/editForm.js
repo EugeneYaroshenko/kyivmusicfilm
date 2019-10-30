@@ -14,7 +14,8 @@ const initialFilmState = {
   country: null,
   date: null,
   duration: null,
-  genre: null
+  genre: null,
+  voice: null
 }
 
 const state = () => ({
@@ -30,7 +31,8 @@ const state = () => ({
   country: null,
   date: null,
   duration: null,
-  genre: null
+  genre: null,
+  voice: null
 })
 
 const getters = {}
@@ -49,6 +51,7 @@ const mutations = {
     state.date = description.date
     state.duration = description.duration
     state.genre = description.genre
+    state.voice = description.voice
     state.originalName = description.originalName
   },
   [types.UPDATE_FILM_NAME] (state, payload) {
@@ -68,6 +71,9 @@ const mutations = {
   },
   [types.UPDATE_FILM_GENRE] (state, payload) {
     state.genre = payload
+  },
+  [types.UPDATE_FILM_VOICE] (state, payload) {
+    state.voice = payload
   },
   [types.UPDATE_FILM_ORIGINAL_NAME] (state, payload) {
     state.originalName = payload
@@ -107,6 +113,9 @@ const actions = {
   },
   updateFilmGenre ({ commit }, payload) {
     commit(types.UPDATE_FILM_GENRE, payload)
+  },
+  updateFilmVoice ({ commit }, payload) {
+    commit(types.UPDATE_FILM_VOICE, payload)
   },
   updateFilmDuration ({ commit }, payload) {
     commit(types.UPDATE_FILM_DURATION, payload)
