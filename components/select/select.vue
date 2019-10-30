@@ -72,7 +72,7 @@ export default {
     },
     emptyText: {
       type: String,
-      default: 'Немає показів в інших містах'
+      default: 'Немає доступних варіантів'
     },
     name: {
       type: String,

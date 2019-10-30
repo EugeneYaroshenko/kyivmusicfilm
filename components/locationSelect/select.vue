@@ -70,7 +70,7 @@ export default {
     },
     emptyText: {
       type: String,
-      default: 'Немає доступних варіантів'
+      default: 'Немає показів в інших містах'
     },
     name: {
       type: String,
