@@ -216,12 +216,17 @@ const mutations = {
 const actions = {
   selectLocation ({ commit, dispatch }, location) {
     commit(types.SELECT_LOCATION, location)
-    dispatch('filmShowings/saveShowingsForLocation', location.name, { root: true })
-    localStorage.setItem('location', JSON.stringify(location))
+
+    if (location) {
+      dispatch('filmShowings/saveShowingsForLocation', location.name, { root: true })
+      localStorage.setItem('location', JSON.stringify(location))
+    }
   },
 
   async getGeolocation ({ commit, rootState, dispatch }, filmLocations) {
     commit(types.SELECT_LOCATION_REQUEST)
+
+    const locationFromLocalStorage = process.browser ? localStorage.getItem('location') : null
     try {
       this.$axios.setHeader('Authorization', null)
 

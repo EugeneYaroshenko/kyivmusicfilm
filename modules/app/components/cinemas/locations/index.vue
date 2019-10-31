@@ -86,7 +86,6 @@
 
   .location-container--is-expanded {
     height: 100%;
-    position: fixed;
   }
 
   .location-component {
@@ -97,7 +96,7 @@
   }
 
   .location-component--is-expanded {
-    padding-top: 64px;
+    padding-top: 32px;
   }
 
   .current-location {
@@ -186,11 +185,4 @@
   .location-container--is-expanded .cities-select {
     display: block;
   }
-
-  @media screen and (min-width: 960px) {
-    .location-container--is-expanded {
-      position: absolute;
-    }
-  }
-
 </style>
