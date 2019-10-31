@@ -305,7 +305,7 @@
 
   .films-list {
     list-style: none;
-    margin-top: 12px;
+    margin-top: 40px;
     padding: 0;
     flex: 1;
     display: flex;
@@ -316,7 +316,7 @@
     .film {
       flex: 1;
       width: 100%;
-      padding: 0px 12px 24px;
+      padding: 0px 12px 40px;
       cursor: pointer;
     }
 

@@ -130,14 +130,12 @@
   @import '../../../../styles/partials/variables';
 
   .cinema-screening {
-    flex: 1;
     position: relative;
-    overflow: hidden;
     min-height: 100vh;
   }
 
   nav {
-    position: fixed;
+    display: none;
     top: 4px;
     left: 0;
     right: 0;
@@ -220,6 +218,7 @@
     .cinema-screening {
       flex: 1.2;
       padding: 24px 32px 0px 24px;
+      overflow: hidden;
     }
 
     .title {
@@ -232,6 +231,7 @@
 
     nav {
       position: absolute;
+      display: block;
     }
   }
 </style>

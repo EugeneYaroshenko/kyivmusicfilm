@@ -2,6 +2,15 @@
   <section
     class="container"
   >
+    <nav>
+      <social-icons color="dark" />
+      <nuxt-link
+        to="/home"
+        class="navigation-to"
+      >
+        Головна
+      </nuxt-link>
+    </nav>
     <div
       class="main"
       ref="main"
@@ -53,6 +62,7 @@
   import TimelineLite from 'gsap/umd/TimelineLite'
   import EasePack from 'gsap/umd/EasePack'
   import TweenMax from 'gsap/umd/TweenMax'
+  import SocialIcons from '~/modules/app/components/socialIcons'
 
   export default {
     // scrollToTop: true,
@@ -102,7 +112,8 @@
       Cinemas,
       CinemaMapComponent,
       Trailer,
-      TrailerMobile
+      TrailerMobile,
+      SocialIcons
     },
     watch: {
       mapShown: function (newValue, oldValue) {
@@ -222,6 +233,26 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '../../styles/partials/variables';
+
+  nav {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+
+    .navigation-to {
+      position: absolute;
+      right: 16px;
+      top: 20px;
+      text-decoration: none;
+      font-size: .9em;
+      color: $blue;
+    }
+  }
+
   .container {
     display: flex;
     align-items: stretch;
@@ -291,6 +322,10 @@
   }
 
   @media screen and (min-width: 960px) {
+    nav {
+      display: none;
+    }
+
     .trailer-container {
       display: block;
       position: fixed;
