@@ -248,7 +248,7 @@ const actions = {
         commit(types.SELECT_LOCATION)
       }
     } catch (error) {
-      commit(types.SELECT_LOCATION_ERROR)
+      commit(types.SELECT_LOCATION)
       console.log(error, error)
     }
   }
