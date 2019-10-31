@@ -13,11 +13,9 @@
           <div class="item" v-if="filmInformation.originalName">{{ this.filmInformation.originalName }}</div>
           <div class="item" v-if="filmInformation.genre">{{ this.filmInformation.genre }}</div>
           <div class="item" v-if="filmInformation.director">{{ this.filmInformation.director }}</div>
-          <div class="item">
-            <span v-if="filmInformation.date">{{ this.filmInformation.date }}, </span>
-            <span v-if="filmInformation.country"> {{ this.filmInformation.country }}</span>
-            <span v-if="filmInformation.duration">{{ this.filmInformation.duration }}</span>
-          </div>
+          <div class="item" v-if="filmInformation.date">{{ this.filmInformation.date }} </div>
+          <div class="item" v-if="filmInformation.country"> {{ this.filmInformation.country }}</div>
+          <div class="item" v-if="filmInformation.duration">{{ this.filmInformation.duration }}</div>
         </div>
         <div class="information-description" >
           <p class="information-description__text">

@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    async asyncData ({ route, store, redirect }) {
+    async asyncData ({ route, store, redirect, error }) {
       const url = route.path.replace('/', '')
 
       try {
@@ -20,8 +20,10 @@
             selectedFilm = await store.dispatch('film/getFilmByName', { url })
           }
 
-          return {
-            selectedFilm
+          if (selectedFilm) {
+            return selectedFilm
+          } else {
+            error({ statusCode: 404, message: `Фільм ${url} не знайдено` })
           }
         } else {
           redirect('/home')

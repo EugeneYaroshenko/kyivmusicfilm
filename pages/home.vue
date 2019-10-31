@@ -491,7 +491,7 @@
       .film {
         width: 100%;
         text-align: center;
-        padding: 0px 64px 24px 12px;
+        padding: 0px 12px 24px;
       }
     }
 
