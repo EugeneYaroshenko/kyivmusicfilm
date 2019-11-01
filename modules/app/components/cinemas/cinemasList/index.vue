@@ -76,7 +76,6 @@
     letter-spacing: .2px;
     pointer-events: none;
     align-items: center;
-    background-color: $white;
     padding: 4px 0px;
 
     .name {

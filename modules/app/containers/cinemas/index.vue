@@ -154,6 +154,7 @@
 
   .cinema-content {
     padding: 12px 8px 12px;
+    width: 100%;
   }
 
   .title {

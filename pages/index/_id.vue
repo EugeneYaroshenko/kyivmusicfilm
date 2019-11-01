@@ -286,10 +286,10 @@
   }
 
   .main__film-cinema {
-    flex: 1;
     display: flex;
     flex-flow: row nowrap;
     order: 1;
+    width: 100%;
   }
 
   .main__film-map {
@@ -374,6 +374,7 @@
       min-width: 60%;
       width: 60%;
       order: 2;
+      flex: 1;
     }
 
     .container {

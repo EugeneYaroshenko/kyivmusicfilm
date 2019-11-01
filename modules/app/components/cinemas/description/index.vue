@@ -178,7 +178,7 @@
     .description-open {
       position: absolute;
       top: 150px;
-      right: -77px;
+      right: -75px;
       transform: rotate(90deg);
       font-weight: 600;
       font-size: .9em;
