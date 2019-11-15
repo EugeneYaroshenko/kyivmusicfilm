@@ -9,7 +9,7 @@
         Головна
       </nuxt-link>
     </nav>
-    <div v-if="locationFetched">
+    <div class="cinema-content__container" v-if="locationFetched">
       <div
         class="cinema-content"
         v-if="location"
@@ -51,12 +51,11 @@
           :film-information="filmInformation"
         />
       </div>
-      <div v-else>
         <locations
           :locations="allLocations"
           :select-location="changeLocation"
+          v-else
         />
-      </div>
     </div>
     <div
       class="loader-container"
@@ -132,6 +131,7 @@
   .cinema-screening {
     position: relative;
     min-height: 100vh;
+    width: 100%;
   }
 
   nav {
@@ -150,6 +150,10 @@
       font-size: .9em;
       color: $blue;
     }
+  }
+
+  .cinema-content__container {
+    width: 100%;
   }
 
   .cinema-content {
