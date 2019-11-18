@@ -41,6 +41,19 @@
               >
                 <li
                   class="film"
+                  @click="goTo('https://www.intro.kisff.org/')"
+                >
+                  <div class="film-name">
+                    INTRO — фестиваль кіно про музику та культуру
+                  </div>
+                  <div class="film-showings">
+                    <div class="film-link">
+                      Придбати квиток
+                    </div>
+                  </div>
+                </li>
+                <li
+                  class="film"
                   v-for="(film, index) in actualFilms"
                   :key="index"
                   @click="redirectTo(film.description.url)"
@@ -161,6 +174,9 @@
       },
       redirectTo (url) {
         this.$router.push('/' + url)
+      },
+      goTo (url) {
+        window.location.href = url
       }
     }
   }

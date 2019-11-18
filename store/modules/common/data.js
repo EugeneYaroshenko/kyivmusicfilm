@@ -34,6 +34,17 @@ const mutations = {
 }
 
 const actions = {
+  async updateData ({ commit }) {
+    commit(types.GET_DATA_REQUEST)
+      try {
+        const data = await this.$axios.$get('/api/data')
+
+        commit(types.GET_DATA_SUCCESS, data)
+        localStorage.setItem('commonData', JSON.stringify(data))
+      } catch (error) {
+        commit(types.GET_DATA_ERROR, error)
+      }
+  },
   async getData ({ commit }) {
     commit(types.GET_DATA_REQUEST)
 

@@ -14,6 +14,12 @@
         />
       </div>
       <div
+        class="update-cinemas"
+        @click="updateData"
+      >
+        Оновити кінотеатри
+      </div>
+      <div
         class="films-block"
         v-if="films"
       >
@@ -90,6 +96,9 @@
     methods: {
       generateFilmLink (url) {
         return `/${url}`
+      },
+      updateData () {
+        this.$store.dispatch('data/updateData')
       },
       editFilm (film) {
         this.$store.dispatch('editFilm/edit', film)
@@ -222,6 +231,17 @@
     bottom: 0;
     margin: auto;
   }
+
+  .update-cinemas {
+    position: absolute;
+    top: 20px;
+    right: 12px;
+    border: 1px solid #000;
+    padding: 8px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+
   @keyframes loading {
     from {
       transform: rotate(0deg)
