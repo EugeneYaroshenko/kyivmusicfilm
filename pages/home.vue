@@ -174,9 +174,17 @@
       },
       redirectTo (url) {
         this.$router.push('/' + url)
+        this.selectFilmEvent(url)
       },
       goTo (url) {
         window.location.href = url
+      },
+      selectFilmEvent (url) {
+        this.$ga.event({
+                         eventCategory: 'Film',
+                         eventAction: 'Film Select',
+                         eventLabel: `${url}`
+                       })
       }
     }
   }

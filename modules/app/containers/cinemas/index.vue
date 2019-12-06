@@ -1,10 +1,11 @@
 <template>
   <div class="cinema-screening">
     <nav>
-      <social-icons color="dark" />
+      <social-icons color="dark" :click-social-event="clickSocialEvent" />
       <nuxt-link
         to="/home"
         class="navigation-to"
+        @click.native="clickHomeEvent"
       >
         Головна
       </nuxt-link>
@@ -30,6 +31,7 @@
             :dates="showingDates"
             :select-showing="selectShowing"
             :selected-date="selectedShowingDate"
+            :scroll-date-event="scrollDateEvent"
           />
         </div>
         <div
@@ -41,6 +43,7 @@
           </h3>
           <cinemas
             :cinemas="cinemas"
+            :select-cinema-event="selectCinemaEvent"
           />
         </div>
         <control-navigation
@@ -49,6 +52,8 @@
         />
         <description
           :film-information="filmInformation"
+          :show-description-event="showDescriptionEvent"
+          :hide-description-event="hideDescriptionEvent"
         />
       </div>
         <locations
@@ -97,9 +102,66 @@
       },
       changeLocation (location) {
         this.$store.dispatch('map/selectLocation', location)
+        this.changeLocationEvent(location.name)
       },
       selectShowing (date) {
         this.$store.dispatch('filmShowings/selectShowing', { date })
+        this.selectDateEvent()
+      },
+      selectDateEvent () {
+        this.$ga.event({
+                         eventCategory: 'Film Calendar',
+                         eventAction: 'Click',
+                         eventLabel: `${this.filmInformation.name}`
+                       })
+      },
+      scrollDateEvent () {
+        this.$ga.event({
+                         eventCategory: 'Film Calendar',
+                         eventAction: 'Scroll',
+                         eventLabel: `${this.filmInformation.name}`
+                       })
+      },
+      selectCinemaEvent () {
+        this.$ga.event({
+                         eventCategory: 'Film Cinema',
+                         eventAction: 'Click',
+                         eventLabel: `${this.filmInformation.name}`
+                       })
+      },
+      showDescriptionEvent () {
+        this.$ga.event({
+                         eventCategory: 'Film Description',
+                         eventAction: 'Show',
+                         eventLabel: `${this.filmInformation.name}`
+                       })
+      },
+      hideDescriptionEvent () {
+        this.$ga.event({
+                         eventCategory: 'Film Description',
+                         eventAction: 'Hide',
+                         eventLabel: `${this.filmInformation.name}`
+                       })
+      },
+      changeLocationEvent (location) {
+        this.$ga.event({
+                         eventCategory: 'Film Location',
+                         eventAction: 'Select',
+                         eventLabel: `${this.filmInformation.name}: ${location}`
+                       })
+      },
+      clickSocialEvent (socialName) {
+        this.$ga.event({
+                         eventCategory: 'Navigation',
+                         eventAction: 'Social',
+                         eventLabel: `${socialName}`
+                       })
+      },
+      clickHomeEvent () {
+        this.$ga.event({
+                         eventCategory: 'Navigation',
+                         eventAction: 'Home'
+                       })
       }
     },
     computed: {

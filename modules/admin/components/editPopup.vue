@@ -11,12 +11,13 @@
       v-else
     >
       <h2>Фільм успішно збережений</h2>
-      <nuxt-link
+      <a
         class="go-to"
-        :to="filmUrl"
+        target="_blank"
+        :href="filmURL"
       >
         Переглянути сторінку
-      </nuxt-link>
+      </a>
     </div>
   </div>
 </template>
@@ -37,6 +38,11 @@
       reset: {
         type: Function,
         required: true
+      }
+    },
+    computed: {
+      filmURL () {
+        return process.env.baseUrl + this.filmUrl
       }
     }
   }

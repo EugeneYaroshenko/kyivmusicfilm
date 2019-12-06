@@ -5,9 +5,21 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
     created () {
-      this.$store.dispatch('data/getData')
+      if (!this.loggedIn) {
+        this.$router.push('/login')
+      } else {
+        this.$store.dispatch('data/getData')
+      }
+
+    },
+    computed: {
+      ...mapState({
+                    loggedIn: state => state.auth.loggedIn
+                  })
     }
   }
 </script>

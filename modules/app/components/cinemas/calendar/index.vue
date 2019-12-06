@@ -82,6 +82,11 @@
         type: Function,
         required: true,
         default: null
+      },
+      scrollDateEvent: {
+        type: Function,
+        required: true,
+        default: null
       }
     },
     data () {
@@ -145,6 +150,7 @@
         this.scrollOffset = this.scrollOffset - this.$refs.datesContainer.clientWidth
 
         this.defineScrollableZone()
+        this.scrollDateEvent()
       },
       scrollLeft () {
         const scrollFirstVisibleElement = this.scrollVisibleArea.slice(0)[0]
@@ -155,6 +161,7 @@
         this.scrollOffset = this.scrollOffset + this.$refs.datesContainer.clientWidth
 
         this.defineScrollableZone()
+        this.scrollDateEvent()
       },
       checkIfScrollRightPossible () {
         if (this.scrollVisibleArea && this.dates) {

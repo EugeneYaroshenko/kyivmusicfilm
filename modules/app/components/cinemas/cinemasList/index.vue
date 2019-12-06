@@ -4,6 +4,7 @@
       class="cinema"
       v-for="(cinema, index) in cinemas"
       :key="index"
+      @click="selectCinemaEvent"
     >
       <div
         class="cinema-name active-link"
@@ -34,6 +35,11 @@
         type: Array,
         required: true,
         default: () => []
+      },
+      selectCinemaEvent: {
+        type: Function,
+        required: false,
+        default: () => []
       }
     },
     data () {
@@ -58,16 +64,16 @@
     min-height: 100px;
     transition: all 350ms ease-in-out;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column;
     justify-content: center;
   }
 
   .cinema {
-    padding: 0px 4px;
-    margin: 0 4px 6px;
+    padding: 8px 4px 8px;
+    margin: 4px 0px 4px;
     transition: all .2s ease-in-out;
     cursor: default;
-    font-size: .9em;
+    font-size: 1.2em;
     text-align: center;
   }
 
@@ -115,7 +121,15 @@
     .cinemas {
       max-height: 200px;
       overflow-y: scroll;
+      flex-flow: row wrap;
     }
+
+    .cinema {
+      padding: 0px 4px;
+      margin: 0 4px 6px;
+      font-size: .9em;
+    }
+
   }
 
   @media screen and (min-width: 1300px) {
@@ -127,6 +141,13 @@
       .cinema {
         margin: 0 0 12px;
       }
+    }
+  }
+
+  @media screen and (min-height: 800px) {
+    .cinemas {
+      max-height: 1000px;
+      overflow-y: scroll;
     }
   }
 </style>

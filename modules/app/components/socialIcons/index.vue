@@ -5,6 +5,7 @@
         target="_blank"
         href="https://www.facebook.com/KyivMusicFilm/"
         class="icon-container"
+        @click="clickSocialEvent('facebook')"
       >
         <icon
           class="icon"
@@ -20,6 +21,7 @@
         target="_blank"
         href="https://www.youtube.com/channel/UCOW9MxduCFNClCOPqbQZTjg"
         class="icon-container"
+        @click="clickSocialEvent('youtube')"
       >
         <icon
           class="icon"
@@ -35,6 +37,7 @@
         target="_blank"
         href="https://www.instagram.com/kyivmusicfilm/"
         class="icon-container"
+        @click="clickSocialEvent('instagram')"
       >
         <icon
           class="icon"
@@ -62,6 +65,11 @@
         type: String,
         required: false,
         default: 'light'
+      },
+      clickSocialEvent: {
+        type: Function,
+        required: false,
+        default: () => []
       }
     },
     components: {

@@ -2,7 +2,7 @@
   <div class="form-container">
     <form @submit.prevent="requestLogin" class="form">
       <h2 class="title">Ти адмін?</h2>
-      <div class="notification" v-if="notificationShown">
+      <div class="notification" v-if="error">
         <div class="notification-text">
           Помилка входу
         </div>
@@ -17,8 +17,9 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
-    auth: false,
     data () {
       return {
         form: {
@@ -28,43 +29,25 @@
         notificationShown: false
       }
     },
-    created () {
-      if (this.$auth.$state.loggedIn) {
-        this.$router.push('/admin/films')
-      }
-    },
     computed: {
+      ...mapState({
+                    error: state => state.auth.request.error,
+                    loggedIn: state => state.auth.loggedIn
+                  }),
       buttonEnabled () {
         return this.form.username && this.form.password
-      },
+      }
+    },
+    watch: {
+      loggedIn: function (newValue) {
+        if (newValue) {
+          this.$router.push('/admin/films')
+        }
+      }
     },
     methods: {
-      hideNotification () {
-        this.notificationShown = false
-      },
-      showNotification () {
-        this.notificationShown = true
-      },
-      changeLocation () {
-        console.log('change Location')
-      },
-      async requestLogin () {
-        this.hideNotification()
-
-        try {
-          await this.$auth.loginWith('local', {
-            data: {
-              username: this.form.username,
-              password: this.form.password
-            }
-          })
-
-          this.hideNotification()
-
-          this.$router.push('/admin/films')
-        } catch (e) {
-          this.showNotification()
-        }
+      requestLogin () {
+        this.$store.dispatch('auth/loginUser', { username: this.form.username, password: this.form.password })
       }
     }
   }

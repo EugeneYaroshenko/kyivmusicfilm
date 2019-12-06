@@ -33,6 +33,13 @@
   import { mapState } from 'vuex'
 
   export default {
+    props: {
+      clickMarkerEvent: {
+        type: Function,
+        required: false,
+        default: () => []
+      }
+    },
     data () {
       return {
         infoWindowShown: false,
@@ -98,6 +105,7 @@
           map.setZoom(13)
         })
         this.infoWindowShown = true
+        this.clickMarkerEvent()
       },
       closeInfoWindow () {
         this.infoWindowShown = false

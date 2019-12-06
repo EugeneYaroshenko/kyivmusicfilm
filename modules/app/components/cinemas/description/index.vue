@@ -1,7 +1,7 @@
 <template>
     <div :class="{'information': true, 'information--collapsed': isDescriptionCollapsed }">
-      <div class="description-open" @click="toggleDescription">Опис фільму</div>
-      <div class="description-close" @click="toggleDescription">Сеанси</div>
+      <div class="description-open" @click="showDescription">Опис фільму</div>
+      <div class="description-close" @click="hideDescription">Сеанси</div>
       <div class="description">
         <h3 class="heading heading-desktop">
           {{ this.filmInformation.name }}
@@ -33,6 +33,16 @@
       filmInformation: {
         type: Object,
         required: true
+      },
+      showDescriptionEvent: {
+        type: Function,
+        required: true,
+        default: () => []
+      },
+      hideDescriptionEvent: {
+        type: Function,
+        required: true,
+        default: () => []
       }
     },
     data () {
@@ -41,9 +51,14 @@
       }
     },
     methods: {
-      toggleDescription () {
-        this.isDescriptionCollapsed = !this.isDescriptionCollapsed
+      showDescription () {
+        this.isDescriptionCollapsed = false
+        this.showDescriptionEvent()
       },
+      hideDescription () {
+        this.isDescriptionCollapsed = true
+        this.hideDescriptionEvent()
+      }
     }
   }
 </script>

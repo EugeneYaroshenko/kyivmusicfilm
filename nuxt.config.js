@@ -1,3 +1,5 @@
+const isProd = process.env.NODE_ENV === 'production'
+
 module.exports = {
   mode: 'universal',
   /*
@@ -45,13 +47,16 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
     '@nuxtjs/proxy',
-    'nuxt-facebook-pixel-module'
+    'nuxt-facebook-pixel-module',
+    ['@nuxtjs/google-analytics', {
+      id: 'UA-154152946-1',
+      debug: {
+        enabled: !isProd,
+        sendHitTask: isProd
+      }
+    }]
   ],
-  auth: {
-    watchLoggedIn: false
-  },
   facebook: {
     track: 'PageView',
     pixelId: '1375285412646391',

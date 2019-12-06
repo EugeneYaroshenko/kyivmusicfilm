@@ -46,7 +46,7 @@
         :trailer="film.description.trailer"
       />
       <div class="main__film-map">
-        <cinema-map-component />
+        <cinema-map-component :click-marker-event="clickMarkerEvent" />
       </div>
     </div>
   </section>
@@ -65,7 +65,7 @@
   import SocialIcons from '~/modules/app/components/socialIcons'
 
   export default {
-    // scrollToTop: true,
+    auth: false,
     async asyncData ({ route, store, redirect, error }) {
       const url = route.path.replace('/', '')
 
@@ -140,6 +140,7 @@
     },
     methods: {
       showTrailer () {
+        this.sendShowTrailerEvent()
         const t = new TimelineMax()
 
         t.add(TweenMax.set(this.$refs.filmInfo, { overflow: 'visible' }))
@@ -156,6 +157,7 @@
       },
 
       hideTrailer () {
+        this.sendHideTrailerEvent()
         const t = new TimelineMax()
 
         t.add(TweenMax.to(
@@ -170,6 +172,7 @@
         t.add(TweenMax.set(this.$refs.filmInfo, { overflow: 'hidden' }))
       },
       showMap () {
+        this.sendShowMapEvent()
         const t = new TimelineMax()
 
         t.add(TweenMax.to(
@@ -204,6 +207,7 @@
         ), 'animation-transition')
       },
       hideMap () {
+        this.sendHideMapEvent()
         const t = new TimelineMax()
 
         t.add(TweenMax.to(
@@ -227,6 +231,42 @@
         ))
 
         t.add(TweenMax.set(this.$refs.main, { overflow: 'hidden' }))
+      },
+
+      sendShowTrailerEvent () {
+        this.$ga.event({
+                         eventCategory: 'Trailer',
+                         eventAction: 'Play',
+                         eventLabel: `${this.filmDescription.name}`
+                       })
+      },
+      sendHideTrailerEvent () {
+        this.$ga.event({
+                         eventCategory: 'Trailer',
+                         eventAction: 'Close',
+                         eventLabel: `${this.filmDescription.name}`
+                       })
+      },
+      sendShowMapEvent () {
+        this.$ga.event({
+                         eventCategory: 'Map',
+                         eventAction: 'Show',
+                         eventLabel: `${this.filmDescription.name}`
+                       })
+      },
+      sendHideMapEvent () {
+        this.$ga.event({
+                         eventCategory: 'Map',
+                         eventAction: 'Hide',
+                         eventLabel: `${this.filmDescription.name}`
+                       })
+      },
+      clickMarkerEvent () {
+        this.$ga.event({
+                         eventCategory: 'Map',
+                         eventAction: 'Click Marker',
+                         eventLabel: `${this.filmDescription.name}`
+                       })
       }
     }
   }
@@ -252,6 +292,8 @@
       color: $blue;
     }
   }
+
+
 
   .container {
     display: flex;
@@ -305,6 +347,7 @@
   }
 
   .main__film-info {
+    display: none;
     flex: 1;
     max-width: 100%;
     height: 300px;
