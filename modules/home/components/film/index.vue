@@ -1,6 +1,6 @@
 <template>
   <nuxt-link
-    to="film-link"
+    :to="film.description.url"
     class="film-item"
   >
     <!--<div-->
