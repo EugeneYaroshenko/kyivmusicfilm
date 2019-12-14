@@ -100,6 +100,5 @@
 
   .film-info__description {
     font-weight: 300;
-    margin-top: 8px;
   }
 </style>

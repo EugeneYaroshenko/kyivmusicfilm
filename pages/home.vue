@@ -308,6 +308,7 @@
 
     .film {
       flex: 1;
+      max-width: 100%;
       padding: 0px 12px 24px;
     }
 
@@ -476,6 +477,10 @@
     .films-list {
       flex-flow: row wrap;
       width: 100%;
+
+      .film {
+        max-width: 33.3%;
+      }
     }
 
 
