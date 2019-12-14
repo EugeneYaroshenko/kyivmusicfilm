@@ -41,31 +41,11 @@
               >
                 <li
                   class="film"
-                  @click="goTo('https://www.intro.kisff.org/')"
-                >
-                  <div class="film-name">
-                    INTRO — фестиваль кіно про музику та культуру
-                  </div>
-                  <div class="film-showings">
-                    <div class="film-link">
-                      Придбати квиток
-                    </div>
-                  </div>
-                </li>
-                <li
-                  class="film"
                   v-for="(film, index) in actualFilms"
                   :key="index"
-                  @click="redirectTo(film.description.url)"
+                  @click="selectFilmEvent(film.description.url)"
                 >
-                  <div class="film-name">
-                    {{ film.description.name }}
-                  </div>
-                  <div class="film-showings">
-                    <div class="film-link">
-                      Придбати квиток
-                    </div>
-                  </div>
+                  <film-preview :film="film"/>
                 </li>
               </ul>
               <div
@@ -120,6 +100,7 @@
 
 <script>
   import Loader from '~/modules/common/components/loader'
+  import FilmPreview from '~/modules/home/components/film'
   import SocialIcons from '~/modules/app/components/socialIcons'
   import MailerLite from '~/modules/app/components/mailerLite'
   import uniq from 'lodash/uniq'
@@ -163,22 +144,10 @@
     components: {
       Loader,
       SocialIcons,
-      MailerLite
+      MailerLite,
+      FilmPreview
     },
     methods: {
-      showActualShowings () {
-        this.actualShowingsDisplayed = true
-      },
-      showFutureShowings () {
-        this.actualShowingsDisplayed = false
-      },
-      redirectTo (url) {
-        this.$router.push('/' + url)
-        this.selectFilmEvent(url)
-      },
-      goTo (url) {
-        window.location.href = url
-      },
       selectFilmEvent (url) {
         this.$ga.event({
                          eventCategory: 'Film',
@@ -329,19 +298,17 @@
 
   .films-list {
     list-style: none;
-    margin-top: 40px;
+    margin-top: 24px;
     padding: 0;
     flex: 1;
     display: flex;
     flex-flow: column wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 
     .film {
       flex: 1;
-      width: 100%;
-      padding: 0px 12px 40px;
-      cursor: pointer;
+      padding: 0px 12px 24px;
     }
 
     .film-name {
@@ -507,16 +474,8 @@
     }
 
     .films-list {
-      flex-flow: column wrap;
-      align-items: center;
-      justify-content: center;
+      flex-flow: row wrap;
       width: 100%;
-
-      .film {
-        width: 100%;
-        text-align: center;
-        padding: 0px 12px 24px;
-      }
     }
 
 
