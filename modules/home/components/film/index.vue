@@ -1,28 +1,57 @@
 <template>
-  <nuxt-link
-    :to="film.description.url"
-    class="film-item"
-  >
-    <!--<div-->
-      <!--class="sales-now"-->
-    <!--&gt;-->
-      <!--Квитки у продажу-->
-    <!--</div>-->
-    <div
-      class="film-preview"
-      :style="{ backgroundImage: 'url(' + film.description.image_desktop + ')' }"
+  <div>
+    <a
+      v-if="film.description.custom"
+      :href="film.description.url"
+      target="_blank"
+      class="film-item"
     >
-      <div class="film-trailer" />
-    </div>
-    <div class="film-info">
-      <div class="film-info__name">
-        {{ film.description.name }}
+      <!--<div-->
+      <!--class="sales-now"-->
+      <!--&gt;-->
+      <!--Квитки у продажу-->
+      <!--</div>-->
+      <div
+        class="film-preview"
+        :style="{ backgroundImage: 'url(' + film.description.image_desktop + ')' }"
+      >
+        <div class="film-trailer" />
       </div>
-      <div class="film-info__description">
-        {{ film.description.genre }}
+      <div class="film-info">
+        <div class="film-info__name">
+          {{ film.description.name }}
+        </div>
+        <div class="film-info__description">
+          {{ film.description.genre }}
+        </div>
       </div>
-    </div>
-  </nuxt-link>
+    </a>
+    <nuxt-link
+      v-else
+      :to="film.description.url"
+      class="film-item"
+    >
+      <!--<div-->
+      <!--class="sales-now"-->
+      <!--&gt;-->
+      <!--Квитки у продажу-->
+      <!--</div>-->
+      <div
+        class="film-preview"
+        :style="{ backgroundImage: 'url(' + film.description.image_desktop + ')' }"
+      >
+        <div class="film-trailer" />
+      </div>
+      <div class="film-info">
+        <div class="film-info__name">
+          {{ film.description.name }}
+        </div>
+        <div class="film-info__description">
+          {{ film.description.genre }}
+        </div>
+      </div>
+    </nuxt-link>
+  </div>
 </template>
 
 <script>
