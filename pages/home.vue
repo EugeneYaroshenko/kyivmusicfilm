@@ -7,6 +7,13 @@
       v-if="loaderShown"
       :fetched="filmsFetched"
     />
+    <a
+      href="https://drive.google.com/file/d/1AsD3Co7XTXQnZkTC2-Hh434kyDbLgptb/view?fbclid=IwAR3N7c1WvD_nJRkkFRp7fBBpSCX9wAHOZyrOJnqZ-ep5EFvfNGtEd1faWWA"
+      target="_blank"
+      class="eng-link"
+    >
+      eng
+    </a>
     <div class="nav-top">
       <social-icons color="dark" />
     </div>
@@ -19,6 +26,12 @@
         v-scroll-to="'#showings'"
       >
         Сеанси
+      </div>
+      <div
+        class="navigation-item"
+        v-scroll-to="'#archive'"
+      >
+        Архів
       </div>
       <div
         class="navigation-item"
@@ -60,6 +73,36 @@
               >
                 Немає фільмів у прокаті
               </div>
+          </div>
+
+        </div>
+        <div
+          class="films"
+          id="archive"
+          v-if="films"
+        >
+          <h2 class="main-title">
+            Архів
+          </h2>
+          <div class="films-block">
+            <ul
+              class="films-list"
+              v-if="oldFilms && oldFilms.length"
+            >
+              <li
+                class="film"
+                v-for="(film, index) in oldFilms"
+                :key="index"
+              >
+                <film-preview :film="film"/>
+              </li>
+            </ul>
+            <div
+              class="films-list"
+              v-else
+            >
+              Немає фільмів у архіві
+            </div>
           </div>
 
         </div>
@@ -154,6 +197,21 @@
         })
 
         return films
+      },
+      oldFilms () {
+        let oldFilms = []
+        this.films.forEach(film => {
+          let allFilmDates = []
+          Object.values(film.showings.dates).forEach(cityDates => {
+            allFilmDates = uniq([...allFilmDates, ...cityDates])
+          })
+
+          if (!allFilmDates.some(date => date >= new Date().setHours(0, 0, 0, 0))) {
+            oldFilms = [...oldFilms, ...[film]]
+          }
+        })
+
+        return oldFilms
       }
     },
     components: {
@@ -182,6 +240,20 @@
     min-height: 100vh;
     position: relative;
     color: $black;
+  }
+
+  .eng-link {
+    position: absolute;
+    right: 24px;
+    top: 26px;
+    text-decoration: none;
+    color: $black;
+    font-weight: 400;
+    padding: 8px;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .home-container--loading {
