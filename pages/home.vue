@@ -162,7 +162,7 @@
         loaderShown: false,
         customFilm: {
           description: {
-            url: 'https://linkin.bio/talesoftails_ff?fbclid=IwAR2IMP-c1ypEJhr9cjXbumBgekPhYmAnJgFwi0hwzmKKtqWmwUpObDBXM9c',
+            url: 'http://talesoftails.com.ua/',
             image_desktop: 'https://scontent-waw1-1.xx.fbcdn.net/v/t1.15752-9/86292212_502633123983022_1756557936626237440_n.jpg?_nc_cat=108&_nc_ohc=noVvbLXrrocAX_qx5_Q&_nc_ht=scontent-waw1-1.xx&oh=5d88dbc49e05f61a9e6a757386c665a8&oe=5EBFEC28',
             name: 'Tales of Tails',
             genre: 'Документальний',
