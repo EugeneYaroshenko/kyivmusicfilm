@@ -54,12 +54,6 @@
               >
                 <li
                   class="film"
-                  @click="selectFilmEvent(customFilm.description.url)"
-                >
-                  <film-preview :film="customFilm"/>
-                </li>
-                <li
-                  class="film"
                   v-for="(film, index) in actualFilms"
                   :key="index"
                   @click="selectFilmEvent(film.description.url)"
@@ -95,6 +89,12 @@
                 :key="index"
               >
                 <film-preview :film="film"/>
+              </li>
+              <li
+                class="film"
+                @click="selectFilmEvent(customFilm.description.url)"
+              >
+                <film-preview :film="customFilm"/>
               </li>
             </ul>
             <div
@@ -163,7 +163,7 @@
         customFilm: {
           description: {
             url: 'http://talesoftails.com.ua/',
-            image_desktop: 'https://scontent-waw1-1.xx.fbcdn.net/v/t1.15752-9/86292212_502633123983022_1756557936626237440_n.jpg?_nc_cat=108&_nc_ohc=noVvbLXrrocAX_qx5_Q&_nc_ht=scontent-waw1-1.xx&oh=5d88dbc49e05f61a9e6a757386c665a8&oe=5EBFEC28',
+            image_desktop: require('../assets/images/tales-of-tails.jpg'),
             name: 'Tales of Tails',
             genre: 'Документальний',
             custom: true
