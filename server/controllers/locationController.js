@@ -6,7 +6,6 @@ exports.location = async function (req, res) {
     const geolocationAPI = 'https://geoip-db.com/json/'
 
     const result = await axios.get(geolocationAPI)
-    consola.info('here', result.data)
 
     res.status(200).send({ geoLocation: result.data })
   } catch (e) {
